@@ -62,6 +62,66 @@ class HousingViewModelTest {
     }
 
     @Test
+    fun next_withoutRoom_staysOnRoomStepAndShowsOnlyRoomError() {
+        assertFalse(viewModel.onNext())
+
+        val state = viewModel.formState.value
+        assertEquals(RepairStep.ROOM, state.step)
+        assertEquals(R.string.housing_error_room, state.roomError)
+        assertNull(state.issueTypeError)
+        assertNull(state.appointmentError)
+    }
+
+    @Test
+    fun next_withValidStep_movesToNextStep() {
+        viewModel.onRoomSelected(Room.KITCHEN)
+        viewModel.onNext()
+        assertEquals(RepairStep.PROBLEM, viewModel.formState.value.step)
+    }
+
+    @Test
+    fun next_onProblemStep_checksDescription() {
+        viewModel.onRoomSelected(Room.KITCHEN)
+        viewModel.onNext()
+        viewModel.onIssueTypeSelected(IssueType.LEAK)
+        viewModel.onDescriptionChanged("Leak")
+        viewModel.onNext()
+
+        val state = viewModel.formState.value
+        assertEquals(RepairStep.PROBLEM, state.step)
+        assertEquals(R.string.housing_error_description_short, state.descriptionError)
+    }
+
+    @Test
+    fun next_throughEveryStep_submitsOnLastStep() {
+        fillValidForm()
+        repeat(RepairStep.entries.size - 1) { assertFalse(viewModel.onNext()) }
+        assertEquals(RepairStep.APPOINTMENT, viewModel.formState.value.step)
+
+        assertTrue(viewModel.onNext())
+        assertEquals(4, repository.requests.value.size)
+    }
+
+    @Test
+    fun previousStep_goesBackAndReturnsFalseOnFirstStep() {
+        viewModel.onRoomSelected(Room.KITCHEN)
+        viewModel.onNext()
+
+        assertTrue(viewModel.onPreviousStep())
+        assertEquals(RepairStep.ROOM, viewModel.formState.value.step)
+        assertFalse(viewModel.onPreviousStep())
+    }
+
+    @Test
+    fun invalidSubmit_jumpsToFirstStepWithAnError() {
+        viewModel.onRoomSelected(Room.KITCHEN)
+        viewModel.onAppointmentSelected(AppointmentPreference.MORNING)
+
+        assertFalse(viewModel.submit())
+        assertEquals(RepairStep.PROBLEM, viewModel.formState.value.step)
+    }
+
+    @Test
     fun selectRequest_selectsSampleByReference() {
         viewModel.selectRequest("HR-2026-0002")
         assertEquals(Room.BEDROOM, viewModel.selectedRequest.value?.room)

@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Mobile Application</string>
 
+    <!-- Shared components -->
+    <string name="shared_back">Back</string>
+    <string name="shared_step_done">done</string>
+    <string name="shared_step_current">current step</string>
+    <string name="shared_step_upcoming">not started</string>
+    <string name="shared_step_description">Step %1$d of %2$d: %3$s, %4$s</string>
+
     <!-- Housing: rooms -->
     <string name="housing_room_kitchen">Kitchen</string>
     <string name="housing_room_bathroom">Bathroom</string>
@@ -49,6 +56,23 @@
     <string name="housing_form_description_hint">For example: water is dripping from the ceiling light.</string>
     <string name="housing_form_appointment_label">Appointment preference</string>
     <string name="housing_form_submit">Submit repair request</string>
+    <string name="housing_form_next">Next</string>
+
+    <!-- Housing: repair wizard steps -->
+    <string name="housing_step_room">Room</string>
+    <string name="housing_step_problem">Problem</string>
+    <string name="housing_step_photos">Photos</string>
+    <string name="housing_step_appointment">Appointment</string>
+    <string name="housing_room_title">Which room is the problem in?</string>
+    <string name="housing_room_subtitle">Select the room where the repair is needed.</string>
+    <string name="housing_problem_title">What is the problem?</string>
+    <string name="housing_problem_subtitle">Choose the type of problem, then tell us more about it.</string>
+    <string name="housing_photos_title">Add photos of the problem</string>
+    <string name="housing_photos_subtitle">Photos help the repair team bring the right tools.</string>
+    <string name="housing_photos_coming_soon">Add photos – coming soon</string>
+    <string name="housing_photos_skip_hint">You can continue without photos for now.</string>
+    <string name="housing_appointment_title">When can we visit?</string>
+    <string name="housing_appointment_subtitle">Choose the time that suits you best.</string>
 
     <!-- Housing: request details (used on confirmation and progress screens) -->
     <string name="housing_detail_reference">Reference</string>
@@ -65,12 +89,14 @@
     <string name="housing_confirmation_reference_intro">Keep this reference to track your repair:</string>
     <string name="housing_confirmation_view_progress">View progress</string>
     <string name="housing_confirmation_done">Report another repair</string>
+    <string name="housing_confirmation_reference_label">Your reference</string>
 
     <!-- Housing: progress screen -->
     <string name="housing_progress_title">Repair progress</string>
     <string name="housing_progress_back">Back</string>
     <string name="housing_progress_demo_label">Demonstration status – not a real council record</string>
     <string name="housing_progress_current_status">Current status: %1$s</string>
+    <string name="housing_progress_details_heading">Request details</string>
     <string name="housing_progress_step_done">Done</string>
     <string name="housing_progress_step_current">Current step</string>
     <string name="housing_progress_step_pending">Not started</string>

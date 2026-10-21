@@ -58,17 +58,52 @@ class HousingViewModel(
     }
 
     /**
+     * Called when the user taps "Next".
+     *
+     * On every step except the last, it checks that step's fields and moves to
+     * the next step only if they are valid. On the last step it calls [submit].
+     *
+     * @return True only when the request was submitted, so the screen can move on.
+     */
+    fun onNext(): Boolean {
+        val current = _formState.value
+        if (current.isLastStep) return submit()
+
+        val checked = RepairFormValidator.validateStep(current)
+        _formState.value = if (checked.hasErrorOn(current.step)) {
+            checked
+        } else {
+            checked.copy(step = RepairStep.entries[current.step.ordinal + 1])
+        }
+        return false
+    }
+
+    /**
+     * Called when the user goes back inside the wizard.
+     *
+     * @return False when already on the first step, so the caller can leave the form instead.
+     */
+    fun onPreviousStep(): Boolean {
+        val step = _formState.value.step
+        if (step.ordinal == 0) return false
+        _formState.update { it.copy(step = RepairStep.entries[step.ordinal - 1]) }
+        return true
+    }
+
+    /**
      * Validates the form and, if everything is filled in correctly, saves a new
      * repair request.
      *
      * On success the new request becomes the [selectedRequest], the form is
      * cleared and the function returns true so the screen can move on.
-     * On failure the error messages are shown and the function returns false.
+     * On failure the error messages are shown, the wizard jumps back to the first
+     * step with an error, and the function returns false.
      */
     fun submit(): Boolean {
         val checked = RepairFormValidator.validate(_formState.value)
         if (!checked.isValid) {
-            _formState.value = checked
+            val firstStepWithError = RepairStep.entries.first { checked.hasErrorOn(it) }
+            _formState.value = checked.copy(step = firstStepWithError)
             return false
         }
         // The validator guarantees these values are not null, so !! is safe here.

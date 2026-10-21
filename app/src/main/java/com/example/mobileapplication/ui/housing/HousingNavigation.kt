@@ -41,14 +41,18 @@ fun NavGraphBuilder.housingGraph(navController: NavHostController) {
         composable(HousingRoutes.FORM) { entry ->
             val viewModel = housingViewModel(navController, entry)
             val state by viewModel.formState.collectAsStateWithLifecycle()
+            // Only offer a back arrow on the first step if there is a screen to go back to.
+            val canLeave = remember(entry) { navController.previousBackStackEntry != null }
             RepairFormScreen(
                 state = state,
                 onRoomSelected = viewModel::onRoomSelected,
                 onIssueTypeSelected = viewModel::onIssueTypeSelected,
                 onDescriptionChanged = viewModel::onDescriptionChanged,
                 onAppointmentSelected = viewModel::onAppointmentSelected,
-                onSubmit = {
-                    if (viewModel.submit()) {
+                onPreviousStep = { viewModel.onPreviousStep() },
+                onExit = if (canLeave) ({ navController.popBackStack() }) else null,
+                onNext = {
+                    if (viewModel.onNext()) {
                         // Remove the form from the back stack so pressing Back on the
                         // confirmation screen cannot resubmit the same request.
                         navController.navigate(HousingRoutes.CONFIRMATION) {

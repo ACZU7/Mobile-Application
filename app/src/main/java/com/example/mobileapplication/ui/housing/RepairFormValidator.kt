@@ -34,4 +34,23 @@ object RepairFormValidator {
             appointmentError = if (state.appointmentPreference == null) R.string.housing_error_appointment else null
         )
     }
+
+    /**
+     * Checks only the fields on the wizard step [state] is currently showing, so
+     * the user is not told about fields they have not reached yet.
+     *
+     * Errors on other steps are left as they are.
+     */
+    fun validateStep(state: RepairFormState): RepairFormState {
+        val all = validate(state)
+        return when (state.step) {
+            RepairStep.ROOM -> state.copy(roomError = all.roomError)
+            RepairStep.PROBLEM -> state.copy(
+                issueTypeError = all.issueTypeError,
+                descriptionError = all.descriptionError
+            )
+            RepairStep.PHOTOS -> state
+            RepairStep.APPOINTMENT -> state.copy(appointmentError = all.appointmentError)
+        }
+    }
 }
