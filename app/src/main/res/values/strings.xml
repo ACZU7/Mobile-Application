@@ -27,4 +27,11 @@
     <string name="housing_status_appointment_booked">Appointment booked</string>
     <string name="housing_status_in_progress">Repair in progress</string>
     <string name="housing_status_completed">Completed</string>
+
+    <!-- Housing: form validation errors -->
+    <string name="housing_error_room">Choose the room where the problem is.</string>
+    <string name="housing_error_issue">Choose the type of problem.</string>
+    <string name="housing_error_description_empty">Describe the problem.</string>
+    <string name="housing_error_description_short">Add a bit more detail (at least 10 characters).</string>
+    <string name="housing_error_appointment">Choose when you would prefer an appointment.</string>
 </resources>
