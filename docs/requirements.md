@@ -8,23 +8,23 @@ Design and evaluate a usable Android application that helps Bristol residents co
 
 | ID | Requirement | Owner | Acceptance criteria |
 |---|---|---|---|
-| FR01 | Browse car parks and Park & Ride locations. | A | A user can open Parking and see sample locations in a list. |
-| FR02 | Filter and sort parking results. | A | A user can filter by parking type/area and sort by distance when location is available. A helpful fallback is shown when it is unavailable. |
-| FR03 | View parking details and directions. | A | Selecting a location opens a details screen; the Directions action opens the destination in Google Maps or shows a clear fallback. |
-| FR04 | Report a street issue. | A | A user can select a category, enter a description, attach an optional photo, review/edit a location pin and submit a local report. |
-| FR05 | Track a street issue locally. | A | A submitted report appears in My Reports with a reference and a visible demonstration status. |
-| FR06 | Report a housing repair. | B | A user can choose a room and issue type, add a description/photo, select an appointment preference and submit a local repair request. |
-| FR07 | View repair progress locally. | B | A submitted repair appears with a reference, selected preference and visible demonstration progress. |
-| FR08 | Check a vehicle against prototype CAZ rules. | B | A user can enter a valid-format registration and see a plainly labelled demonstration result plus an Official Checker action. |
-| FR09 | Provide shared navigation. | A + B | A user can reach Home, Parking, Streets and Housing from consistent navigation, and Android back behaviour is predictable. |
+| FR01 | Browse car parks and Park & Ride locations. | Omar Abdelatty | A user can open Parking and see sample locations in a list. |
+| FR02 | Filter and sort parking results. | Omar Abdelatty | A user can filter by parking type/area and sort by distance when location is available. A helpful fallback is shown when it is unavailable. |
+| FR03 | View parking details and directions. | Omar Abdelatty | Selecting a location opens a details screen; the Directions action opens the destination in Google Maps or shows a clear fallback. |
+| FR04 | Report a street issue. | Omar Abdelatty | A user can select a category, enter a description, attach an optional photo, review/edit a location pin and submit a local report. |
+| FR05 | Track a street issue locally. | Omar Abdelatty | A submitted report appears in My Reports with a reference and a visible demonstration status. |
+| FR06 | Report a housing repair. | Mohammad AlAbwah | A user can choose a room and issue type, add a description/photo, select an appointment preference and submit a local repair request. |
+| FR07 | View repair progress locally. | Mohammad AlAbwah | A submitted repair appears with a reference, selected preference and visible demonstration progress. |
+| FR08 | Check a vehicle against prototype CAZ rules. | Mohammad AlAbwah | A user can enter a valid-format registration and see a plainly labelled demonstration result plus an Official Checker action. |
+| FR09 | Provide shared navigation. | Omar Abdelatty + Mohammad AlAbwah | A user can reach Home, Parking, Streets and Housing from consistent navigation, and Android back behaviour is predictable. |
 
 ## Quality-core requirements
 
 | ID | Requirement | Owner | Acceptance criteria |
 |---|---|---|---|
-| QR01 | Save a parking permit and show an expiry reminder. | A | A user can save a sample permit expiry date and receive a local reminder after notification permission is granted. |
-| QR02 | View sample rent balance/history and set a reminder. | B | A user can view local sample data, set a reminder and see saved state after reopening the app. |
-| QR03 | Persist saved local data. | A + B | Selected reports, repairs, favourites and settings are retained using local storage. |
+| QR01 | Save a parking permit and show an expiry reminder. | Omar Abdelatty | A user can save a sample permit expiry date and receive a local reminder after notification permission is granted. |
+| QR02 | View sample rent balance/history and set a reminder. | Mohammad AlAbwah | A user can view local sample data, set a reminder and see saved state after reopening the app. |
+| QR03 | Persist saved local data. | Omar Abdelatty + Mohammad AlAbwah | Selected reports, repairs, favourites and settings are retained using local storage. |
 
 ## Stretch requirements
 
