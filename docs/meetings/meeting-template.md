@@ -1,4 +1,4 @@
-# Meeting XX â YYYY-MM-DD
+# Meeting XX  YYYY-MM-DD
 
 **Time:**
 
