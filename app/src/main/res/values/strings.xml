@@ -49,4 +49,20 @@
     <string name="housing_form_description_hint">For example: water is dripping from the ceiling light.</string>
     <string name="housing_form_appointment_label">Appointment preference</string>
     <string name="housing_form_submit">Submit repair request</string>
+
+    <!-- Housing: request details (used on confirmation and progress screens) -->
+    <string name="housing_detail_reference">Reference</string>
+    <string name="housing_detail_room">Room</string>
+    <string name="housing_detail_issue">Problem</string>
+    <string name="housing_detail_description">Description</string>
+    <string name="housing_detail_appointment">Appointment preference</string>
+    <string name="housing_detail_created">Date reported</string>
+    <string name="housing_no_request">No repair request selected. Go back and submit the form.</string>
+
+    <!-- Housing: confirmation screen -->
+    <string name="housing_confirmation_title">Request received</string>
+    <string name="housing_confirmation_heading">Your repair request has been saved</string>
+    <string name="housing_confirmation_reference_intro">Keep this reference to track your repair:</string>
+    <string name="housing_confirmation_view_progress">View progress</string>
+    <string name="housing_confirmation_done">Report another repair</string>
 </resources>
