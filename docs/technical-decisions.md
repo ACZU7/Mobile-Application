@@ -6,7 +6,7 @@
 |---|---|---|
 | Platform | Native Android in Kotlin | Required by the assessment. |
 | UI | Jetpack Compose and Material 3 | Supports the module learning and the agreed UI design. |
-| Architecture | Feature-based MVVM | Keeps Owner A and Owner B code independent, readable and assessable. |
+| Architecture | Feature-based MVVM | Keeps Omar Abdelatty and Mohammad AlAbwah's code independent, readable and assessable. |
 | Navigation | Navigation Compose | Provides predictable navigation and back-stack behaviour. |
 | Data before APIs | Curated sample data and repositories | Lets the group complete working flows without depending on unstable/unauthorised integrations. |
 | Local persistence | Room in quality-core phase | Suitable for favourites, local reports, repairs, permits and sample rent history. |
@@ -25,10 +25,10 @@ app/
     repository/
   ui/
     shared/
-    parking/        # Owner A
-    streetissues/   # Owner A
-    housing/        # Owner B
-    cleanairzone/   # Owner B
+    parking/        # Omar Abdelatty
+    streetissues/   # Omar Abdelatty
+    housing/        # Mohammad AlAbwah
+    cleanairzone/   # Mohammad AlAbwah
   navigation/
 ```
 
