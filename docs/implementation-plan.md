@@ -135,7 +135,7 @@ The aim is a complete, simple user journey for one Omar feature and one Mohammad
 
 ## Phase 3 Device capabilities and quality-core work
 
-Complete these only after Phases 0â2 have a stable build.
+Complete these only after Phases 02 have a stable build.
 
 ### Omar Abdelatty Permissions, directions and parking permit
 
