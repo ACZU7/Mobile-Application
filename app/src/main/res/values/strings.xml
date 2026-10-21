@@ -34,4 +34,19 @@
     <string name="housing_error_description_empty">Describe the problem.</string>
     <string name="housing_error_description_short">Add a bit more detail (at least 10 characters).</string>
     <string name="housing_error_appointment">Choose when you would prefer an appointment.</string>
+
+    <!-- Housing: shared -->
+    <string name="housing_demo_notice">Demonstration only. Requests are stored on this phone and are not sent to Bristol City Council.</string>
+    <string name="housing_error_icon_description">Error</string>
+
+    <!-- Housing: repair form screen -->
+    <string name="housing_form_title">Report a repair</string>
+    <string name="housing_form_intro">Tell us what needs fixing. All fields are required.</string>
+    <string name="housing_form_room_label">Room</string>
+    <string name="housing_form_issue_label">Problem</string>
+    <string name="housing_form_select_placeholder">Select an option</string>
+    <string name="housing_form_description_label">Describe the problem</string>
+    <string name="housing_form_description_hint">For example: water is dripping from the ceiling light.</string>
+    <string name="housing_form_appointment_label">Appointment preference</string>
+    <string name="housing_form_submit">Submit repair request</string>
 </resources>
