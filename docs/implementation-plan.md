@@ -22,7 +22,7 @@ A task is complete only when:
 5. The related test case is run and evidence is retained.
 6. The contribution log and, where needed, meeting notes are updated.
 
-## Phase 0 â Set up the shared project
+## Phase 0 Set up the shared project
 
 ### Omar Abdelatty
 
@@ -65,11 +65,11 @@ app/
 - The app opens to Home; all four destinations open; Android Back behaves sensibly; there are no crashes.
 - Evidence: screenshot/video of navigation and a completed T01 test entry.
 
-## Phase 1 â First vertical slices
+## Phase 1 First vertical slices
 
 The aim is a complete, simple user journey for one Omar feature and one Mohammad feature. Use fixed sample data. Do not add device permissions yet.
 
-### Omar Abdelatty â Parking finder
+### Omar Abdelatty Parking finder
 
 1. Create a `CarPark` model: name, type, area, address, opening information, price note, spaces note, latitude and longitude.
 2. Add a local repository with at least 6â8 clearly labelled sample car parks/Park & Ride locations.
@@ -79,7 +79,7 @@ The aim is a complete, simple user journey for one Omar feature and one Mohammad
 6. Add a Directions button. Initially show a safe fallback message; later replace this with a Google Maps intent.
 7. Keep state in a `ParkingViewModel`, not inside large composables.
 
-### Mohammad AlAbwah â Housing repair report
+### Mohammad AlAbwah Housing repair report
 
 1. Create a `RepairRequest` model: reference, room, issue type, description, appointment preference, created date, status and optional image URI.
 2. Create a local repository with sample repair-progress data.
@@ -92,17 +92,17 @@ The aim is a complete, simple user journey for one Omar feature and one Mohammad
 ### Both
 
 - Make the two flows visually consistent and reachable from the dashboard.
-- Review each otherâs pull requests before merging.
-- Test T02âT07 that apply to completed work; retain screenshots.
+- Review each other pull requests before merging.
+- Test T02 T07 that apply to completed work; retain screenshots.
 
 ### Completion check
 
 - A user can browse/filter/select sample parking and complete a housing-repair request from start to finish.
 - Evidence: one short screen recording per flow, pull requests, commits and contribution-log entries.
 
-## Phase 2 â Complete the service MVP
+## Phase 2 Complete the service MVP
 
-### Omar Abdelatty â Street issue reporting
+### Omar Abdelatty Street issue reporting
 
 1. Create a `StreetReport` model: reference, category, description, location label/coordinates, image URI, created date and status.
 2. Build the report form with category selection and description input.
@@ -112,7 +112,7 @@ The aim is a complete, simple user journey for one Omar feature and one Mohammad
 6. Create My Reports/status screen, listing submitted local reports with reference, category, date and visible demonstration status.
 7. Add an optional photo attachment only after the form/confirmation/status flow works.
 
-### Mohammad AlAbwah â Clean Air Zone checker
+### Mohammad AlAbwah Clean Air Zone checker
 
 1. Create a local `CazCheckResult` model and simple rules engine appropriate for a demonstration.
 2. Build a registration input screen with clear format guidance.
@@ -133,11 +133,11 @@ The aim is a complete, simple user journey for one Omar feature and one Mohammad
 - A user can submit and review a local street report; a user can check a registration-format input and see a clearly non-official CAZ prototype result.
 - Evidence: T04, T05 and T08 tests complete, plus screenshots of confirmation and invalid-input states.
 
-## Phase 3 â Device capabilities and quality-core work
+## Phase 3 Device capabilities and quality-core work
 
 Complete these only after Phases 0â2 have a stable build.
 
-### Omar Abdelatty â Permissions, directions and parking permit
+### Omar Abdelatty Permissions, directions and parking permit
 
 1. Replace the Directions fallback with a Google Maps intent using the selected car parkâs coordinates. Keep a user-friendly fallback if Maps is unavailable.
 2. Request location only when the user asks to sort/find nearby parking. If denied, show the list without distance sorting and explain the alternative.
@@ -145,7 +145,7 @@ Complete these only after Phases 0â2 have a stable build.
 4. Build a resident parking-permit screen using sample permit data: permit zone/reference and expiry date.
 5. Store the sample permit locally and schedule a local expiry reminder only after notification permission is granted.
 
-### Mohammad AlAbwah â Rent account and persistence
+### Mohammad AlAbwah Rent account and persistence
 
 1. Build a rent-account screen using clearly labelled sample balance and payment-history data.
 2. Add a local reminder choice; request notification permission only when the user enables it.
@@ -164,17 +164,17 @@ Complete these only after Phases 0â2 have a stable build.
 - Location/camera/notification permission decisions do not block core flows; relevant local data survives restart.
 - Evidence: permission-denied screenshots, persistence recording, T09/T10 results.
 
-## Phase 4 â Polish and final verification
+## Phase 4 Polish and final verification
 
 ### Omar Abdelatty
 
-- Test Parking and Streets features against FR01âFR05 and QR01.
+- Test Parking and Streets features against FR01 FR05 and QR01.
 - Fix layout, validation, navigation and permission issues in owned features.
 - Capture final screenshots/video clips showing main and error states.
 
 ### Mohammad AlAbwah
 
-- Test Housing and CAZ features against FR06âFR08 and QR02.
+- Test Housing and CAZ features against FR06 FR08 and QR02.
 - Fix layout, validation, persistence and wording issues in owned features.
 - Capture final screenshots/video clips showing main and error states.
 
