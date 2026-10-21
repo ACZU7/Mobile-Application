@@ -72,10 +72,10 @@ The aim is a complete, simple user journey for one Omar feature and one Mohammad
 ### Omar Abdelatty Parking finder
 
 1. Create a `CarPark` model: name, type, area, address, opening information, price note, spaces note, latitude and longitude.
-2. Add a local repository with at least 6â8 clearly labelled sample car parks/Park & Ride locations.
+2. Add a local repository with at least 68 clearly labelled sample car parks/Park & Ride locations.
 3. Build the Parking list screen with a title, short prototype-data notice, cards and empty-state handling.
 4. Add filter chips for parking type/area and ensure changing a filter updates the list.
-5. Build a Parking Details screen with the selected car parkâs information.
+5. Build a Parking Details screen with the selected car parks information.
 6. Add a Directions button. Initially show a safe fallback message; later replace this with a Google Maps intent.
 7. Keep state in a `ParkingViewModel`, not inside large composables.
 
@@ -139,7 +139,7 @@ Complete these only after Phases 0â2 have a stable build.
 
 ### Omar Abdelatty Permissions, directions and parking permit
 
-1. Replace the Directions fallback with a Google Maps intent using the selected car parkâs coordinates. Keep a user-friendly fallback if Maps is unavailable.
+1. Replace the Directions fallback with a Google Maps intent using the selected car parks coordinates. Keep a user-friendly fallback if Maps is unavailable.
 2. Request location only when the user asks to sort/find nearby parking. If denied, show the list without distance sorting and explain the alternative.
 3. Add a Street Issue photo-picker/camera flow if time allows. It must be optional and remain usable if permission is denied.
 4. Build a resident parking-permit screen using sample permit data: permit zone/reference and expiry date.
