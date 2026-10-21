@@ -65,4 +65,13 @@
     <string name="housing_confirmation_reference_intro">Keep this reference to track your repair:</string>
     <string name="housing_confirmation_view_progress">View progress</string>
     <string name="housing_confirmation_done">Report another repair</string>
+
+    <!-- Housing: progress screen -->
+    <string name="housing_progress_title">Repair progress</string>
+    <string name="housing_progress_back">Back</string>
+    <string name="housing_progress_demo_label">Demonstration status – not a real council record</string>
+    <string name="housing_progress_current_status">Current status: %1$s</string>
+    <string name="housing_progress_step_done">Done</string>
+    <string name="housing_progress_step_current">Current step</string>
+    <string name="housing_progress_step_pending">Not started</string>
 </resources>
