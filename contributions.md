@@ -6,16 +6,16 @@ Update this file throughout the project. The final mini report should refer to t
 
 | Owner | Primary responsibilities |
 |---|---|
-| A | Parking finder, filters, car-park details/directions, street issue report, street-report status, parking permit reminder. |
-| B | Housing repair report/progress, Clean Air Zone checker, rent account/reminder, local data persistence for their features. |
-| A + B | Dashboard, Navigation Compose, theme/design components, integration, testing, design document and video. |
+| Omar Abdelatty | Parking finder, filters, car-park details/directions, street issue report, street-report status, parking permit reminder. |
+| Mohammad AlAbwah | Housing repair report/progress, Clean Air Zone checker, rent account/reminder, local data persistence for their features. |
+| Omar Abdelatty + Mohammad AlAbwah | Dashboard, Navigation Compose, theme/design components, integration, testing, design document and video. |
 
 ## Contribution log
 
 | Date | Owner | Work completed | Files/PR/commit evidence | Reviewed by |
 |---|---|---|---|---|
-|  | A |  |  |  |
-|  | B |  |  |  |
+|  | Omar Abdelatty |  |  |  |
+|  | Mohammad AlAbwah |  |  |  |
 
 ## Environment record
 
