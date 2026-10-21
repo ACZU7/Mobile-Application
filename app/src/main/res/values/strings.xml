@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">Mobile Application</string>
+
+    <!-- Housing: rooms -->
+    <string name="housing_room_kitchen">Kitchen</string>
+    <string name="housing_room_bathroom">Bathroom</string>
+    <string name="housing_room_bedroom">Bedroom</string>
+    <string name="housing_room_living_room">Living room</string>
+    <string name="housing_room_hallway">Hallway or stairs</string>
+    <string name="housing_room_other">Other</string>
+
+    <!-- Housing: issue types -->
+    <string name="housing_issue_leak">Leak or water damage</string>
+    <string name="housing_issue_heating">Heating or hot water</string>
+    <string name="housing_issue_electrical">Electrical fault</string>
+    <string name="housing_issue_damp_mould">Damp or mould</string>
+    <string name="housing_issue_door_window">Door or window</string>
+    <string name="housing_issue_other">Other problem</string>
+
+    <!-- Housing: appointment preferences -->
+    <string name="housing_appointment_morning">Morning (8am – 12pm)</string>
+    <string name="housing_appointment_afternoon">Afternoon (12pm – 5pm)</string>
+    <string name="housing_appointment_any_time">Any time</string>
+
+    <!-- Housing: statuses -->
+    <string name="housing_status_submitted">Submitted</string>
+    <string name="housing_status_appointment_booked">Appointment booked</string>
+    <string name="housing_status_in_progress">Repair in progress</string>
+    <string name="housing_status_completed">Completed</string>
 </resources>
