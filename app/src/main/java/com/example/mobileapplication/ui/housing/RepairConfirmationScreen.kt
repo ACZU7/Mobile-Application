@@ -4,13 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -68,7 +69,13 @@ fun RepairConfirmationScreen(
     Scaffold(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surface,
-        topBar = { TopBar(title = stringResource(R.string.housing_confirmation_title), onBack = null) }
+        topBar = { TopBar(title = stringResource(R.string.housing_confirmation_title), onBack = null) },
+        bottomBar = {
+            // Pinned below the scrolling content so both actions are always visible.
+            if (request != null) {
+                ConfirmationActions(onViewProgress = onViewProgress, onDone = onDone)
+            }
+        }
     ) { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -114,11 +121,27 @@ fun RepairConfirmationScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
-
-                Spacer(Modifier.height(Dimens.GroupSpacing))
-                PrimaryButton(text = stringResource(R.string.housing_confirmation_view_progress), onClick = onViewProgress)
-                SecondaryButton(text = stringResource(R.string.housing_confirmation_done), onClick = onDone)
             }
+        }
+    }
+}
+
+/** The "View progress" and "Report another repair" buttons at the bottom of the screen. */
+@Composable
+private fun ConfirmationActions(onViewProgress: () -> Unit, onDone: () -> Unit) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.navigationBars)
+            .padding(Dimens.ScreenPadding)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Dimens.CardSpacing),
+            modifier = Modifier.widthIn(max = Dimens.MaxContentWidth)
+        ) {
+            PrimaryButton(text = stringResource(R.string.housing_confirmation_view_progress), onClick = onViewProgress)
+            SecondaryButton(text = stringResource(R.string.housing_confirmation_done), onClick = onDone)
         }
     }
 }

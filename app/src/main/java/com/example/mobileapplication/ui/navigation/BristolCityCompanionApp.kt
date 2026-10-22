@@ -2,6 +2,7 @@ package com.example.mobileapplication.ui.navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -66,7 +67,11 @@ fun BristolCityCompanionApp() {
         NavHost(
             navController = navController,
             startDestination = AppDestination.Home.route,
-            modifier = Modifier.padding(innerPadding)
+            // consumeWindowInsets tells screens with their own Scaffold that the system bars
+            // are already handled here, so they don't add the same space again.
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
         ) {
             composable(AppDestination.Home.route) {
                 PlaceholderScreen("Welcome to Bristol City Companion", "A prototype for selected Bristol resident services.")
