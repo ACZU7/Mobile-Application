@@ -20,21 +20,18 @@ import com.example.mobileapplication.ui.shared.StatusChipType
 import com.example.mobileapplication.ui.theme.Dimens
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import java.util.Locale
 
 /**
  * A card listing the details of a [request] (room, problem, appointment, and so on).
  *
  * It is shared by the confirmation and progress screens so both show the
  * details in the same way: a white card with a very light border, as in the spec.
- *
- * @param showDescription Whether to include the resident's full description.
  */
 @Composable
 fun RepairDetailsCard(
     request: RepairRequest,
-    modifier: Modifier = Modifier,
-    showDescription: Boolean = true
+    modifier: Modifier = Modifier
 ) {
     AppCard(modifier = modifier) {
         Column(
@@ -43,9 +40,7 @@ fun RepairDetailsCard(
         ) {
             DetailRow(R.string.housing_detail_room, stringResource(request.room.labelRes))
             DetailRow(R.string.housing_detail_issue, stringResource(request.issueType.labelRes))
-            if (showDescription) {
-                DetailRow(R.string.housing_detail_description, request.description)
-            }
+            DetailRow(R.string.housing_detail_description, request.description)
             DetailRow(
                 R.string.housing_detail_appointment,
                 stringResource(request.appointmentPreference.labelRes)
@@ -92,6 +87,8 @@ val RepairStatus.chipType: StatusChipType
         RepairStatus.COMPLETED -> StatusChipType.FIXED
     }
 
-/** Formats a date in the phone's own style, for example "21 Oct 2026" in the UK. */
-fun formatDate(date: LocalDate): String =
-    date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+/** UK date style, for example "22 Oct 2026", whatever the phone's language. */
+private val ukDateFormatter = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.UK)
+
+/** Formats a date the UK way, for example "22 Oct 2026". */
+fun formatDate(date: LocalDate): String = date.format(ukDateFormatter)

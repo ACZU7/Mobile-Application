@@ -50,8 +50,8 @@ import java.time.LocalDate
  * Shown straight after a repair request is submitted.
  *
  * It displays a green success tick, the generated reference in large text with
- * its status chip, and the chosen room, problem and appointment preference, so
- * the user can check what was saved.
+ * its status chip, and the chosen room, problem, description and appointment
+ * preference, so the user can check what was saved.
  *
  * @param request The request that was just saved, or null if none is available
  * (for example if the screen is opened directly). A helpful message is shown instead.
@@ -106,7 +106,7 @@ fun RepairConfirmationScreen(
                 )
 
                 ReferenceCard(request)
-                RepairDetailsCard(request = request, showDescription = false)
+                RepairDetailsCard(request = request)
 
                 Text(
                     text = stringResource(R.string.housing_demo_notice),
