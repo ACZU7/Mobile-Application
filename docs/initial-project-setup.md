@@ -22,18 +22,18 @@ app/src/main/java/com/example/mobileapplication/
     navigation/
       AppDestination.kt
       BristolCityCompanionApp.kt
-    theme/
-  data/
-    model/              # Shared models
-    repository/         # Local/sample data sources
-  features/
+    theme/              # Colours, typography, shapes, spacing (see docs/design/ui-spec.md)
+    shared/             # Reusable components: TopBar, buttons, Stepper, SelectableTile, StatusChip
     parking/            # Omar Abdelatty
     streetissues/       # Omar Abdelatty
     housing/            # Mohammad AlAbwah
     cleanairzone/       # Mohammad AlAbwah
+  data/
+    model/              # Shared models
+    repository/         # Local/sample data sources
 ```
 
-Create feature code inside the appropriate `features/` folder. Do not put feature logic in `MainActivity.kt` or `BristolCityCompanionApp.kt`.
+Create feature code inside the appropriate `ui/<feature>/` folder, matching `docs/technical-decisions.md`. Do not put feature logic in `MainActivity.kt` or `BristolCityCompanionApp.kt`.
 
 ## First run
 
