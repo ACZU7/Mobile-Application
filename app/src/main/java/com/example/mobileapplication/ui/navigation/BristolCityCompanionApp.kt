@@ -18,17 +18,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mobileapplication.ui.housing.housingGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BristolCityCompanionApp() {
     val navController = rememberNavController()
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 
     Scaffold(
         topBar = {
@@ -43,7 +45,8 @@ fun BristolCityCompanionApp() {
             NavigationBar {
                 AppDestination.bottomNavigation.forEach { destination ->
                     NavigationBarItem(
-                        selected = currentRoute == destination.route,
+                        // hierarchy also matches nested graphs, so Housing stays selected on every housing screen.
+                        selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true,
                         onClick = {
                             navController.navigate(destination.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -74,9 +77,7 @@ fun BristolCityCompanionApp() {
             composable(AppDestination.Streets.route) {
                 PlaceholderScreen("Streets & Travel", "Omar Abdelatty will add street issue reporting here.")
             }
-            composable(AppDestination.Housing.route) {
-                PlaceholderScreen("Housing", "Mohammad AlAbwah will add housing repair features here.")
-            }
+            housingGraph(navController)
         }
     }
 }
