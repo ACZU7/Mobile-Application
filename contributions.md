@@ -21,11 +21,12 @@ Update this file throughout the project. The final mini report should refer to t
 
 | Item | Value |
 |---|---|
-| Android Studio version | To be recorded |
-| Kotlin version | To be recorded |
-| Compose BOM/version | To be recorded |
-| Minimum SDK | To be recorded |
-| Target SDK | To be recorded |
-| Primary emulator/device | To be recorded |
-| Secondary test device/emulator | To be recorded |
-
+| Android Studio version | To be recorded (Android Studio > About Android Studio) |
+| Android Gradle Plugin | 9.0.1 |
+| Kotlin version | 2.0.21 |
+| Compose BOM/version | 2024.09.00 (Material 3, Navigation Compose 2.9.5) |
+| Compile SDK | 36 |
+| Minimum SDK | 26 (Android 8.0) |
+| Target SDK | 36 |
+| Primary emulator/device | Medium Phone API 36.1 (Android Studio emulator) |
+| Secondary test device/emulator | To be recorded (tablet emulator or physical phone for T09) |
