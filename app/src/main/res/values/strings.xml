@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mobile Application</string>
+    <string name="app_name">Bristol City Companion</string>
 
     <!-- Shared components -->
     <string name="shared_back">Back</string>
