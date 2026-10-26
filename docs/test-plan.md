@@ -19,6 +19,13 @@ Test every acceptance criterion manually on the primary emulator. Repeat key tes
 | T09 | Test large font size and a second screen size. | Core labels/actions remain visible, usable and not clipped. | Omar Abdelatty + Mohammad AlAbwah |
 | T10 | Deny camera/notification permissions. | The affected flow remains usable and gives an appropriate explanation. | Omar Abdelatty + Mohammad AlAbwah |
 
+## Results
+
+| ID | Date | Result | Tested by | Evidence |
+|---|---|---|---|---|
+| T06 | 2026-10-22 | Passed | Mohammad AlAbwah | [08-T06-confirmation.png](evidence/housing/08-T06-confirmation.png) |
+| T07 | 2026-10-22 | Passed | Mohammad AlAbwah | [09-T07-progress.png](evidence/housing/09-T07-progress.png) |
+
 ## Evidence to retain
 
 - Screenshots/recordings for each completed test.
