@@ -23,6 +23,8 @@ Test every acceptance criterion manually on the primary emulator. Repeat key tes
 
 | ID | Date | Result | Tested by | Evidence |
 |---|---|---|---|---|
+| T03 | 2026-10-24 | Passed for static-map redesign: EV chip updates pins/results; pin selection changes spaces label; row opens matching details; Back restores finder; settings filters produce an empty state; location button provides later-phase fallback. | Omar Abdelatty feature; coding agent operating API 37 emulator via ADB | [Static map screenshots 06–10 and verification](evidence/parking/README.md#static-map-redesign--2026-10-24) |
+| T03 | 2026-10-24 | Passed for Phase 1 sample-data scope: combined filters, empty state, clear filters, details, Directions fallback and Android Back. Parking selected on details; Housing still reachable. | Omar Abdelatty feature; verified by coding agent operating emulator through ADB | [Parking test record and five screenshots](evidence/parking/README.md) |
 | T06 | 2026-10-22 | Passed | Mohammad AlAbwah | [08-T06-confirmation.png](evidence/housing/08-T06-confirmation.png) |
 | T07 | 2026-10-22 | Passed | Mohammad AlAbwah | [09-T07-progress.png](evidence/housing/09-T07-progress.png) |
 
