@@ -123,4 +123,7 @@
     <string name="caz_result_charge">%1$s: a sample daily charge of %2$s applies.</string>
     <string name="caz_result_unknown">%1$s is not in the sample data, so no result can be given.</string>
     <string name="caz_result_disclaimer">Prototype result from sample data – not an official charge decision.</string>
+
+    <!-- Temporary: lets testers open features that are not in the bottom navigation yet -->
+    <string name="temp_open_clean_air_zone">Open Clean Air Zone checker (temporary)</string>
 </resources>
