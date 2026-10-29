@@ -3,7 +3,7 @@ package com.example.mobileapplication.data.repository
 import com.example.mobileapplication.data.model.CazOutcome
 import com.example.mobileapplication.data.model.EuroStandard
 import com.example.mobileapplication.data.model.FuelType
-import com.example.mobileapplication.ui.cleanairzone.CazRulesEngine
+import com.example.mobileapplication.domain.cleanairzone.CazRulesEngine
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull

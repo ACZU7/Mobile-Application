@@ -1,4 +1,4 @@
-package com.example.mobileapplication.ui.cleanairzone
+package com.example.mobileapplication.domain.cleanairzone
 
 import com.example.mobileapplication.data.model.CazOutcome
 import com.example.mobileapplication.data.model.EuroStandard
