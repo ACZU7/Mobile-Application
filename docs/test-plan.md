@@ -38,3 +38,16 @@ Test every acceptance criterion manually on the primary emulator. Repeat key tes
 ## Phase 2 Street Issues automated verification ? 2026-10-30
 
 Omar Abdelatty feature, branch `feature/street-issue-report`: `./gradlew.bat test` passed (67 tests, zero failures/errors, including 15 Street Issues tests); `./gradlew.bat assembleDebug` passed. Automated coverage includes T04/T05 validation/submission logic, references, repository retrieval, status filters and empty results. T04/T05 manual UI acceptance remains pending: ADB found no connected emulator/device. No manual pass or screenshot evidence is claimed. See [verification and pending checks](evidence/streetissues/README.md).
+
+## Phase 2 Street Issues emulator follow-up ? 2026-10-30
+
+This supersedes the earlier no-device/pending-manual note for the Street Issues scope. Tested by the coding agent operating the API 37 emulator for Omar Abdelatty.
+
+| ID | Actual result | Evidence |
+|---|---|---|
+| T04 / FR05 | Passed local submit, edited fictional location, generated reference, confirmation disclaimer, status timeline, My Reports filtering and empty Fixed results. Final build references SR-2026-0004 and SR-2026-0005 verified. | [Street Issues test record and screenshots](evidence/streetissues/README.md#manual-emulator-results) |
+| T05 | Passed empty category/description, 5-character minimum error, 501-character maximum error, and correction followed by successful submission. | [Validation evidence](evidence/streetissues/README.md#manual-emulator-results) |
+| T01 (integration smoke) | Passed nested Streets selection, Back, reset form and tab restoration; Home/Parking/Housing remained reachable. Existing feature acceptance was not fully repeated. | Screenshots 14-18 in [evidence](evidence/streetissues/README.md) |
+| T09 (Streets scope) | Passed 150% font size, landscape, dark mode, forced RTL, and simulated tablet size 1600 x 2560 / 240 dpi on the same emulator; draft retained on rotation. Separate API 29 tablet AVD stayed offline; no second-device/OS pass claimed. | Screenshots 19-32 in [evidence](evidence/streetissues/README.md) |
+
+Visual testing found and fixed disclaimer punctuation and selected-filter colour; final `./gradlew.bat test assembleDebug` passed (67 tests, zero failures/errors; BUILD SUCCESSFUL in 3s). Shared theme/components and Housing/CAZ files are unchanged. Human peer review remains outstanding.

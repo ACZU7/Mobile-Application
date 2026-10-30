@@ -19,7 +19,7 @@
     <string name="street_cancel">Cancel</string>
     <string name="street_submit">Submit report</string>
     <string name="street_demo">Fictional demonstration data. Reports and statuses are stored in memory only and reset when the app closes.</string>
-    <string name="street_disclaimer">Prototype report only ? this has not been submitted to Bristol City Council.</string>
+    <string name="street_disclaimer">Prototype report only - this has not been submitted to Bristol City Council.</string>
     <string name="street_saved">Report saved locally</string>
     <string name="street_view_status">View report status</string>
     <string name="street_another">Report another issue</string>

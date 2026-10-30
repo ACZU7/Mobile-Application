@@ -170,7 +170,12 @@ fun StreetReportsScreen(reports: List<StreetReport>, filter: StreetStatus?, onFi
             Row(horizontalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing)) {
                 pair.forEach { status ->
                     FilterChip(selected = filter == status, onClick = { onFilter(status) },
-                        label = { Text(stringResource(status?.labelRes ?: R.string.street_all)) }, modifier = Modifier.weight(1f))
+                        label = { Text(stringResource(status?.labelRes ?: R.string.street_all)) },
+                        modifier = Modifier.weight(1f),
+                        colors = FilterChipDefaults.filterChipColors(
+                            containerColor = MaterialTheme.extendedColors.chipNeutral,
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary))
                 }
             }
         }
