@@ -32,3 +32,9 @@ Update this file throughout the project. The final mini report should refer to t
 | Target SDK | 36 |
 | Primary emulator/device | Medium Phone API 36.1 (Android Studio emulator) |
 | Secondary test device/emulator | To be recorded (tablet emulator or physical phone for T09) |
+
+## Omar Abdelatty ? Phase 2 Street Issues, 2026-10-30
+
+Implemented on `feature/street-issue-report` from main `1315c4b`: fictional StreetReport model/enums, in-memory repository and unique references, StateFlow ViewModel and validator, coral category selection, description counter/errors, photo placeholder, static sample map with editable label, local confirmation/disclaimer, My Reports filters/empty state and status timeline. Integrated the nested Streets graph while retaining bottom navigation; Housing and Clean Air Zone files are unchanged.
+
+Actual verification: `./gradlew.bat test` BUILD SUCCESSFUL (67 tests, zero failures/errors; 15 new Street Issues tests); `./gradlew.bat assembleDebug` BUILD SUCCESSFUL. Evidence location: [docs/evidence/streetissues/](docs/evidence/streetissues/README.md). ADB found no connected emulator/device, so manual UI acceptance, screenshots, navigation checks and accessibility/device-size checks remain pending. Peer review pending. No PR created automatically.

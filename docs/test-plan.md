@@ -34,3 +34,7 @@ Test every acceptance criterion manually on the primary emulator. Repeat key tes
 - Issues found, owner, fix and retest outcome.
 - Commit links for the feature that was tested.
 
+
+## Phase 2 Street Issues automated verification ? 2026-10-30
+
+Omar Abdelatty feature, branch `feature/street-issue-report`: `./gradlew.bat test` passed (67 tests, zero failures/errors, including 15 Street Issues tests); `./gradlew.bat assembleDebug` passed. Automated coverage includes T04/T05 validation/submission logic, references, repository retrieval, status filters and empty results. T04/T05 manual UI acceptance remains pending: ADB found no connected emulator/device. No manual pass or screenshot evidence is claimed. See [verification and pending checks](evidence/streetissues/README.md).
