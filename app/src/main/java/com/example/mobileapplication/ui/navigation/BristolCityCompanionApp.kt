@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mobileapplication.R
 import com.example.mobileapplication.ui.cleanairzone.CLEAN_AIR_ZONE_GRAPH_ROUTE
 import com.example.mobileapplication.ui.cleanairzone.cleanAirZoneGraph
+import com.example.mobileapplication.ui.housing.HOUSING_GRAPH_ROUTE
 import com.example.mobileapplication.ui.housing.housingGraph
 import com.example.mobileapplication.ui.parking.parkingGraph
 
@@ -41,10 +42,11 @@ fun BristolCityCompanionApp() {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination
     val isParking = currentDestination?.hierarchy?.any { it.route == AppDestination.Parking.route } == true
     val isCleanAirZone = currentDestination?.hierarchy?.any { it.route == CLEAN_AIR_ZONE_GRAPH_ROUTE } == true
+    val isHousing = currentDestination?.hierarchy?.any { it.route == HOUSING_GRAPH_ROUTE } == true
 
     Scaffold(
         topBar = {
-            if (!isParking && !isCleanAirZone) {
+            if (!isParking && !isCleanAirZone && !isHousing) {
             CenterAlignedTopAppBar(
                 title = { Text("Bristol City Companion") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
