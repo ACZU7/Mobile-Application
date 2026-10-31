@@ -2,6 +2,7 @@ package com.example.mobileapplication.ui.cleanairzone
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -32,11 +33,14 @@ fun NavGraphBuilder.cleanAirZoneGraph(navController: NavHostController) {
             val state by viewModel.state.collectAsStateWithLifecycle()
             // Only offer a back arrow if there is a screen to go back to.
             val canLeave = remember(entry) { navController.previousBackStackEntry != null }
+            val context = LocalContext.current
+            val linkOpener = remember(context) { BrowserLinkOpener(context) }
             CleanAirZoneScreen(
                 state = state,
                 demoRegistrations = viewModel.demoRegistrations,
                 onRegistrationChanged = viewModel::onRegistrationChanged,
                 onCheck = viewModel::onCheck,
+                onOpenOfficialChecker = { viewModel.onOpenOfficialChecker(linkOpener) },
                 onBack = if (canLeave) ({ navController.popBackStack() }) else null
             )
         }

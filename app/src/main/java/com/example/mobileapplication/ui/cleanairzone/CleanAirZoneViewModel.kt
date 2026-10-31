@@ -19,11 +19,14 @@ import kotlinx.coroutines.flow.update
  * @property error Why the last check was rejected, or null if there is no error.
  * @property result The prototype result of the last valid check, or null if
  * nothing has been checked since the text last changed.
+ * @property officialCheckerFallbackUrl The official checker's web address, shown
+ * as text when no app could open it; null when there is nothing to show.
  */
 data class CleanAirZoneState(
     val registration: String = "",
     val error: RegistrationError? = null,
-    val result: CazCheckResult? = null
+    val result: CazCheckResult? = null,
+    val officialCheckerFallbackUrl: String? = null
 )
 
 /**
@@ -74,5 +77,23 @@ class CleanAirZoneViewModel(
                 _state.update { it.copy(error = null, result = result) }
             }
         }
+    }
+
+    /**
+     * Called when the user taps "Use the official checker". Opens
+     * [OFFICIAL_CHECKER_URL] with [linkOpener]; if no app can open it, the
+     * address is put in the state so the screen can show it instead.
+     */
+    fun onOpenOfficialChecker(linkOpener: LinkOpener) {
+        val opened = linkOpener.open(OFFICIAL_CHECKER_URL)
+        _state.update { it.copy(officialCheckerFallbackUrl = if (opened) null else OFFICIAL_CHECKER_URL) }
+    }
+
+    /** Holds the official checker's address. */
+    companion object {
+
+        /** Bristol City Council's official Clean Air Zone charges and vehicle checker. */
+        const val OFFICIAL_CHECKER_URL =
+            "https://www.bristol.gov.uk/residents/streets-travel/bristols-caz/charges-and-vehicle-checker"
     }
 }

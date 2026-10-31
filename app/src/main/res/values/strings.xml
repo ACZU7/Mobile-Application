@@ -126,7 +126,7 @@
     <string name="caz_result_charge_amount">Sample daily charge: %1$s</string>
     <string name="caz_result_charge_body">Your vehicle does not meet the emission standard for Bristol\'s Clean Air Zone, so a charge applies for each day you drive in the zone.</string>
     <string name="caz_result_unknown_title">We couldn\'t find this vehicle in the sample data</string>
-    <string name="caz_result_unknown_body">This prototype can only find the sample registrations listed above. Check the registration is typed correctly.</string>
+    <string name="caz_result_unknown_body">This prototype can only find the sample registrations listed above. Check the registration is typed correctly, or use the official checker.</string>
 
     <!-- Clean Air Zone: prototype notice, shown on every result -->
     <string name="caz_prototype_notice_title">Prototype result using sample data.</string>
@@ -143,6 +143,10 @@
     <string name="caz_fuel_electric">Electric</string>
     <string name="caz_euro_standard">Euro %1$d</string>
     <string name="caz_euro_not_applicable">Not applicable</string>
+
+    <!-- Clean Air Zone: official checker -->
+    <string name="caz_official_checker_button">Use the official checker</string>
+    <string name="caz_official_checker_fallback">No app on this phone can open web links. To use the official checker, go to %1$s</string>
 
     <!-- Temporary: lets testers open features that are not in the bottom navigation yet -->
     <string name="temp_open_clean_air_zone">Open Clean Air Zone checker (temporary)</string>

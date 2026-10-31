@@ -95,6 +95,45 @@ class CleanAirZoneViewModelTest {
     }
 
     @Test
+    fun officialChecker_opensTheCouncilWebsite() {
+        val opened = mutableListOf<String>()
+
+        viewModel.onOpenOfficialChecker { url -> opened += url; true }
+
+        assertEquals(listOf(CleanAirZoneViewModel.OFFICIAL_CHECKER_URL), opened)
+        assertNull(viewModel.state.value.officialCheckerFallbackUrl)
+    }
+
+    @Test
+    fun officialChecker_whenNoAppCanOpenIt_showsTheWebAddressInstead() {
+        viewModel.onRegistrationChanged("IB15 PTL")
+        viewModel.onCheck()
+
+        viewModel.onOpenOfficialChecker { false }
+
+        val state = viewModel.state.value
+        assertEquals(CleanAirZoneViewModel.OFFICIAL_CHECKER_URL, state.officialCheckerFallbackUrl)
+        // The result stays on screen under the message.
+        assertEquals(CazOutcome.NO_CHARGE, state.result?.outcome)
+    }
+
+    @Test
+    fun officialChecker_openingLater_clearsTheFallbackMessage() {
+        viewModel.onOpenOfficialChecker { false }
+        viewModel.onOpenOfficialChecker { true }
+
+        assertNull(viewModel.state.value.officialCheckerFallbackUrl)
+    }
+
+    @Test
+    fun officialCheckerUrl_isTheCouncilCheckerPage() {
+        assertEquals(
+            "https://www.bristol.gov.uk/residents/streets-travel/bristols-caz/charges-and-vehicle-checker",
+            CleanAirZoneViewModel.OFFICIAL_CHECKER_URL
+        )
+    }
+
+    @Test
     fun demoRegistrations_comeFromTheRepository() {
         assertEquals(SampleVehicleRepository().registrations, viewModel.demoRegistrations)
     }

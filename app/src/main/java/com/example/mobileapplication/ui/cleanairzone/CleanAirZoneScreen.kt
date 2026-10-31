@@ -22,8 +22,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,8 +39,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -54,6 +58,7 @@ import com.example.mobileapplication.data.repository.SampleVehicleRepository
 import com.example.mobileapplication.domain.cleanairzone.CazRulesEngine
 import com.example.mobileapplication.domain.cleanairzone.RegistrationError
 import com.example.mobileapplication.ui.shared.PrimaryButton
+import com.example.mobileapplication.ui.shared.SecondaryButton
 import com.example.mobileapplication.ui.shared.TopBar
 import com.example.mobileapplication.ui.theme.Dimens
 import com.example.mobileapplication.ui.theme.MobileApplicationTheme
@@ -61,7 +66,8 @@ import com.example.mobileapplication.ui.theme.extendedColors
 
 /**
  * The Clean Air Zone checker (mockup screen 8): a yellow number-plate input, a
- * "Check vehicle" button and, after a valid check, the [CazResult].
+ * "Check vehicle" button and, after a valid check, the [CazResult] and a button
+ * that opens the official checker.
  *
  * This composable is "stateless": it draws whatever [state] it is given and
  * reports user actions through the callbacks. Validation and the prototype rules
@@ -71,6 +77,7 @@ import com.example.mobileapplication.ui.theme.extendedColors
  * @param demoRegistrations The sample registrations users can try.
  * @param onRegistrationChanged Called whenever the plate text changes.
  * @param onCheck Called when the user taps "Check vehicle" or the keyboard's Done key.
+ * @param onOpenOfficialChecker Called when the user taps "Use the official checker".
  * @param onBack Called when the back arrow is tapped. Pass null to hide the arrow.
  */
 @Composable
@@ -79,6 +86,7 @@ fun CleanAirZoneScreen(
     demoRegistrations: List<String>,
     onRegistrationChanged: (String) -> Unit,
     onCheck: () -> Unit,
+    onOpenOfficialChecker: () -> Unit,
     onBack: (() -> Unit)?,
     modifier: Modifier = Modifier
 ) {
@@ -143,6 +151,15 @@ fun CleanAirZoneScreen(
                 state.result?.let {
                     Spacer(Modifier.height(Dimens.ScreenPadding))
                     CazResult(it)
+                    Spacer(Modifier.height(Dimens.CardSpacing))
+                    SecondaryButton(
+                        text = stringResource(R.string.caz_official_checker_button),
+                        onClick = onOpenOfficialChecker
+                    )
+                    state.officialCheckerFallbackUrl?.let { url ->
+                        Spacer(Modifier.height(Dimens.GroupSpacing))
+                        LinkFallbackMessage(url)
+                    }
                 }
             }
         }
@@ -263,6 +280,30 @@ private val IllustrationWidth = 136.dp
 /** Width of the blue "GB" strip on the plate. */
 private val PlateStripWidth = 36.dp
 
+/**
+ * Shown when no app could open the official checker. The address can be
+ * selected and copied, and screen readers announce the message when it appears.
+ */
+@Composable
+private fun LinkFallbackMessage(url: String) {
+    Row(modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }) {
+        Icon(
+            imageVector = Icons.Filled.Info,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(Modifier.width(Dimens.GroupSpacing))
+        SelectionContainer {
+            Text(
+                text = stringResource(R.string.caz_official_checker_fallback, url),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+    }
+}
+
 /** The message shown for each registration error. */
 @get:StringRes
 private val RegistrationError.messageRes: Int
@@ -308,6 +349,7 @@ private fun CleanAirZonePreview(state: CleanAirZoneState, darkTheme: Boolean = f
             demoRegistrations = previewDemoRegistrations,
             onRegistrationChanged = {},
             onCheck = {},
+            onOpenOfficialChecker = {},
             onBack = {}
         )
     }
