@@ -11,6 +11,8 @@ package com.example.mobileapplication.data.model
  * readable label from `strings.xml`.
  *
  * @property registration The registration the user entered, for example "IB15 PTL".
+ * @property make The manufacturer, or null if the registration is not in the sample data.
+ * @property model The model name, or null if the registration is not in the sample data.
  * @property vehicleType The kind of vehicle, or null if the registration is not in the sample data.
  * @property fuelType The vehicle's fuel, or null if the registration is not in the sample data.
  * @property euroStandard The vehicle's emissions standard, or null if it is not known
@@ -21,6 +23,8 @@ package com.example.mobileapplication.data.model
  */
 data class CazCheckResult(
     val registration: String,
+    val make: String?,
+    val model: String?,
     val vehicleType: VehicleType?,
     val fuelType: FuelType?,
     val euroStandard: EuroStandard?,

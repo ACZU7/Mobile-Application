@@ -44,15 +44,16 @@ class SampleVehicleRepository(
 
         /**
          * Fictional vehicles covering each prototype rule, including the
-         * boundary cases (petrol Euro 3 and 4, diesel Euro 5 and 6).
+         * boundary cases (petrol Euro 3 and 4, diesel Euro 5 and 6). The makes and
+         * models are common ones, chosen only so the details look realistic.
          */
         private fun sampleVehicles(): List<SampleVehicle> = listOf(
-            SampleVehicle("IA26 EVD", VehicleType.CAR, FuelType.ELECTRIC, euroStandard = null),
-            SampleVehicle("IB15 PTL", VehicleType.CAR, FuelType.PETROL, EuroStandard.EURO_4),
-            SampleVehicle("IC05 PTL", VehicleType.CAR, FuelType.PETROL, EuroStandard.EURO_3),
-            SampleVehicle("ID18 DSL", VehicleType.VAN, FuelType.DIESEL, EuroStandard.EURO_6),
-            SampleVehicle("IE13 DSL", VehicleType.TAXI, FuelType.DIESEL, EuroStandard.EURO_5),
-            SampleVehicle("IF12 HGV", VehicleType.HGV, FuelType.DIESEL, EuroStandard.EURO_5)
+            SampleVehicle("IA26 EVD", "Nissan", "Leaf", VehicleType.CAR, FuelType.ELECTRIC, euroStandard = null),
+            SampleVehicle("IB15 PTL", "Volkswagen", "Golf", VehicleType.CAR, FuelType.PETROL, EuroStandard.EURO_4),
+            SampleVehicle("IC05 PTL", "Vauxhall", "Corsa", VehicleType.CAR, FuelType.PETROL, EuroStandard.EURO_3),
+            SampleVehicle("ID18 DSL", "Ford", "Transit Custom", VehicleType.VAN, FuelType.DIESEL, EuroStandard.EURO_6),
+            SampleVehicle("IE13 DSL", "Skoda", "Octavia", VehicleType.TAXI, FuelType.DIESEL, EuroStandard.EURO_5),
+            SampleVehicle("IF12 HGV", "DAF", "CF", VehicleType.HGV, FuelType.DIESEL, EuroStandard.EURO_5)
         )
     }
 }

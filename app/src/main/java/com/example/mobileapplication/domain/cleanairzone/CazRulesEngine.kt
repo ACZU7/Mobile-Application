@@ -45,6 +45,8 @@ object CazRulesEngine {
         if (vehicle == null) {
             return CazCheckResult(
                 registration = registration,
+                make = null,
+                model = null,
                 vehicleType = null,
                 fuelType = null,
                 euroStandard = null,
@@ -54,6 +56,8 @@ object CazRulesEngine {
         val outcome = outcomeFor(vehicle.fuelType, vehicle.euroStandard)
         return CazCheckResult(
             registration = registration,
+            make = vehicle.make,
+            model = vehicle.model,
             vehicleType = vehicle.vehicleType,
             fuelType = vehicle.fuelType,
             euroStandard = vehicle.euroStandard,

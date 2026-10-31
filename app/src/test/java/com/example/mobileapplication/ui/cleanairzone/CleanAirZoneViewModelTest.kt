@@ -56,6 +56,8 @@ class CleanAirZoneViewModelTest {
         val result = viewModel.state.value.result!!
         assertNull(viewModel.state.value.error)
         assertEquals(CazOutcome.NO_CHARGE, result.outcome)
+        assertEquals("Volkswagen", result.make)
+        assertEquals("Golf", result.model)
         assertEquals(FuelType.PETROL, result.fuelType)
         assertEquals(EuroStandard.EURO_4, result.euroStandard)
     }
@@ -79,6 +81,7 @@ class CleanAirZoneViewModelTest {
         assertNull(viewModel.state.value.error)
         assertEquals(CazOutcome.UNKNOWN, result.outcome)
         assertEquals("AB12 CDE", result.registration)
+        assertNull(result.make)
         assertNull(result.vehicleType)
     }
 

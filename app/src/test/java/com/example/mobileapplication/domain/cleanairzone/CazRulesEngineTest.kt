@@ -16,7 +16,7 @@ class CazRulesEngineTest {
         fuelType: FuelType,
         euroStandard: EuroStandard?,
         vehicleType: VehicleType = VehicleType.CAR
-    ) = SampleVehicle("IZ00 TST", vehicleType, fuelType, euroStandard)
+    ) = SampleVehicle("IZ00 TST", "Test", "Model", vehicleType, fuelType, euroStandard)
 
     private fun outcomeOf(fuelType: FuelType, euroStandard: EuroStandard?): CazOutcome =
         CazRulesEngine.check("IZ00 TST", vehicle(fuelType, euroStandard)).outcome
@@ -105,6 +105,8 @@ class CazRulesEngineTest {
 
         assertEquals(CazOutcome.UNKNOWN, result.outcome)
         assertEquals("AB12 CDE", result.registration)
+        assertNull(result.make)
+        assertNull(result.model)
         assertNull(result.vehicleType)
         assertNull(result.fuelType)
         assertNull(result.euroStandard)
@@ -160,6 +162,8 @@ class CazRulesEngineTest {
         val result = CazRulesEngine.check("iz00tst", sample)
 
         assertEquals("iz00tst", result.registration)
+        assertEquals("Test", result.make)
+        assertEquals("Model", result.model)
         assertEquals(VehicleType.VAN, result.vehicleType)
         assertEquals(FuelType.PETROL, result.fuelType)
         assertEquals(EuroStandard.EURO_4, result.euroStandard)

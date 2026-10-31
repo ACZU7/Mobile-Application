@@ -44,6 +44,22 @@ class SampleVehicleRepositoryTest {
     }
 
     @Test
+    fun everyDemoVehicle_hasAMakeAndModel() {
+        repository.registrations.mapNotNull(repository::findByRegistration).forEach {
+            assertTrue("${it.registration} needs a make", it.make.isNotBlank())
+            assertTrue("${it.registration} needs a model", it.model.isNotBlank())
+        }
+    }
+
+    @Test
+    fun findByRegistration_returnsTheVehicleDetails() {
+        val vehicle = repository.findByRegistration("IB15 PTL")!!
+
+        assertEquals("Volkswagen", vehicle.make)
+        assertEquals("Golf", vehicle.model)
+    }
+
+    @Test
     fun sampleData_coversEveryOutcomeAndBoundaryCase() {
         val vehicles = repository.registrations.mapNotNull(repository::findByRegistration)
         val outcomes = vehicles.map { CazRulesEngine.check(it.registration, it).outcome }.toSet()

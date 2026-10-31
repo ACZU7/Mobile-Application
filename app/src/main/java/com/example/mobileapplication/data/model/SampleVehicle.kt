@@ -7,6 +7,8 @@ package com.example.mobileapplication.data.model
  * [com.example.mobileapplication.data.repository.SampleVehicleRepository].
  *
  * @property registration The demo registration, for example "IB15 PTL".
+ * @property make The manufacturer, for example "Volkswagen".
+ * @property model The model name, for example "Golf".
  * @property vehicleType The kind of vehicle.
  * @property fuelType The vehicle's fuel.
  * @property euroStandard The emissions standard, or null for electric vehicles
@@ -14,6 +16,8 @@ package com.example.mobileapplication.data.model
  */
 data class SampleVehicle(
     val registration: String,
+    val make: String,
+    val model: String,
     val vehicleType: VehicleType,
     val fuelType: FuelType,
     val euroStandard: EuroStandard?
