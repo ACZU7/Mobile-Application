@@ -27,6 +27,7 @@ Test every acceptance criterion manually on the primary emulator. Repeat key tes
 | T03 | 2026-10-24 | Passed for Phase 1 sample-data scope: combined filters, empty state, clear filters, details, Directions fallback and Android Back. Parking selected on details; Housing still reachable. | Omar Abdelatty feature; verified by coding agent operating emulator through ADB | [Parking test record and five screenshots](evidence/parking/README.md) |
 | T06 | 2026-10-22 | Passed | Mohammad AlAbwah | [08-T06-confirmation.png](evidence/housing/08-T06-confirmation.png) |
 | T07 | 2026-10-22 | Passed | Mohammad AlAbwah | [09-T07-progress.png](evidence/housing/09-T07-progress.png) |
+| T08 | 2026-10-31 | Passed: empty and invalid registrations show a clear error with an icon; no-charge (IB15 PTL), charge (IC05 PTL) and unknown (AB12 CDE) results each show the prototype statement and "Use the official checker"; the button opens the council checker in the browser, and shows the web address instead when no browser is available; back arrow, system Back, dark mode and landscape checked. | Mohammad AlAbwah | _Screenshot links to be added_ |
 
 ## Evidence to retain
 
