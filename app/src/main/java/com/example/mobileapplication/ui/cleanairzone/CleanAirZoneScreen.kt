@@ -2,6 +2,7 @@ package com.example.mobileapplication.ui.cleanairzone
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +34,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -102,11 +105,22 @@ fun CleanAirZoneScreen(
                     .fillMaxWidth()
                     .padding(Dimens.ScreenPadding)
             ) {
-                Text(
-                    text = stringResource(R.string.caz_intro),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // Decorative, so screen readers skip it; the text next to it says what the screen is for.
+                    Image(
+                        painter = painterResource(R.drawable.illustration_bristol_bridge),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                        modifier = Modifier.width(IllustrationWidth)
+                    )
+                    Spacer(Modifier.width(Dimens.CardSpacing))
+                    Text(
+                        text = stringResource(R.string.caz_intro),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
                 Spacer(Modifier.height(24.dp))
                 NumberPlateField(
                     value = state.registration,
@@ -247,6 +261,9 @@ private fun PlateTextField(
         }
     )
 }
+
+/** Width of the bridge illustration next to the intro text. */
+private val IllustrationWidth = 136.dp
 
 /** Width of the blue "GB" strip on the plate. */
 private val PlateStripWidth = 36.dp
