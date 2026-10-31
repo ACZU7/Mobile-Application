@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PriorityHigh
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.Icon
@@ -46,7 +47,8 @@ import java.util.Locale
 
 /**
  * Everything shown after a valid check (bottom half of mockup screen 8): the
- * outcome card and, for a vehicle found in the sample data, its details.
+ * outcome card, the prototype notice and, for a vehicle found in the sample
+ * data, its details.
  *
  * It only displays [result]; the outcome is worked out by the rules engine.
  */
@@ -57,6 +59,7 @@ fun CazResult(result: CazCheckResult, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth()
     ) {
         OutcomeCard(result)
+        PrototypeNotice()
         if (result.outcome != CazOutcome.UNKNOWN) {
             VehicleDetailsCard(result)
         }
@@ -178,6 +181,47 @@ private fun ResultBody(text: String) {
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
+}
+
+/**
+ * The statement that this is not an official decision, shown on every result.
+ *
+ * It is full size, not small print, and uses an info icon, a bold first line and
+ * an outline, so it stands out without relying on colour.
+ */
+@Composable
+private fun PrototypeNotice() {
+    Surface(
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(Dimens.SelectedBorderWidth, MaterialTheme.colorScheme.primary),
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
+    ) {
+        Row(modifier = Modifier.padding(Dimens.ScreenPadding)) {
+            // The text says it all, so the icon needs no description.
+            Icon(
+                imageVector = Icons.Filled.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(Modifier.width(Dimens.CardSpacing))
+            Column {
+                Text(
+                    text = stringResource(R.string.caz_prototype_notice_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.caz_prototype_notice_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+    }
 }
 
 /** The "Vehicle details" table: make, model, fuel type and Euro standard. */

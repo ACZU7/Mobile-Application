@@ -128,6 +128,10 @@
     <string name="caz_result_unknown_title">We couldn\'t find this vehicle in the sample data</string>
     <string name="caz_result_unknown_body">This prototype can only find the sample registrations listed above. Check the registration is typed correctly.</string>
 
+    <!-- Clean Air Zone: prototype notice, shown on every result -->
+    <string name="caz_prototype_notice_title">Prototype result using sample data.</string>
+    <string name="caz_prototype_notice_body">This is not an official charge decision.</string>
+
     <!-- Clean Air Zone: vehicle details -->
     <string name="caz_details_heading">Vehicle details</string>
     <string name="caz_details_make">Make</string>
