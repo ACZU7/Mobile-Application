@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -51,8 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapplication.R
-import com.example.mobileapplication.data.model.CazCheckResult
-import com.example.mobileapplication.data.model.CazOutcome
 import com.example.mobileapplication.data.repository.SampleVehicleRepository
 import com.example.mobileapplication.domain.cleanairzone.CazRulesEngine
 import com.example.mobileapplication.domain.cleanairzone.RegistrationError
@@ -61,12 +58,10 @@ import com.example.mobileapplication.ui.shared.TopBar
 import com.example.mobileapplication.ui.theme.Dimens
 import com.example.mobileapplication.ui.theme.MobileApplicationTheme
 import com.example.mobileapplication.ui.theme.extendedColors
-import java.text.NumberFormat
-import java.util.Locale
 
 /**
- * The Clean Air Zone checker: a yellow number-plate input and a "Check vehicle"
- * button (top half of mockup screen 8).
+ * The Clean Air Zone checker (mockup screen 8): a yellow number-plate input, a
+ * "Check vehicle" button and, after a valid check, the [CazResult].
  *
  * This composable is "stateless": it draws whatever [state] it is given and
  * reports user actions through the callbacks. Validation and the prototype rules
@@ -147,7 +142,7 @@ fun CleanAirZoneScreen(
                 PrimaryButton(text = stringResource(R.string.caz_check_button), onClick = onCheck)
                 state.result?.let {
                     Spacer(Modifier.height(Dimens.ScreenPadding))
-                    ResultPlaceholder(it)
+                    CazResult(it)
                 }
             }
         }
@@ -267,35 +262,6 @@ private val IllustrationWidth = 136.dp
 
 /** Width of the blue "GB" strip on the plate. */
 private val PlateStripWidth = 36.dp
-
-/**
- * A one-line outcome shown after a valid check, with the prototype disclaimer.
- * Temporary: the full result card from the mockup replaces it later.
- */
-@Composable
-private fun ResultPlaceholder(result: CazCheckResult) {
-    val text = when (result.outcome) {
-        CazOutcome.NO_CHARGE -> stringResource(R.string.caz_result_no_charge, result.registration)
-        CazOutcome.CHARGE_APPLIES -> stringResource(
-            R.string.caz_result_charge,
-            result.registration,
-            formatPence(result.dailyChargePence ?: 0)
-        )
-        CazOutcome.UNKNOWN -> stringResource(R.string.caz_result_unknown, result.registration)
-    }
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(text = text, style = MaterialTheme.typography.bodyMedium)
-        Text(
-            text = stringResource(R.string.caz_result_disclaimer),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-/** Formats an amount in pence as pounds, for example 900 as "£9.00". */
-private fun formatPence(pence: Int): String =
-    NumberFormat.getCurrencyInstance(Locale.UK).format(pence / 100.0)
 
 /** The message shown for each registration error. */
 @get:StringRes

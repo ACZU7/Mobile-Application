@@ -119,11 +119,26 @@
     <string name="caz_error_invalid_characters">Use only letters and numbers.</string>
     <string name="caz_error_no_digits">A UK registration includes at least one number.</string>
 
-    <!-- Clean Air Zone: temporary result line (the full result card comes later) -->
-    <string name="caz_result_no_charge">%1$s: no charge – this sample vehicle meets the prototype standard.</string>
-    <string name="caz_result_charge">%1$s: a sample daily charge of %2$s applies.</string>
-    <string name="caz_result_unknown">%1$s is not in the sample data, so no result can be given.</string>
-    <string name="caz_result_disclaimer">Prototype result from sample data – not an official charge decision.</string>
+    <!-- Clean Air Zone: result -->
+    <string name="caz_result_no_charge_title">No charge – your vehicle meets the standard</string>
+    <string name="caz_result_no_charge_body">Your vehicle meets the emission standard for Bristol\'s Clean Air Zone and can drive in the zone without paying a charge.</string>
+    <string name="caz_result_charge_title">A charge applies</string>
+    <string name="caz_result_charge_amount">Sample daily charge: %1$s</string>
+    <string name="caz_result_charge_body">Your vehicle does not meet the emission standard for Bristol\'s Clean Air Zone, so a charge applies for each day you drive in the zone.</string>
+    <string name="caz_result_unknown_title">We couldn\'t find this vehicle in the sample data</string>
+    <string name="caz_result_unknown_body">This prototype can only find the sample registrations listed above. Check the registration is typed correctly.</string>
+
+    <!-- Clean Air Zone: vehicle details -->
+    <string name="caz_details_heading">Vehicle details</string>
+    <string name="caz_details_make">Make</string>
+    <string name="caz_details_model">Model</string>
+    <string name="caz_details_fuel_type">Fuel type</string>
+    <string name="caz_details_euro_standard">Euro standard</string>
+    <string name="caz_fuel_petrol">Petrol</string>
+    <string name="caz_fuel_diesel">Diesel</string>
+    <string name="caz_fuel_electric">Electric</string>
+    <string name="caz_euro_standard">Euro %1$d</string>
+    <string name="caz_euro_not_applicable">Not applicable</string>
 
     <!-- Temporary: lets testers open features that are not in the bottom navigation yet -->
     <string name="temp_open_clean_air_zone">Open Clean Air Zone checker (temporary)</string>
