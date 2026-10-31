@@ -13,6 +13,7 @@ The approved mockups are in `docs/design/ui-mockups.png` (12 screens). Every scr
 | `surfaceTint` | `#F5FBF8` | Highlighted cards (rent balance, selected room tile, result cards) |
 | `chipNeutral` | `#F2F3F5` | Unselected filter chips |
 | `plateYellow` | `#EBC038` | UK number-plate input |
+| `plateBlue` | `#233471` | "GB" strip on the left of the number-plate input |
 | Status – Submitted | bg `#DAE8FB`, text dark blue | Status chip |
 | Status – In progress | bg `#F6E0B6`, text dark amber | Status chip |
 | Status – Fixed / Completed | bg `#DAEFE1`, text dark green | Status chip |

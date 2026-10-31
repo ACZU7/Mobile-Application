@@ -106,6 +106,7 @@
     <string name="caz_intro">Check if your vehicle can drive in Bristol\'s Clean Air Zone</string>
     <string name="caz_plate_label">Vehicle registration</string>
     <string name="caz_plate_placeholder">AB12 CDE</string>
+    <string name="caz_plate_country" translatable="false">GB</string>
     <string name="caz_format_guidance">Enter a UK registration such as AB12 CDE</string>
     <string name="caz_demo_hint">Prototype: only sample vehicles can be found. Try %1$s.</string>
     <string name="caz_check_button">Check vehicle</string>

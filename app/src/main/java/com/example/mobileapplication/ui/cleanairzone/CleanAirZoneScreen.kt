@@ -2,11 +2,14 @@ package com.example.mobileapplication.ui.cleanairzone
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,8 +35,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -136,7 +141,8 @@ fun CleanAirZoneScreen(
 }
 
 /**
- * The yellow UK number-plate input. Letters are typed and shown in bold capitals.
+ * The yellow UK number-plate input, with the blue "GB" strip on the left.
+ * Letters are typed and shown in bold capitals.
  *
  * The plate stays yellow with dark text in dark mode too, like a real plate.
  */
@@ -160,40 +166,90 @@ private fun NumberPlateField(
         border = BorderStroke(2.dp, plateText),
         modifier = Modifier.fillMaxWidth()
     ) {
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            singleLine = true,
-            textStyle = textStyle,
-            cursorBrush = SolidColor(plateText),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Characters,
-                autoCorrectEnabled = false,
-                keyboardType = KeyboardType.Ascii,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(onDone = { onDone() }),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 72.dp)
-                .semantics { contentDescription = label },
-            decorationBox = { innerTextField ->
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.padding(horizontal = Dimens.ScreenPadding, vertical = Dimens.CardSpacing)
-                ) {
-                    if (value.isEmpty()) {
-                        Text(
-                            text = stringResource(R.string.caz_plate_placeholder),
-                            style = textStyle.copy(color = plateText.copy(alpha = 0.35f))
-                        )
-                    }
-                    innerTextField()
-                }
-            }
+        Row(Modifier.height(IntrinsicSize.Min)) {
+            PlateCountryStrip()
+            PlateTextField(
+                value = value,
+                onValueChange = onValueChange,
+                onDone = onDone,
+                textStyle = textStyle,
+                label = label,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+/**
+ * The blue "GB" strip on the left of the plate. It is only decoration, so screen
+ * readers skip it.
+ */
+@Composable
+private fun PlateCountryStrip() {
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(PlateStripWidth)
+            .background(MaterialTheme.extendedColors.plateBlue)
+            .padding(bottom = Dimens.GroupSpacing)
+            .clearAndSetSemantics {}
+    ) {
+        Text(
+            text = stringResource(R.string.caz_plate_country),
+            color = MaterialTheme.extendedColors.onPlateBlue,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold
         )
     }
 }
+
+/** The text field part of the plate, to the right of the "GB" strip. */
+@Composable
+private fun PlateTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    onDone: () -> Unit,
+    textStyle: TextStyle,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    val plateText = textStyle.color
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        textStyle = textStyle,
+        cursorBrush = SolidColor(plateText),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Characters,
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Ascii,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(onDone = { onDone() }),
+        modifier = modifier
+            .heightIn(min = 72.dp)
+            .semantics { contentDescription = label },
+        decorationBox = { innerTextField ->
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.padding(horizontal = Dimens.CardSpacing, vertical = Dimens.CardSpacing)
+            ) {
+                if (value.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.caz_plate_placeholder),
+                        style = textStyle.copy(color = plateText.copy(alpha = 0.35f))
+                    )
+                }
+                innerTextField()
+            }
+        }
+    )
+}
+
+/** Width of the blue "GB" strip on the plate. */
+private val PlateStripWidth = 36.dp
 
 /**
  * A one-line outcome shown after a valid check, with the prototype disclaimer.
