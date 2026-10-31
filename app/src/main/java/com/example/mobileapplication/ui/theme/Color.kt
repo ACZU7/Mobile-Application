@@ -14,6 +14,7 @@ val SurfaceWhite = Color(0xFFFFFFFF)    // screen background and cards
 val SurfaceTint = Color(0xFFF5FBF8)     // highlighted cards, selected tiles
 val ChipNeutral = Color(0xFFF2F3F5)     // unselected chips, upcoming stepper steps
 val PlateYellow = Color(0xFFEBC038)     // UK number-plate input
+val PlateBlue = Color(0xFF233471)       // "GB" strip on the left of the number plate
 val TextPrimary = Color(0xFF1C1C1C)
 val TextSecondary = Color(0xFF6B6B6B)
 val BorderLight = Color(0xFFE3E5E8)     // very light card border

@@ -23,6 +23,12 @@ data class ExtendedColors(
     val surfaceTint: Color,
     val chipNeutral: Color,
     val plateYellow: Color,
+    /** Text on [plateYellow]. Dark in both themes, because the plate stays yellow. */
+    val onPlateYellow: Color,
+    /** The "GB" strip on the left of the plate. The same in both themes, like a real plate. */
+    val plateBlue: Color,
+    /** Text on [plateBlue]. */
+    val onPlateBlue: Color,
     val statusSubmitted: StatusColors,
     val statusInProgress: StatusColors,
     val statusFixed: StatusColors,
@@ -34,6 +40,9 @@ val LightExtendedColors = ExtendedColors(
     surfaceTint = SurfaceTint,
     chipNeutral = ChipNeutral,
     plateYellow = PlateYellow,
+    onPlateYellow = TextPrimary,
+    plateBlue = PlateBlue,
+    onPlateBlue = SurfaceWhite,
     statusSubmitted = StatusColors(StatusSubmittedBg, StatusSubmittedText),
     statusInProgress = StatusColors(StatusInProgressBg, StatusInProgressText),
     statusFixed = StatusColors(StatusFixedBg, StatusFixedText),
@@ -45,6 +54,9 @@ val DarkExtendedColors = ExtendedColors(
     surfaceTint = SurfaceTintDark,
     chipNeutral = ChipNeutralDark,
     plateYellow = PlateYellow,
+    onPlateYellow = TextPrimary,
+    plateBlue = PlateBlue,
+    onPlateBlue = SurfaceWhite,
     statusSubmitted = StatusColors(StatusSubmittedBgDark, StatusSubmittedTextDark),
     statusInProgress = StatusColors(StatusInProgressBgDark, StatusInProgressTextDark),
     statusFixed = StatusColors(StatusFixedBgDark, StatusFixedTextDark),

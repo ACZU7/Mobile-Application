@@ -14,10 +14,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -26,6 +28,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mobileapplication.R
+import com.example.mobileapplication.ui.cleanairzone.CLEAN_AIR_ZONE_GRAPH_ROUTE
+import com.example.mobileapplication.ui.cleanairzone.cleanAirZoneGraph
+import com.example.mobileapplication.ui.housing.HOUSING_GRAPH_ROUTE
 import com.example.mobileapplication.ui.housing.housingGraph
 import com.example.mobileapplication.ui.parking.parkingGraph
 
@@ -35,10 +41,12 @@ fun BristolCityCompanionApp() {
     val navController = rememberNavController()
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination
     val isParking = currentDestination?.hierarchy?.any { it.route == AppDestination.Parking.route } == true
+    val isCleanAirZone = currentDestination?.hierarchy?.any { it.route == CLEAN_AIR_ZONE_GRAPH_ROUTE } == true
+    val isHousing = currentDestination?.hierarchy?.any { it.route == HOUSING_GRAPH_ROUTE } == true
 
     Scaffold(
         topBar = {
-            if (!isParking) {
+            if (!isParking && !isCleanAirZone && !isHousing) {
             CenterAlignedTopAppBar(
                 title = { Text("Bristol City Companion") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -86,19 +94,25 @@ fun BristolCityCompanionApp() {
                 .consumeWindowInsets(innerPadding)
         ) {
             composable(AppDestination.Home.route) {
-                PlaceholderScreen("Welcome to Bristol City Companion", "A prototype for selected Bristol resident services.")
+                PlaceholderScreen("Welcome to Bristol City Companion", "A prototype for selected Bristol resident services.") {
+                    // TEMPORARY: opens the Clean Air Zone checker for testing until Home has service tiles.
+                    TextButton(onClick = { navController.navigate(CLEAN_AIR_ZONE_GRAPH_ROUTE) }) {
+                        Text(stringResource(R.string.temp_open_clean_air_zone))
+                    }
+                }
             }
             parkingGraph(navController)
             composable(AppDestination.Streets.route) {
                 PlaceholderScreen("Streets & Travel", "Omar Abdelatty will add street issue reporting here.")
             }
             housingGraph(navController)
+            cleanAirZoneGraph(navController)
         }
     }
 }
 
 @Composable
-private fun PlaceholderScreen(title: String, description: String) {
+private fun PlaceholderScreen(title: String, description: String, extra: @Composable () -> Unit = {}) {
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.Center,
@@ -110,5 +124,6 @@ private fun PlaceholderScreen(title: String, description: String) {
             modifier = Modifier.padding(top = 12.dp),
             style = MaterialTheme.typography.bodyLarge
         )
+        extra()
     }
 }
