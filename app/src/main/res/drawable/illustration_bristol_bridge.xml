@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Simple illustration of Bristol's Clifton Suspension Bridge (Clean Air Zone checker).
+    Every shape is black with a different opacity; the screen tints it with the theme's
+    primary colour, so it is teal in light mode and light teal in dark mode.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="96dp"
+    android:viewportWidth="160"
+    android:viewportHeight="96">
+
+    <!-- Distant hills -->
+    <path
+        android:fillColor="#FF000000"
+        android:fillAlpha="0.12"
+        android:pathData="M0,88 L0,60 Q20,44 40,56 Q60,36 84,52 Q104,34 126,50 Q146,40 160,54 L160,88 Z" />
+
+    <!-- River in the gorge -->
+    <path
+        android:fillColor="#FF000000"
+        android:fillAlpha="0.2"
+        android:pathData="M46,80 L114,80 L110,88 L50,88 Z" />
+
+    <!-- Gorge sides -->
+    <path
+        android:fillColor="#FF000000"
+        android:fillAlpha="0.35"
+        android:pathData="M0,66 L40,62 L50,88 L0,88 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:fillAlpha="0.35"
+        android:pathData="M160,66 L120,62 L110,88 L160,88 Z" />
+
+    <!-- Trees on both sides -->
+    <path
+        android:fillColor="#FF000000"
+        android:fillAlpha="0.55"
+        android:pathData="M2,70 A7,9 0 0,1 16,70 Z M12,72 A6,7 0 0,1 24,72 Z M136,72 A6,7 0 0,1 148,72 Z M144,70 A7,9 0 0,1 158,70 Z" />
+
+    <!-- Back stays from the tower tops down to the anchors -->
+    <path
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M37,18 Q22,36 8,63 M123,18 Q138,36 152,63" />
+
+    <!-- Hangers between the main cable and the deck -->
+    <path
+        android:strokeColor="#FF000000"
+        android:strokeAlpha="0.7"
+        android:strokeWidth="1"
+        android:pathData="M48,30.5 V52 M58,38.7 V52 M68,43.8 V52 M80,46 V52 M92,43.8 V52 M102,38.7 V52 M112,30.5 V52" />
+
+    <!-- Main cable -->
+    <path
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M37,18 Q80,74 123,18" />
+
+    <!-- Deck -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M24,52 L136,52 L136,55.5 L24,55.5 Z" />
+
+    <!-- Towers: two legs, a cross beam and a cap -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M30,18 h4 v46 h-4 Z M40,18 h4 v46 h-4 Z M30,30 h14 v3 h-14 Z M28,14 h18 v5 h-18 Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M116,18 h4 v46 h-4 Z M126,18 h4 v46 h-4 Z M116,30 h14 v3 h-14 Z M114,14 h18 v5 h-18 Z" />
+
+    <!-- Bird -->
+    <path
+        android:strokeColor="#FF000000"
+        android:strokeAlpha="0.5"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:pathData="M84,8 q3,-3 6,0 q3,-3 6,0" />
+</vector>
