@@ -28,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mobileapplication.ui.housing.housingGraph
 import com.example.mobileapplication.ui.parking.parkingGraph
+import com.example.mobileapplication.ui.streetissues.streetIssuesGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +39,7 @@ fun BristolCityCompanionApp() {
 
     Scaffold(
         topBar = {
-            if (!isParking) {
+            if (!isParking && currentDestination?.hierarchy?.any { it.route == AppDestination.Streets.route } != true) {
             CenterAlignedTopAppBar(
                 title = { Text("Bristol City Companion") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -89,9 +90,7 @@ fun BristolCityCompanionApp() {
                 PlaceholderScreen("Welcome to Bristol City Companion", "A prototype for selected Bristol resident services.")
             }
             parkingGraph(navController)
-            composable(AppDestination.Streets.route) {
-                PlaceholderScreen("Streets & Travel", "Omar Abdelatty will add street issue reporting here.")
-            }
+            streetIssuesGraph(navController)
             housingGraph(navController)
         }
     }
