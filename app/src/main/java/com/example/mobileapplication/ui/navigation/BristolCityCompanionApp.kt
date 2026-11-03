@@ -34,6 +34,7 @@ import com.example.mobileapplication.ui.cleanairzone.cleanAirZoneGraph
 import com.example.mobileapplication.ui.housing.HOUSING_GRAPH_ROUTE
 import com.example.mobileapplication.ui.housing.housingGraph
 import com.example.mobileapplication.ui.parking.parkingGraph
+import com.example.mobileapplication.ui.streetissues.streetIssuesGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,12 +42,13 @@ fun BristolCityCompanionApp() {
     val navController = rememberNavController()
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination
     val isParking = currentDestination?.hierarchy?.any { it.route == AppDestination.Parking.route } == true
+    val isStreets = currentDestination?.hierarchy?.any { it.route == AppDestination.Streets.route } == true
     val isCleanAirZone = currentDestination?.hierarchy?.any { it.route == CLEAN_AIR_ZONE_GRAPH_ROUTE } == true
     val isHousing = currentDestination?.hierarchy?.any { it.route == HOUSING_GRAPH_ROUTE } == true
 
     Scaffold(
         topBar = {
-            if (!isParking && !isCleanAirZone && !isHousing) {
+            if (!isParking && !isStreets && !isHousing && !isCleanAirZone) {
             CenterAlignedTopAppBar(
                 title = { Text("Bristol City Companion") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -102,9 +104,7 @@ fun BristolCityCompanionApp() {
                 }
             }
             parkingGraph(navController)
-            composable(AppDestination.Streets.route) {
-                PlaceholderScreen("Streets & Travel", "Omar Abdelatty will add street issue reporting here.")
-            }
+            streetIssuesGraph(navController)
             housingGraph(navController)
             cleanAirZoneGraph(navController)
         }
