@@ -66,23 +66,45 @@ class ParkingViewModelTest {
     }
 
     @Test
-    fun invalidSelection_clearsPreviousSelectionAndFallback() {
+    fun invalidSelection_clearsPreviousSelectionAndDirectionsDialogs() {
         viewModel.selectCarPark("sample-01")
-        viewModel.showDirectionsMessage()
+        viewModel.requestDirections()
         viewModel.selectCarPark("missing")
         assertNull(viewModel.uiState.value.selectedCarPark)
-        assertFalse(viewModel.uiState.value.directionsMessageVisible)
+        assertFalse(viewModel.uiState.value.directionsConfirmVisible)
+        assertFalse(viewModel.uiState.value.directionsUnavailableVisible)
     }
 
     @Test
-    fun directionsFallback_requiresSelectionAndCanBeDismissed() {
-        viewModel.showDirectionsMessage()
-        assertFalse(viewModel.uiState.value.directionsMessageVisible)
+    fun directionsConfirmation_requiresSelectionAndCanBeCancelled() {
+        viewModel.requestDirections()
+        assertFalse(viewModel.uiState.value.directionsConfirmVisible)
         viewModel.selectCarPark("sample-01")
-        viewModel.showDirectionsMessage()
-        assertTrue(viewModel.uiState.value.directionsMessageVisible)
-        viewModel.dismissDirectionsMessage()
-        assertFalse(viewModel.uiState.value.directionsMessageVisible)
+        viewModel.requestDirections()
+        assertTrue(viewModel.uiState.value.directionsConfirmVisible)
+        viewModel.dismissDirections()
+        assertFalse(viewModel.uiState.value.directionsConfirmVisible)
+    }
+
+    @Test
+    fun directionsOpened_closesConfirmationWithoutFallback() {
+        viewModel.selectCarPark("sample-02")
+        viewModel.requestDirections()
+        viewModel.onDirectionsLaunched(opened = true)
+        assertFalse(viewModel.uiState.value.directionsConfirmVisible)
+        assertFalse(viewModel.uiState.value.directionsUnavailableVisible)
+    }
+
+    @Test
+    fun noMapsAppOrBrowser_showsFallbackThatCanBeDismissed() {
+        viewModel.selectCarPark("sample-02")
+        viewModel.requestDirections()
+        viewModel.onDirectionsLaunched(opened = false)
+        assertFalse(viewModel.uiState.value.directionsConfirmVisible)
+        assertTrue(viewModel.uiState.value.directionsUnavailableVisible)
+        viewModel.dismissDirectionsUnavailable()
+        assertFalse(viewModel.uiState.value.directionsUnavailableVisible)
+        assertEquals(repository.getCarPark("sample-02"), viewModel.uiState.value.selectedCarPark)
     }
 
     private fun resultIds() = viewModel.uiState.value.filteredCarParks.map { it.id }
@@ -131,11 +153,80 @@ class ParkingViewModelTest {
     }
 
     @Test
-    fun locationFallback_canBeShownAndDismissedWithoutSelectingAPark() {
-        viewModel.setLocationMessageVisible(true)
-        assertTrue(viewModel.uiState.value.locationMessageVisible)
-        assertNull(viewModel.uiState.value.selectedCarPark)
-        viewModel.setLocationMessageVisible(false)
-        assertFalse(viewModel.uiState.value.locationMessageVisible)
+    fun locating_showsProgressWithoutChangingOrder() {
+        viewModel.onLocating()
+        assertEquals(LocationStatus.LOCATING, viewModel.uiState.value.locationStatus)
+        assertEquals(repository.carParks.map { it.id }, resultIds())
+    }
+
+    @Test
+    fun locationReceived_sortsNearestFirstAndHighlightsNearest() {
+        viewModel.onLocating()
+        viewModel.onLocationReceived(EAST_PARK_AND_RIDE)
+        val state = viewModel.uiState.value
+        assertEquals(LocationStatus.SORTED_BY_DISTANCE, state.locationStatus)
+        assertEquals("sample-08", resultIds().first())
+        assertEquals("sample-08", state.highlightedCarParkId)
+        val distances = state.filteredCarParks.map { state.distanceMiles(it) }
+        assertEquals(distances.sorted(), distances)
+        assertEquals(0.0, distances.first(), 0.001)
+        assertNull(state.locationMessage)
+        assertEquals(1, state.distanceSortVersion)
+    }
+
+    @Test
+    fun filterChanges_doNotCountAsANewDistanceSort() {
+        viewModel.onLocationReceived(EAST_PARK_AND_RIDE)
+        viewModel.onTypeSelected(ParkingType.CAR_PARK)
+        assertEquals(1, viewModel.uiState.value.distanceSortVersion)
+        viewModel.onLocationReceived(GeoPoint(51.454, -2.593))
+        assertEquals(2, viewModel.uiState.value.distanceSortVersion)
+        assertEquals("sample-01", resultIds().first())
+    }
+
+    @Test
+    fun distanceSorting_isKeptWhenFiltersChange() {
+        viewModel.onLocationReceived(EAST_PARK_AND_RIDE)
+        viewModel.onTypeSelected(ParkingType.PARK_AND_RIDE)
+        assertEquals(listOf("sample-08", "sample-06", "sample-07"), resultIds())
+        viewModel.clearFilters()
+        assertEquals(8, resultIds().size)
+        assertEquals("sample-08", resultIds().first())
+    }
+
+    @Test
+    fun withoutLocation_rowsUseSampleDistances() {
+        val state = viewModel.uiState.value
+        val first = state.filteredCarParks.first()
+        assertEquals(first.sampleDistanceMiles, state.distanceMiles(first), 0.0)
+    }
+
+    @Test
+    fun locationDenied_keepsDefaultOrderAndExplains() {
+        viewModel.onLocating()
+        viewModel.onLocationDenied()
+        val state = viewModel.uiState.value
+        assertEquals(LocationStatus.IDLE, state.locationStatus)
+        assertEquals(LocationMessage.DENIED, state.locationMessage)
+        assertEquals(repository.carParks.map { it.id }, resultIds())
+        assertNull(state.selectedCarPark)
+        viewModel.dismissLocationMessage()
+        assertNull(viewModel.uiState.value.locationMessage)
+    }
+
+    @Test
+    fun locationUnavailable_explainsAndKeepsAnEarlierSort() {
+        viewModel.onLocationReceived(EAST_PARK_AND_RIDE)
+        viewModel.onLocating()
+        viewModel.onLocationUnavailable()
+        val state = viewModel.uiState.value
+        assertEquals(LocationMessage.UNAVAILABLE, state.locationMessage)
+        assertEquals(LocationStatus.SORTED_BY_DISTANCE, state.locationStatus)
+        assertEquals("sample-08", resultIds().first())
+    }
+
+    private companion object {
+        /** Same coordinates as sample-08, so it must sort first at zero miles. */
+        val EAST_PARK_AND_RIDE = GeoPoint(51.47, -2.52)
     }
 }
