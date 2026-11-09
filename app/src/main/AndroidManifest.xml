@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Android 13+: requested only when the user turns on the permit expiry reminder. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Requested only when the user taps Add photo on a street report. Photos stay in app storage. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
 
     <application
         android:allowBackup="true"

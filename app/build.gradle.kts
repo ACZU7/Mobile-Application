@@ -53,6 +53,11 @@ dependencies {
     // Parking permit: local storage (DataStore) and the expiry reminder (WorkManager).
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime.ktx)
+    // Street Issues photos: in-app camera (CameraX) and thumbnails that respect photo orientation (Coil).
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.coil.compose)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)

@@ -12,12 +12,12 @@ class StreetReportRepository(private val today: () -> LocalDate = { LocalDate.no
     val reports = records.asStateFlow()
 
     @Synchronized
-    fun save(category: StreetCategory, description: String, locationLabel: String): StreetReport {
+    fun save(category: StreetCategory, description: String, locationLabel: String, imageUris: List<String> = emptyList()): StreetReport {
         val date = today()
         val sequence = records.value.filter { it.createdDate.year == date.year }
             .mapNotNull { it.reference.substringAfterLast('-').toIntOrNull() }.maxOrNull()?.plus(1) ?: 1
         val report = StreetReport(formatReference(date.year, sequence), category, description.trim(),
-            locationLabel.trim(), 51.457, -2.592, createdDate = date, status = StreetStatus.SUBMITTED)
+            locationLabel.trim(), 51.457, -2.592, imageUris = imageUris, createdDate = date, status = StreetStatus.SUBMITTED)
         records.value = listOf(report) + records.value
         return report
     }
