@@ -83,7 +83,7 @@ Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL; 149 unit test
 
 ## Real OpenStreetMap location map — 2026-11-09
 
-Branch `feature/real-maps`. The location card on the report form now shows a small, fixed OpenStreetMap map with the coral pin at the sample report position (near Nelson Street). It does not respond to touch, so the form still scrolls normally, and it does not use the device location.
+Branch `feature/parking-directions-location` (PR #5). The location card on the report form now shows a small, fixed OpenStreetMap map with the coral pin at the sample report position (near Nelson Street). It does not respond to touch, so the form still scrolls normally, and it does not use the device location.
 
 | # | Check | Result | Evidence |
 |---|---|---|---|

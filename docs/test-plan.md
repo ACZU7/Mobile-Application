@@ -89,7 +89,7 @@ Omar Abdelatty feature, branch `feature/parking-directions-location` (PR #5). Te
 
 ## Real maps — 2026-11-09
 
-Omar Abdelatty, branch `feature/real-maps`. Tested by the coding agent operating the API 37 emulator through ADB.
+Omar Abdelatty, branch `feature/parking-directions-location` (PR #5). Tested by the coding agent operating the API 37 emulator through ADB.
 
 | ID | Actual result | Evidence |
 |---|---|---|

@@ -90,7 +90,7 @@ Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 149 test
 
 ## Omar Abdelatty — Real OpenStreetMap maps, 2026-11-09
 
-On `feature/real-maps`, built on PR #5:
+On `feature/parking-directions-location` (PR #5):
 
 - **Maps:** replaced the drawn maps on the Car park finder, permit zone and street report screens with real OpenStreetMap maps (osmdroid), using a shared `ui/maps` package (map composable, theme-coloured markers, framing helper).
 - **Content:** sample car-park pins with selection, the user's location dot, the fictional Zone CM drawn with a not-a-real-boundary banner, and a fixed report-location map.

@@ -120,7 +120,7 @@ Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL; 141 unit test
 
 ## Real OpenStreetMap maps — 2026-11-09
 
-Branch `feature/real-maps`, built on PR #5. The drawn illustrations on the Car park finder and the permit zone screen now use real OpenStreetMap tiles (osmdroid, no API key). The sample car parks, the user's location dot, the fictional Zone CM outline and the sample address are drawn on top in theme colours.
+Branch `feature/parking-directions-location` (PR #5). The drawn illustrations on the Car park finder and the permit zone screen now use real OpenStreetMap tiles (osmdroid, no API key). The sample car parks, the user's location dot, the fictional Zone CM outline and the sample address are drawn on top in theme colours.
 
 | # | Check | Result | Evidence |
 |---|---|---|---|
