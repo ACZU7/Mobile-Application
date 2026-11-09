@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Entry point on the Car park finder -->
+    <string name="permit_entry">Permit zones</string>
+
+    <!-- Permit zone checker (mockup screen 4). All zone and permit data is fictional. -->
+    <string name="permit_sample_address">College Road, Bristol</string>
+    <string name="permit_zone_label">Zone %1$s</string>
+    <string name="permit_inside_zone">You are inside Zone %1$s</string>
+    <string name="permit_zone_hours">Permit required 9am – 5pm Mon – Fri</string>
+    <string name="permit_zone_rules">Sample zone information. In this fictional zone, resident and visitor permit holders may park in marked permit bays from 9am to 5pm, Monday to Friday. Outside those hours, anyone may park in those bays. Always check the street signs and the Council website for the real rules.</string>
+    <string name="permit_zone_info_action">Zone information</string>
+    <string name="permit_your_permit">Your resident\'s permit</string>
+    <string name="permit_card_title">Zone %1$s – Resident</string>
+    <string name="permit_expires">Expires %1$s</string>
+    <string name="permit_details_action">Permit details</string>
+    <string name="permit_details_body">Zone: %1$s – Resident\nReference: %2$s\nVehicle: %3$s\nExpires: %4$s\n\nThis is a sample permit stored only on this device. It is not a real Council permit and cannot be used for parking.</string>
+    <string name="permit_remind_me">Remind me before it expires</string>
+    <string name="permit_reminder_on">Reminder on</string>
+    <string name="permit_reminder_off">Reminder off</string>
+    <string name="permit_reminder_explainer">We\'ll send a notification on this device %1$d days before the permit expires. Notification permission is only asked for when you turn this on.</string>
+    <string name="permit_reminder_scheduled">Reminder set for %1$s at 9am on this device.</string>
+    <string name="permit_sample_notice">Prototype: the address, zone, hours and permit are fictional sample data, not live Council records.</string>
+    <string name="permit_map_description">OpenStreetMap map with the fictional Zone %1$s drawn around the sample address. The shaded area is invented and is not a real permit zone boundary.</string>
+    <string name="permit_map_sample_banner">Sample Zone %1$s drawn for demonstration only. This is not a real permit zone boundary.</string>
+
+    <!-- Dialogs -->
+    <string name="permit_notifications_blocked_title">Notifications are off</string>
+    <string name="permit_notifications_blocked_body">The reminder has not been set because this app is not allowed to show notifications. Your permit details are still saved here. To get a reminder, allow notifications for this app in Settings, then turn the reminder on again.</string>
+    <string name="permit_open_settings">Open settings</string>
+    <string name="permit_not_now">Not now</string>
+    <string name="permit_expired_title">Permit already expired</string>
+    <string name="permit_expired_body">This sample permit has already expired, so there is nothing to remind you about.</string>
+
+    <!-- Notification -->
+    <string name="permit_notification_channel">Permit reminders</string>
+    <string name="permit_notification_channel_description">Local reminders before your sample resident\'s permit expires.</string>
+    <string name="permit_notification_title">Resident\'s permit expiring soon</string>
+    <string name="permit_notification_text">Your sample Zone %1$s resident\'s permit expires on %2$s. This is a prototype reminder; renew real permits through the Council website.</string>
+</resources>

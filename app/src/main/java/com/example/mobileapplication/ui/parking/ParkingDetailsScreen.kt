@@ -4,6 +4,9 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,7 +23,9 @@ fun ParkingDetailsScreen(
     state: ParkingUiState,
     onBack: () -> Unit,
     onDirections: () -> Unit,
-    onDismissDirections: () -> Unit
+    onConfirmDirections: () -> Unit,
+    onDismissDirections: () -> Unit,
+    onDismissDirectionsUnavailable: () -> Unit
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -63,13 +68,29 @@ fun ParkingDetailsScreen(
             }
         }
     }
-    if (state.directionsMessageVisible && state.selectedCarPark != null) {
+    val selected = state.selectedCarPark
+    if (state.directionsConfirmVisible && selected != null) {
         AlertDialog(
             onDismissRequest = onDismissDirections,
-            title = { Text(stringResource(R.string.parking_directions)) },
-            text = { Text(stringResource(R.string.parking_directions_fallback)) },
+            icon = { Icon(Icons.Default.Map, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+            title = { Text(stringResource(R.string.parking_directions_confirm_title)) },
+            text = { Text(stringResource(R.string.parking_directions_confirm_message, stringResource(selected.nameRes))) },
             confirmButton = {
-                TextButton(onClick = onDismissDirections) { Text(stringResource(R.string.parking_understood)) }
+                TextButton(onClick = onConfirmDirections) { Text(stringResource(R.string.parking_directions_open)) }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismissDirections) { Text(stringResource(R.string.parking_cancel)) }
+            }
+        )
+    }
+    if (state.directionsUnavailableVisible) {
+        AlertDialog(
+            onDismissRequest = onDismissDirectionsUnavailable,
+            icon = { Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+            title = { Text(stringResource(R.string.parking_directions_unavailable_title)) },
+            text = { Text(stringResource(R.string.parking_directions_unavailable)) },
+            confirmButton = {
+                TextButton(onClick = onDismissDirectionsUnavailable) { Text(stringResource(R.string.parking_understood)) }
             }
         )
     }

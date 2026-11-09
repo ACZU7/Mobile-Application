@@ -34,6 +34,7 @@ import com.example.mobileapplication.ui.cleanairzone.cleanAirZoneGraph
 import com.example.mobileapplication.ui.housing.HOUSING_GRAPH_ROUTE
 import com.example.mobileapplication.ui.housing.housingGraph
 import com.example.mobileapplication.ui.parking.parkingGraph
+import com.example.mobileapplication.ui.streetissues.STREET_CAMERA_ROUTE
 import com.example.mobileapplication.ui.streetissues.streetIssuesGraph
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +59,8 @@ fun BristolCityCompanionApp() {
             }
         },
         bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+            // Mockup 5: the street-issue camera is full screen, so the bottom bar is hidden only there.
+            if (currentDestination?.route != STREET_CAMERA_ROUTE) NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 AppDestination.bottomNavigation.forEach { destination ->
                     NavigationBarItem(
                         // hierarchy also matches nested graphs, so Housing stays selected on every housing screen.

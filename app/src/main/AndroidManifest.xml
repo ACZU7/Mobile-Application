@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- OpenStreetMap tiles are downloaded for the Parking, permit zone and street report maps. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Requested only when the user taps "Find my location" on the Car park finder. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Android 13+: requested only when the user turns on the permit expiry reminder. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Requested only when the user taps Add photo on a street report. Photos stay in app storage. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

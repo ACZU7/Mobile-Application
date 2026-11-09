@@ -47,3 +47,57 @@ On `feature/street-issue-report`, completed T04/T05 local reporting checks and F
 Fixed two issues found visually: disclaimer punctuation and My Reports selected filters (existing teal theme tokens). Final `./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL in 3s; 67 unit tests, zero failures/errors. Captured 31 unedited screenshots and updated [evidence and verification record](docs/evidence/streetissues/README.md). This supersedes the earlier pending-manual note for the checks above. Human peer review remains pending; Housing and Clean Air Zone files were preserved.
 
 Handover: [PR #3 - Implement Phase 2 street issue reporting flow](https://github.com/ACZU7/Mobile-Application/pull/3), commits `faf9614` and `f748146`. Open for human peer review; no merge or approval performed.
+
+## Omar Abdelatty — Phase 3 directions and location sorting, 2026-11-09
+
+On `feature/parking-directions-location`, branched from `main` at `9b78c5f`:
+
+- **Directions.** Replaced the Phase 1 directions fallback with a confirm-then-open Google Maps intent. If Maps isn't available, it tries a `geo:` link, then a browser. If none can open, a "Directions unavailable" message is shown.
+- **Location sorting.** Added on-request location permission (coarse or fine) and a one-off position read through `LocationManager`. The list sorts by haversine distance, and the order survives filter changes.
+- **Failure states.** Added explanations for permission denied and location unavailable.
+- **Tests.** Added 10 Parking unit tests.
+
+Two bugs were found on the emulator and fixed: a stale cached position, and the list not scrolling to the nearest result after re-sorting.
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 126 tests and zero failures. T02 and the T03 directions check passed on the API 37 emulator. Evidence: [parking screenshots 11–17](docs/evidence/parking/README.md#phase-3-directions-and-location-sorting--2026-11-09). Only Parking files, `parking_strings.xml` and the manifest location permissions were changed; Housing, Clean Air Zone, Streets and the shared theme are unchanged. Peer review is pending.
+
+## Omar Abdelatty — Phase 3 resident's permit and reminder, 2026-11-09
+
+On `feature/parking-directions-location` (PR #5), alongside the directions and location work:
+
+- **Screen.** Built the permit zone checker from mockup screen 4: an illustrated zone map, a zone result card, a resident's permit card, the reminder switch, and the sample disclaimers. It is opened from Permit zones in the Car park finder.
+- **Storage.** Stored the sample permit and reminder choice in Preferences DataStore. This changes the agreed design (Room) and is recorded in `technical-decisions.md` for Mohammad to confirm.
+- **Reminder.** A WorkManager reminder is set 14 days before expiry. Notification permission is asked only when the switch is turned on, with a denied explanation and an Open settings action.
+- **Tests.** Added 15 unit tests, using `kotlinx-coroutines-test`.
+
+Dependencies were added to the shared Gradle files: DataStore Preferences 1.1.7, WorkManager 2.10.3, and kotlinx-coroutines-test 1.10.2 (tests only).
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 141 tests and zero failures. On the API 37 emulator, these passed: the notification prompt, denied path, allowed and scheduled, persistence after force-stop, notification delivered (job force-run), cancel on switch-off, and dark mode with 150% font. Three visual issues were found and fixed. Evidence: [parking screenshots 18–25](docs/evidence/parking/README.md#phase-3-permit-zone-checker-and-expiry-reminder--2026-11-09). Housing, Clean Air Zone and Streets files are unchanged. Peer review is pending.
+
+## Omar Abdelatty — Phase 3 optional Street Issue photos, 2026-11-09
+
+On `feature/parking-directions-location` (PR #5):
+
+- **Form (mockup 6):** a "Photos (optional)" row with thumbnails, remove buttons and an Add photo tile, up to 3 photos.
+- **Camera (mockup 5):** a full-screen in-app CameraX camera with category chips, shutter, gallery, flash and switch-camera buttons.
+- **Permission:** camera permission is asked only after Add photo is tapped. If it is denied, the photo picker and "Continue without photo" are offered.
+- **Storage:** photos are kept in app-private storage, and removing a photo deletes its file. Report screens show the photo as a thumbnail.
+- **Tests:** added 8 unit tests.
+
+Shared changes for Mohammad to review: CameraX 1.4.2 and Coil 2.7.0 were added to the Gradle files; the `CAMERA` permission and an optional camera feature entry were added to the manifest; and `BristolCityCompanionApp.kt` now hides the bottom bar on the camera route only (mockup 5 is full screen).
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 149 tests and zero failures. T04 (photo) and T10 (camera denied) passed on the API 37 emulator. One chip-colour mismatch was found and fixed. Evidence: [Street Issues screenshots 33–40](docs/evidence/streetissues/README.md#phase-3-optional-photos--2026-11-09). Housing and Clean Air Zone files are unchanged. Peer review is pending.
+
+## Omar Abdelatty — Real OpenStreetMap maps, 2026-11-09
+
+On `feature/parking-directions-location` (PR #5):
+
+- **Maps:** replaced the drawn maps on the Car park finder, permit zone and street report screens with real OpenStreetMap maps (osmdroid), using a shared `ui/maps` package (map composable, theme-coloured markers, framing helper).
+- **Content:** sample car-park pins with selection, the user's location dot, the fictional Zone CM drawn with a not-a-real-boundary banner, and a fixed report-location map.
+- **Licence and dark mode:** the OSM credit is always visible, and dark mode uses a dark-grey tile filter.
+
+Five issues were found on the emulator and fixed, including OSM blocking the default osmdroid user agent (fixed with an identifying user agent and a custom tile-source definition that keeps OSM's limits).
+
+Shared changes for Mohammad to review: osmdroid 6.1.20 added to the Gradle files, `INTERNET` and `ACCESS_NETWORK_STATE` permissions, and a change to the Meeting 02 "static map" decision (recorded in `technical-decisions.md`).
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 154 tests and zero failures (5 new map-framing tests). Evidence: [parking screenshots 26–29](docs/evidence/parking/README.md#real-openstreetmap-maps--2026-11-09), [street screenshot 41](docs/evidence/streetissues/README.md#real-openstreetmap-location-map--2026-11-09). Housing and Clean Air Zone files are unchanged. Peer review is pending.
