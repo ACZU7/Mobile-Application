@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.LocalParking
 import androidx.compose.material.icons.filled.LocationOff
 import androidx.compose.material.icons.filled.Navigation
@@ -51,6 +52,7 @@ fun ParkingListScreen(
     onFiltersVisibleChanged: (Boolean) -> Unit,
     onFindLocation: () -> Unit,
     onDismissLocationMessage: () -> Unit,
+    onOpenPermitZones: () -> Unit,
     onCarParkSelected: (String) -> Unit
 ) {
     val locatingDescription = stringResource(R.string.parking_location_finding)
@@ -114,7 +116,7 @@ fun ParkingListScreen(
                 Icon(Icons.Default.Navigation, contentDescription = stringResource(R.string.parking_location_action))
             }
         }
-        ParkingResultsSheet(state, onClearFilters, onCarParkSelected, Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(sheetHeight))
+        ParkingResultsSheet(state, onClearFilters, onCarParkSelected, onOpenPermitZones, Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(sheetHeight))
     }
     if (state.filtersVisible) {
         AlertDialog(
@@ -166,13 +168,23 @@ private fun ParkingFilterChip(selected: Boolean, label: String, onClick: () -> U
 }
 
 @Composable
-private fun ParkingResultsSheet(state: ParkingUiState, onClearFilters: () -> Unit, onCarParkSelected: (String) -> Unit, modifier: Modifier) {
+private fun ParkingResultsSheet(
+    state: ParkingUiState, onClearFilters: () -> Unit, onCarParkSelected: (String) -> Unit,
+    onOpenPermitZones: () -> Unit, modifier: Modifier
+) {
     Surface(modifier = modifier, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp), color = MaterialTheme.colorScheme.surface, shadowElevation = 2.dp) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.height(6.dp))
             Box(Modifier.size(width = 32.dp, height = 3.dp).background(MaterialTheme.colorScheme.outlineVariant, CircleShape))
             Column(Modifier.widthIn(max = Dimens.MaxContentWidth).fillMaxWidth().padding(horizontal = Dimens.ScreenPadding)) {
-                Text(stringResource(R.string.parking_nearest), style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(top = Dimens.GroupSpacing).semantics { heading() })
+                Row(Modifier.fillMaxWidth().padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.parking_nearest), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f).semantics { heading() })
+                    TextButton(onClick = onOpenPermitZones, contentPadding = PaddingValues(horizontal = Dimens.GroupSpacing)) {
+                        Icon(Icons.Default.Badge, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.permit_entry), style = MaterialTheme.typography.labelLarge)
+                    }
+                }
                 val sheetNotice = if (state.locationStatus == LocationStatus.SORTED_BY_DISTANCE) {
                     R.string.parking_sheet_sorted_notice
                 } else {
