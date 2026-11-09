@@ -78,3 +78,42 @@ Issues found on the emulator and fixed before the final run:
 Test setup note: on the API 37 emulator, `adb emu geo fix` reported OK but did not change the reported position. The Bristol test position was therefore set through a shell test provider (`cmd location providers set-test-provider-location gps`).
 
 Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL; 126 unit tests, zero failures or errors. 27 Parking tests in total: 23 ViewModel, 4 directions/distance; 10 are new. Tested on the Medium Phone API 37 emulator, operated by the coding agent through ADB for Omar Abdelatty. Large font, landscape, dark mode, RTL and tablet checks were not repeated for these dialogs. Peer review is pending.
+
+## Phase 3 permit zone checker and expiry reminder — 2026-11-09
+
+Branch `feature/parking-directions-location` (PR #5), added after the directions and location work. This covers implementation plan Phase 3, Omar tasks 4–5, and follows approved mockup screen 4.
+
+The screen is opened from **Permit zones** in the Car park finder's results sheet. It shows:
+- a read-only sample address
+- an illustrated map with the fictional Zone CM shaded coral and a position dot
+- a "You are inside Zone CM" card, which opens the sample zone rules
+- a "Your resident's permit" card, which opens the permit details
+- a "Remind me before it expires" switch
+
+The sample permit (reference RP-CM-20417, expiring 31 Mar 2027) is written to Preferences DataStore on first use. The reminder is a WorkManager one-time job, set 14 days before expiry at 9am. Notification permission is requested only when the switch is turned on.
+
+| # | Check | Result | Evidence |
+|---|---|---|---|
+| 18 | Permit zones entry in the results sheet; it no longer covers a map pin | Passed | [18-permit-entry.png](18-permit-entry.png) |
+| 19 | Screen matches mockup 4: map, zone label, result card, permit card, switch, sample notice | Passed | [19-permit-zone.png](19-permit-zone.png) |
+| 20 | Fresh install, turning the switch on shows the Android 13+ notification prompt; nothing is asked before that | Passed | [20-notification-prompt.png](20-notification-prompt.png) |
+| 21 | Don't allow: switch stays off, "Notifications are off" explains why, permit still visible, no job scheduled; Open settings opens this app's notification page | Passed | [21-notifications-denied.png](21-notifications-denied.png) |
+| 22 | Notifications allowed in Settings, switch on: "Reminder set for Mar 17, 2027 at 9am"; JobScheduler shows the WorkManager job about 127 days 22 hours ahead | Passed | [22-reminder-on.png](22-reminder-on.png) |
+| 23 | Restart: the app process was force-stopped and reopened; the switch is still on and the permit is unchanged. The DataStore file contains the zone, reference, vehicle and expiry | Passed | [23-after-restart.png](23-after-restart.png) |
+| 24 | Job force-run (`cmd jobscheduler run -f`): the "Resident's permit expiring soon" notification shows the sample disclaimer | Passed | [24-expiry-notification.png](24-expiry-notification.png) |
+| — | Switch off: the pending job is removed (only the completed forced run remains in JobScheduler history) | Passed | dumpsys check, no screenshot |
+| 25 | Dark mode with 150% font: readable, sheet scrolls, map label wraps instead of clipping | Passed after fix | [25-permit-dark-large-font.png](25-permit-dark-large-font.png) |
+
+Issues found on the emulator and fixed:
+
+1. The permit card title rendered teal instead of near-black, because the tinted card inherited the primary content colour. Both cards now set `onSurface` explicitly.
+2. The first "Permit zones" pill on the map covered a car-park pin. It was moved into the results-sheet header.
+3. "Ashley Down Park" was clipped at 150% font. It is now anchored to the end edge with a maximum width.
+
+Design differences from the mockup:
+
+- A circular back button sits beside the search field, because the mockup has no visible way back.
+- The position dot uses the theme's dark-blue status token, because the spec has no separate blue token.
+- Dates use the device locale's medium format (the emulator shows "Mar 31, 2027"; a UK-English device shows "31 Mar 2027").
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL; 141 unit tests, zero failures (15 new: 8 ViewModel, 7 reminder timing and permit). Tested on the API 37 emulator, operated by the coding agent through ADB. Not tested: Android 12 or lower (no runtime notification prompt), RTL, tablet, and a real reboot before the reminder fires.

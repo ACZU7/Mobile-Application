@@ -63,3 +63,15 @@ Omar Abdelatty feature, branch `feature/parking-directions-location`. Tested by 
 | T03 (directions) | Passed. The confirmation dialog warns that the location is fictional; Open Maps launches Google Maps directions to the selected car park's coordinates. With Maps and Chrome disabled, a "Directions unavailable" fallback appears and the app does not crash. | [Parking evidence 14–16](evidence/parking/README.md#phase-3-directions-and-location-sorting--2026-11-09) |
 
 `./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL; 126 unit tests, zero failures or errors.
+
+## Phase 3 resident's permit and reminder — 2026-11-09
+
+Omar Abdelatty feature, branch `feature/parking-directions-location` (PR #5). Tested by the coding agent operating the API 37 emulator through ADB.
+
+| ID | Actual result | Evidence |
+|---|---|---|
+| T10 (notifications, Parking scope) | Passed. Notification permission is requested only when the reminder is turned on. If it is denied, the switch stays off, an explanation and an Open settings action are shown, and the permit screen is still usable. Once allowed, the reminder is scheduled and the notification is delivered (job force-run). | [Parking evidence 20–22, 24](evidence/parking/README.md#phase-3-permit-zone-checker-and-expiry-reminder--2026-11-09) |
+| Persistence after restart (Parking scope) | Passed. After a force-stop and relaunch, the stored sample permit and the reminder choice are restored from DataStore. | [Parking evidence 23](evidence/parking/README.md#phase-3-permit-zone-checker-and-expiry-reminder--2026-11-09) |
+| T09 (permit screen) | Passed in dark mode at 150% font on the phone emulator; a clipped map label was fixed. Tablet and RTL were not tested for this screen. | [Parking evidence 25](evidence/parking/README.md#phase-3-permit-zone-checker-and-expiry-reminder--2026-11-09) |
+
+`./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL; 141 unit tests, zero failures or errors. Camera-permission T10 is still pending; it depends on the optional Street Issue photo task.

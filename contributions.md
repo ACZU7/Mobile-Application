@@ -60,3 +60,16 @@ On `feature/parking-directions-location`, branched from `main` at `9b78c5f`:
 Two bugs were found on the emulator and fixed: a stale cached position, and the list not scrolling to the nearest result after re-sorting.
 
 Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 126 tests and zero failures. T02 and the T03 directions check passed on the API 37 emulator. Evidence: [parking screenshots 11–17](docs/evidence/parking/README.md#phase-3-directions-and-location-sorting--2026-11-09). Only Parking files, `parking_strings.xml` and the manifest location permissions were changed; Housing, Clean Air Zone, Streets and the shared theme are unchanged. Peer review is pending.
+
+## Omar Abdelatty — Phase 3 resident's permit and reminder, 2026-11-09
+
+On `feature/parking-directions-location` (PR #5), alongside the directions and location work:
+
+- **Screen.** Built the permit zone checker from mockup screen 4: an illustrated zone map, a zone result card, a resident's permit card, the reminder switch, and the sample disclaimers. It is opened from Permit zones in the Car park finder.
+- **Storage.** Stored the sample permit and reminder choice in Preferences DataStore. This changes the agreed design (Room) and is recorded in `technical-decisions.md` for Mohammad to confirm.
+- **Reminder.** A WorkManager reminder is set 14 days before expiry. Notification permission is asked only when the switch is turned on, with a denied explanation and an Open settings action.
+- **Tests.** Added 15 unit tests, using `kotlinx-coroutines-test`.
+
+Dependencies were added to the shared Gradle files: DataStore Preferences 1.1.7, WorkManager 2.10.3, and kotlinx-coroutines-test 1.10.2 (tests only).
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 141 tests and zero failures. On the API 37 emulator, these passed: the notification prompt, denied path, allowed and scheduled, persistence after force-stop, notification delivered (job force-run), cancel on switch-off, and dark mode with 150% font. Three visual issues were found and fixed. Evidence: [parking screenshots 18–25](docs/evidence/parking/README.md#phase-3-permit-zone-checker-and-expiry-reminder--2026-11-09). Housing, Clean Air Zone and Streets files are unchanged. Peer review is pending.
