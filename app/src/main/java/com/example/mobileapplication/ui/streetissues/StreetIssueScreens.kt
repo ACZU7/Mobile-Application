@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,12 +19,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
 import com.example.mobileapplication.R
 import com.example.mobileapplication.data.model.*
 import com.example.mobileapplication.ui.shared.*
+import com.example.mobileapplication.data.repository.StreetReportRepository
+import com.example.mobileapplication.ui.maps.MapMarkers
+import com.example.mobileapplication.ui.maps.OsmMap
+import com.example.mobileapplication.ui.maps.addMarker
+import com.example.mobileapplication.ui.maps.frame
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.util.GeoPoint as OsmPoint
 import com.example.mobileapplication.ui.theme.Dimens
 import com.example.mobileapplication.ui.theme.extendedColors
 
@@ -110,21 +117,20 @@ private fun StreetError(message: Int) {
         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
 }
 
+/** Small fixed OpenStreetMap preview with the report pin; not draggable, so the form scrolls normally. */
 @Composable
 private fun SampleStreetMap() {
-    val colors = MaterialTheme.colorScheme
-    val description = stringResource(R.string.street_map_description)
-    Box(Modifier.fillMaxWidth().height(Dimens.ButtonHeight * 2).semantics { contentDescription = description },
-        contentAlignment = Alignment.Center) {
-        Canvas(Modifier.fillMaxSize()) {
-            drawRect(colors.surfaceVariant)
-            for (i in 0..5) {
-                val x = size.width * i / 5
-                drawLine(colors.surface, Offset(x, 0f), Offset(x + size.width / 4, size.height), strokeWidth = size.height / 12)
-            }
-            drawLine(colors.surface, Offset(0f, size.height / 2), Offset(size.width, size.height / 3), strokeWidth = size.height / 8)
+    val context = LocalContext.current
+    val colours = MaterialTheme.colorScheme
+    val pin = colours.secondary.toArgb()
+    val ring = colours.surface.toArgb()
+    val point = OsmPoint(StreetReportRepository.SAMPLE_LATITUDE, StreetReportRepository.SAMPLE_LONGITUDE)
+    OsmMap(stringResource(R.string.street_map_description), Modifier.fillMaxWidth().height(Dimens.ButtonHeight * 3), interactive = false) { map ->
+        if (map.overlays.none { it is Marker }) {
+            val icon = MapMarkers.pin(context, pin, ring, null, ring)
+            map.addMarker(point, icon, MapMarkers.pinAnchorY(icon, context))
+            map.frame(listOf(point), singlePointZoom = 16.0)
         }
-        Icon(Icons.Default.LocationOn, null, tint = colors.secondary, modifier = Modifier.size(Dimens.ButtonHeight))
     }
 }
 

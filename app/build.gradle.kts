@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.coil.compose)
+    // Real maps: OpenStreetMap tiles via osmdroid (no API key).
+    implementation(libs.osmdroid.android)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)

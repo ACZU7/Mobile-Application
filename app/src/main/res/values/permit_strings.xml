@@ -21,9 +21,8 @@
     <string name="permit_reminder_explainer">We\'ll send a notification on this device %1$d days before the permit expires. Notification permission is only asked for when you turn this on.</string>
     <string name="permit_reminder_scheduled">Reminder set for %1$s at 9am on this device.</string>
     <string name="permit_sample_notice">Prototype: the address, zone, hours and permit are fictional sample data, not live Council records.</string>
-    <string name="permit_map_description">Illustrated sample map showing fictional Zone %1$s shaded, with the sample address inside it. Not real zone boundaries.</string>
-    <string name="permit_map_label_park">Ashley Down Park</string>
-    <string name="permit_map_label_area">St Andrews</string>
+    <string name="permit_map_description">OpenStreetMap map with the fictional Zone %1$s drawn around the sample address. The shaded area is invented and is not a real permit zone boundary.</string>
+    <string name="permit_map_sample_banner">Sample Zone %1$s drawn for demonstration only. This is not a real permit zone boundary.</string>
 
     <!-- Dialogs -->
     <string name="permit_notifications_blocked_title">Notifications are off</string>

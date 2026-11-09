@@ -57,7 +57,7 @@
     <string name="street_error_short">Describe the issue using at least 10 characters.</string>
     <string name="street_error_long">Keep the description to 500 characters or fewer.</string>
     <string name="street_error_location">Enter a fictional sample location label.</string>
-    <string name="street_map_description">Static fictional street illustration with a sample pin. Not a live map.</string>
+    <string name="street_map_description">OpenStreetMap map with a pin at the fixed sample report location. It does not use your location.</string>
     <string name="street_date">Created: %1$s</string>
     <string name="street_reference">Reference: %1$s</string>
 </resources>

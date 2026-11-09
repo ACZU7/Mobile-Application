@@ -58,10 +58,12 @@ fun ParkingListScreen(
     val locatingDescription = stringResource(R.string.parking_location_finding)
     BoxWithConstraints(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
         val sheetHeight = maxHeight * if (maxHeight < 440.dp) 0.43f else 0.40f
-        StaticParkingMap(
+        ParkingMap(
             carParks = state.filteredCarParks,
             highlightedId = state.highlightedCarParkId,
+            userLocation = state.userLocation,
             onPinSelected = onMapPinSelected,
+            attributionBottomPadding = 24.dp,
             modifier = Modifier.fillMaxWidth().height(maxHeight - sheetHeight + 24.dp)
         )
         Column(

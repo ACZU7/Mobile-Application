@@ -50,9 +50,12 @@ fun PermitZoneScreen(
     BoxWithConstraints(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
         val sheetHeight = maxHeight * if (maxHeight < 480.dp) 0.62f else 0.50f
         PermitZoneMap(state.zone.code, Modifier.fillMaxWidth().height(maxHeight - sheetHeight + 24.dp))
-        Row(
+        Column(
             Modifier.align(Alignment.TopCenter).widthIn(max = Dimens.MaxContentWidth).fillMaxWidth()
                 .padding(horizontal = Dimens.ScreenPadding, vertical = Dimens.GroupSpacing),
+            verticalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing)
+        ) {
+        Row(
             horizontalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -73,6 +76,23 @@ fun PermitZoneScreen(
                 ),
                 modifier = Modifier.weight(1f)
             )
+        }
+        // The zone is drawn over a real neighbourhood, so it must be obvious that the boundary is invented.
+        Surface(
+            shape = MaterialTheme.shapes.small, color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+            border = BorderStroke(Dimens.BorderWidth, MaterialTheme.colorScheme.secondary)
+        ) {
+            Row(
+                Modifier.padding(horizontal = Dimens.CardSpacing, vertical = Dimens.GroupSpacing),
+                horizontalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing), verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(Icons.Default.Info, contentDescription = null, tint = MaterialTheme.colorScheme.secondary, modifier = Modifier.size(18.dp))
+                Text(
+                    stringResource(R.string.permit_map_sample_banner, state.zone.code),
+                    style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
         }
         Surface(
             modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(sheetHeight),
