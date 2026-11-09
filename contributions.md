@@ -47,3 +47,16 @@ On `feature/street-issue-report`, completed T04/T05 local reporting checks and F
 Fixed two issues found visually: disclaimer punctuation and My Reports selected filters (existing teal theme tokens). Final `./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL in 3s; 67 unit tests, zero failures/errors. Captured 31 unedited screenshots and updated [evidence and verification record](docs/evidence/streetissues/README.md). This supersedes the earlier pending-manual note for the checks above. Human peer review remains pending; Housing and Clean Air Zone files were preserved.
 
 Handover: [PR #3 - Implement Phase 2 street issue reporting flow](https://github.com/ACZU7/Mobile-Application/pull/3), commits `faf9614` and `f748146`. Open for human peer review; no merge or approval performed.
+
+## Omar Abdelatty — Phase 3 directions and location sorting, 2026-11-09
+
+On `feature/parking-directions-location`, branched from `main` at `9b78c5f`:
+
+- **Directions.** Replaced the Phase 1 directions fallback with a confirm-then-open Google Maps intent. If Maps isn't available, it tries a `geo:` link, then a browser. If none can open, a "Directions unavailable" message is shown.
+- **Location sorting.** Added on-request location permission (coarse or fine) and a one-off position read through `LocationManager`. The list sorts by haversine distance, and the order survives filter changes.
+- **Failure states.** Added explanations for permission denied and location unavailable.
+- **Tests.** Added 10 Parking unit tests.
+
+Two bugs were found on the emulator and fixed: a stale cached position, and the list not scrolling to the nearest result after re-sorting.
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 126 tests and zero failures. T02 and the T03 directions check passed on the API 37 emulator. Evidence: [parking screenshots 11–17](docs/evidence/parking/README.md#phase-3-directions-and-location-sorting--2026-11-09). Only Parking files, `parking_strings.xml` and the manifest location permissions were changed; Housing, Clean Air Zone, Streets and the shared theme are unchanged. Peer review is pending.

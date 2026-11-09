@@ -12,7 +12,7 @@
 | Local persistence | Room in quality-core phase | Suitable for favourites, local reports, repairs, permits and sample rent history. |
 | Directions | Google Maps intent | Gives practical directions without building a navigation engine. |
 | Camera | Android photo picker/camera flow | Supports photo evidence while allowing a clear no-photo path where appropriate. |
-| Location | Android location services | Supports distance ordering and editable report pins; manual fallback is required. |
+| Location | Android location services | Supports distance ordering and editable report pins; manual fallback is required. Implemented (Phase 3) with the framework `LocationManager`, so no Google Play Services dependency was added. It accepts approximate location and asks only when the user taps Find my location. |
 | Notifications | WorkManager/local notifications | Used only after core flows work, for permit/rent reminders. |
 | Authentication | Local demonstration profile first | Firebase Auth is not a dependency for the MVP and is only a stretch integration. |
 

@@ -51,3 +51,30 @@ Verification:
 - EV charging plus East Bristol produced no pins/results and a useful Clear filters action.
 
 Earlier screenshots 01–05 document the previous list layout. Screenshots 06–10 document this map redesign. Large-font, landscape, tablet, RTL and dark-mode checks remain pending. Implementation is recorded on the feature branch; no merge or PR.
+
+## Phase 3 directions and location sorting — 2026-11-09
+
+Branch `feature/parking-directions-location`, from `main` at `9b78c5f`. This replaces the Phase 1 directions and location fallbacks with real device features, as set out in the implementation plan (Phase 3, Omar tasks 1–2).
+
+**Directions.** Tapping Directions first shows a confirmation dialog, because the coordinates are fictional. Open Maps then tries three options in order: Google Maps directions to the car park's coordinates, any other app that handles `geo:` links, and finally the same directions URL in a browser. If none of these can open, a "Directions unavailable" dialog explains this, and the details screen stays open.
+
+**Location sorting.** Permission is requested only when the user taps Find my location. Approximate location is accepted. The position comes from the Android framework `LocationManager`; no Google Play Services dependency was added. A cached position is used only if it is under two minutes old; otherwise the app asks for one fresh fix. When a position arrives, the list is sorted by straight-line (haversine) distance, the rows show calculated miles, the nearest pin is highlighted, the list scrolls back to the top, and the sheet notice changes to "Sorted by straight-line distance from you · fictional sample locations". The distance order is kept when filters change. If permission is denied, or no position can be read, the list keeps its previous order and a dialog explains the alternative.
+
+| # | Check | Result | Evidence |
+|---|---|---|---|
+| 11 | Tapping Find my location shows the Android permission prompt; nothing was requested before the tap | Passed | [11-location-permission-prompt.png](11-location-permission-prompt.png) |
+| 12 | Don't allow: "Location not allowed" dialog; default sample order and sample distances kept; browsing still works | Passed | [12-location-denied.png](12-location-denied.png) |
+| 13 | Allowed, with a test location at 51.47, -2.52: Sample East Park & Ride first at 0.0 mi, then East Courtyard at 1.5 mi; nearest pin highlighted (150 spaces) | Passed after fix (see below) | [13-location-sorted.png](13-location-sorted.png) |
+| 14 | Directions on Sample East Courtyard shows the confirmation with the fictional-location warning | Passed | [14-directions-confirm.png](14-directions-confirm.png) |
+| 15 | Open Maps launches Google Maps in driving-directions mode with destination 51.4600000,-2.5500000, matching the sample coordinates | Passed | [15-directions-google-maps.png](15-directions-google-maps.png) |
+| 16 | Google Maps and Chrome temporarily disabled: "Directions unavailable" dialog; no crash. Both apps re-enabled afterwards | Passed | [16-directions-unavailable.png](16-directions-unavailable.png) |
+| 17 | Device location turned off: "Location unavailable" dialog; the earlier sort is kept | Passed | [17-location-unavailable.png](17-location-unavailable.png) |
+
+Issues found on the emulator and fixed before the final run:
+
+1. **Stale cached location.** The first version trusted any cached position, so the list was sorted from the emulator's default Mountain View fix (about 5,293 mi). Fixed by accepting only cached positions under two minutes old.
+2. **Nearest results scrolled out of view.** The keyed `LazyColumn` kept the previous first row on screen after re-sorting, so the two nearest car parks sat above the visible area. Fixed by scrolling to the top once for each new sort, using a sort counter. Returning from the details screen does not reset the scroll.
+
+Test setup note: on the API 37 emulator, `adb emu geo fix` reported OK but did not change the reported position. The Bristol test position was therefore set through a shell test provider (`cmd location providers set-test-provider-location gps`).
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL; 126 unit tests, zero failures or errors. 27 Parking tests in total: 23 ViewModel, 4 directions/distance; 10 are new. Tested on the Medium Phone API 37 emulator, operated by the coding agent through ADB for Omar Abdelatty. Large font, landscape, dark mode, RTL and tablet checks were not repeated for these dialogs. Peer review is pending.

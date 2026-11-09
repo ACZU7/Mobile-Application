@@ -52,3 +52,14 @@ This supersedes the earlier no-device/pending-manual note for the Street Issues 
 | T09 (Streets scope) | Passed 150% font size, landscape, dark mode, forced RTL, and simulated tablet size 1600 x 2560 / 240 dpi on the same emulator; draft retained on rotation. Separate API 29 tablet AVD stayed offline; no second-device/OS pass claimed. | Screenshots 19-32 in [evidence](evidence/streetissues/README.md) |
 
 Visual testing found and fixed disclaimer punctuation and selected-filter colour; final `./gradlew.bat test assembleDebug` passed (67 tests, zero failures/errors; BUILD SUCCESSFUL in 3s). Shared theme/components and Housing/CAZ files are unchanged. Human peer review remains outstanding.
+
+## Phase 3 Parking directions and location — 2026-11-09
+
+Omar Abdelatty feature, branch `feature/parking-directions-location`. Tested by the coding agent operating the API 37 emulator through ADB.
+
+| ID | Actual result | Evidence |
+|---|---|---|
+| T02 | Passed. Permission is requested only from Find my location. Denied: default order kept and an explanation shown. Allowed (test location 51.47, -2.52): nearest-first order with calculated miles and the nearest pin highlighted. Location turned off: "Location unavailable" explanation. | [Parking evidence 11–13, 17](evidence/parking/README.md#phase-3-directions-and-location-sorting--2026-11-09) |
+| T03 (directions) | Passed. The confirmation dialog warns that the location is fictional; Open Maps launches Google Maps directions to the selected car park's coordinates. With Maps and Chrome disabled, a "Directions unavailable" fallback appears and the app does not crash. | [Parking evidence 14–16](evidence/parking/README.md#phase-3-directions-and-location-sorting--2026-11-09) |
+
+`./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL; 126 unit tests, zero failures or errors.
