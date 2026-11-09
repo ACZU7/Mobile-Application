@@ -86,3 +86,15 @@ Omar Abdelatty feature, branch `feature/parking-directions-location` (PR #5). Te
 | T10 (camera) | Passed. Camera permission is requested only after Add photo is tapped. If it is denied, "Camera not allowed" offers Choose from gallery and Continue without photo; the gallery path still attached a photo and the report could be finished. | [Street Issues evidence 34–36](evidence/streetissues/README.md#phase-3-optional-photos--2026-11-09) |
 
 `./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL; 149 unit tests, zero failures or errors. Together with the notification results above, T10 is now covered for Omar's features.
+
+## Real maps — 2026-11-09
+
+Omar Abdelatty, branch `feature/real-maps`. Tested by the coding agent operating the API 37 emulator through ADB.
+
+| ID | Actual result | Evidence |
+|---|---|---|
+| T02 / T03 (map) | Passed. The Car park finder uses real OpenStreetMap tiles: pins at the sample car-park positions, pin selection, the user's location dot after Find my location, and the OSM credit. Dark mode passed. | [Parking evidence 26–29](evidence/parking/README.md#real-openstreetmap-maps--2026-11-09) |
+| Permit zone map | Passed. The fictional Zone CM is drawn around the sample address on real tiles, with a not-a-real-boundary banner. | [Parking evidence 28](evidence/parking/README.md#real-openstreetmap-maps--2026-11-09) |
+| T04 (location map) | Passed. The report form shows a fixed real map with the sample report pin. | [Street Issues evidence 41](evidence/streetissues/README.md#real-openstreetmap-location-map--2026-11-09) |
+
+`./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL; 154 unit tests, zero failures or errors.

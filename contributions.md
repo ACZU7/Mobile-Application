@@ -87,3 +87,17 @@ On `feature/parking-directions-location` (PR #5):
 Shared changes for Mohammad to review: CameraX 1.4.2 and Coil 2.7.0 were added to the Gradle files; the `CAMERA` permission and an optional camera feature entry were added to the manifest; and `BristolCityCompanionApp.kt` now hides the bottom bar on the camera route only (mockup 5 is full screen).
 
 Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 149 tests and zero failures. T04 (photo) and T10 (camera denied) passed on the API 37 emulator. One chip-colour mismatch was found and fixed. Evidence: [Street Issues screenshots 33–40](docs/evidence/streetissues/README.md#phase-3-optional-photos--2026-11-09). Housing and Clean Air Zone files are unchanged. Peer review is pending.
+
+## Omar Abdelatty — Real OpenStreetMap maps, 2026-11-09
+
+On `feature/real-maps`, built on PR #5:
+
+- **Maps:** replaced the drawn maps on the Car park finder, permit zone and street report screens with real OpenStreetMap maps (osmdroid), using a shared `ui/maps` package (map composable, theme-coloured markers, framing helper).
+- **Content:** sample car-park pins with selection, the user's location dot, the fictional Zone CM drawn with a not-a-real-boundary banner, and a fixed report-location map.
+- **Licence and dark mode:** the OSM credit is always visible, and dark mode uses a dark-grey tile filter.
+
+Five issues were found on the emulator and fixed, including OSM blocking the default osmdroid user agent (fixed with an identifying user agent and a custom tile-source definition that keeps OSM's limits).
+
+Shared changes for Mohammad to review: osmdroid 6.1.20 added to the Gradle files, `INTERNET` and `ACCESS_NETWORK_STATE` permissions, and a change to the Meeting 02 "static map" decision (recorded in `technical-decisions.md`).
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 154 tests and zero failures (5 new map-framing tests). Evidence: [parking screenshots 26–29](docs/evidence/parking/README.md#real-openstreetmap-maps--2026-11-09), [street screenshot 41](docs/evidence/streetissues/README.md#real-openstreetmap-location-map--2026-11-09). Housing and Clean Air Zone files are unchanged. Peer review is pending.

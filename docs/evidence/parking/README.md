@@ -117,3 +117,25 @@ Design differences from the mockup:
 - Dates use the device locale's medium format (the emulator shows "Mar 31, 2027"; a UK-English device shows "31 Mar 2027").
 
 Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL; 141 unit tests, zero failures (15 new: 8 ViewModel, 7 reminder timing and permit). Tested on the API 37 emulator, operated by the coding agent through ADB. Not tested: Android 12 or lower (no runtime notification prompt), RTL, tablet, and a real reboot before the reminder fires.
+
+## Real OpenStreetMap maps — 2026-11-09
+
+Branch `feature/real-maps`, built on PR #5. The drawn illustrations on the Car park finder and the permit zone screen now use real OpenStreetMap tiles (osmdroid, no API key). The sample car parks, the user's location dot, the fictional Zone CM outline and the sample address are drawn on top in theme colours.
+
+| # | Check | Result | Evidence |
+|---|---|---|---|
+| 26 | The Car park finder shows real Bristol tiles with all 8 sample pins below the chips; the selected pin is coral with its spaces label; the OSM credit is visible above the sheet | Passed after fixes | [26-real-map-finder.png](26-real-map-finder.png) |
+| — | Tapping a pin highlights it (Sample East Park & Ride, 150 spaces) without opening details | Passed | Screenshot not kept |
+| 27 | Find my location (test position 51.47, -2.52): blue dot on the map, nearest pin selected, list sorted 0.0 mi then 1.5 mi | Passed | [27-real-map-location.png](27-real-map-location.png) |
+| 28 | The permit zone screen shows the fictional Zone CM drawn around the sample address on real tiles, with a "not a real permit zone boundary" banner and the OSM credit | Passed | [28-real-map-permit-zone.png](28-real-map-permit-zone.png) |
+| 29 | Dark mode: tiles become a neutral dark-grey map; pins stay in theme colours | Passed after fix | [29-real-map-dark.png](29-real-map-dark.png) |
+
+Issues found on the emulator and fixed:
+
+1. **OSM blocked every tile ("403 Access blocked").** osmdroid's built-in MAPNIK source replaces the user agent with one based on the package name (`com.example.mobileapplication`), which OSM blocks. The OSM tile server is now defined in the app with an identifying user agent (app name and repository), keeping OSM's limits (no bulk downloads, no pre-fetching, two parallel requests). A tile request from the PC confirmed that the old user agent gets the 403 image and the new one gets real tiles.
+2. The selected pin was hidden behind a neighbouring pin; it is now drawn last.
+3. The OSM credit was hidden under the results sheet; it is now lifted above the sheet.
+4. A pin was hidden under the filter chips; framing now leaves room at the top.
+5. Plain colour inversion in dark mode turned parks purple; it was replaced with a greyscale-then-invert filter.
+
+Notes: the maps need an internet connection the first time an area is viewed (tiles are then cached). Map pins are not reachable with TalkBack; the results list below the map provides the same choices. The OSM tile service is a free, volunteer-run service meant for light use, which suits a coursework prototype; a production app would need its own or a paid tile provider.

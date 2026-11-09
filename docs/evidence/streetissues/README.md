@@ -80,3 +80,13 @@ Notes:
 - Street reports are still in memory only (Phase 2 design). If the app process ends, the report is lost, but its photo files stay in app storage until the app is uninstalled. Persisting street reports would fix this, but that is not part of this task.
 
 Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL; 149 unit tests, zero failures (8 new photo tests). Tested on the API 37 emulator, operated by the coding agent through ADB. Not tested: switch camera, RTL, tablet, landscape camera, and a device without a camera.
+
+## Real OpenStreetMap location map — 2026-11-09
+
+Branch `feature/real-maps`. The location card on the report form now shows a small, fixed OpenStreetMap map with the coral pin at the sample report position (near Nelson Street). It does not respond to touch, so the form still scrolls normally, and it does not use the device location.
+
+| # | Check | Result | Evidence |
+|---|---|---|---|
+| 41 | The form's location card shows real tiles with the report pin, the OSM credit, and the address and Edit location below the map | Passed after fix | [41-real-map-street-form.png](41-real-map-street-form.png) |
+
+Issue found and fixed: the embedded map drew tiles beyond its own area, covering the address and Edit location. The map container now clips to its bounds.
