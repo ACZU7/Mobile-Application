@@ -73,3 +73,17 @@ On `feature/parking-directions-location` (PR #5), alongside the directions and l
 Dependencies were added to the shared Gradle files: DataStore Preferences 1.1.7, WorkManager 2.10.3, and kotlinx-coroutines-test 1.10.2 (tests only).
 
 Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 141 tests and zero failures. On the API 37 emulator, these passed: the notification prompt, denied path, allowed and scheduled, persistence after force-stop, notification delivered (job force-run), cancel on switch-off, and dark mode with 150% font. Three visual issues were found and fixed. Evidence: [parking screenshots 18–25](docs/evidence/parking/README.md#phase-3-permit-zone-checker-and-expiry-reminder--2026-11-09). Housing, Clean Air Zone and Streets files are unchanged. Peer review is pending.
+
+## Omar Abdelatty — Phase 3 optional Street Issue photos, 2026-11-09
+
+On `feature/parking-directions-location` (PR #5):
+
+- **Form (mockup 6):** a "Photos (optional)" row with thumbnails, remove buttons and an Add photo tile, up to 3 photos.
+- **Camera (mockup 5):** a full-screen in-app CameraX camera with category chips, shutter, gallery, flash and switch-camera buttons.
+- **Permission:** camera permission is asked only after Add photo is tapped. If it is denied, the photo picker and "Continue without photo" are offered.
+- **Storage:** photos are kept in app-private storage, and removing a photo deletes its file. Report screens show the photo as a thumbnail.
+- **Tests:** added 8 unit tests.
+
+Shared changes for Mohammad to review: CameraX 1.4.2 and Coil 2.7.0 were added to the Gradle files; the `CAMERA` permission and an optional camera feature entry were added to the manifest; and `BristolCityCompanionApp.kt` now hides the bottom bar on the camera route only (mockup 5 is full screen).
+
+Verification: `./gradlew.bat test assembleDebug` BUILD SUCCESSFUL, with 149 tests and zero failures. T04 (photo) and T10 (camera denied) passed on the API 37 emulator. One chip-colour mismatch was found and fixed. Evidence: [Street Issues screenshots 33–40](docs/evidence/streetissues/README.md#phase-3-optional-photos--2026-11-09). Housing and Clean Air Zone files are unchanged. Peer review is pending.

@@ -75,3 +75,14 @@ Omar Abdelatty feature, branch `feature/parking-directions-location` (PR #5). Te
 | T09 (permit screen) | Passed in dark mode at 150% font on the phone emulator; a clipped map label was fixed. Tablet and RTL were not tested for this screen. | [Parking evidence 25](evidence/parking/README.md#phase-3-permit-zone-checker-and-expiry-reminder--2026-11-09) |
 
 `./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL; 141 unit tests, zero failures or errors. Camera-permission T10 is still pending; it depends on the optional Street Issue photo task.
+
+## Phase 3 Street Issues photos — 2026-11-09
+
+Omar Abdelatty feature, branch `feature/parking-directions-location` (PR #5). Tested by the coding agent operating the API 37 emulator through ADB.
+
+| ID | Actual result | Evidence |
+|---|---|---|
+| T04 (optional photo) | Passed. A photo can be taken with the in-app camera or chosen from the gallery, removed, and submitted with the report. The confirmation and My reports screens show the thumbnail. Reports without a photo still submit. | [Street Issues evidence 33, 36–40](evidence/streetissues/README.md#phase-3-optional-photos--2026-11-09) |
+| T10 (camera) | Passed. Camera permission is requested only after Add photo is tapped. If it is denied, "Camera not allowed" offers Choose from gallery and Continue without photo; the gallery path still attached a photo and the report could be finished. | [Street Issues evidence 34–36](evidence/streetissues/README.md#phase-3-optional-photos--2026-11-09) |
+
+`./gradlew.bat test assembleDebug`: BUILD SUCCESSFUL; 149 unit tests, zero failures or errors. Together with the notification results above, T10 is now covered for Omar's features.
