@@ -117,6 +117,11 @@
     <string name="housing_my_repairs_empty_title">No repairs reported yet</string>
     <string name="housing_my_repairs_empty_body">When you report a repair it will be saved on this phone and shown here.</string>
 
+    <!-- Housing: rent account payment methods (sample data) -->
+    <string name="rent_method_direct_debit">Direct Debit</string>
+    <string name="rent_method_debit_card">Debit card</string>
+    <string name="rent_method_bank_transfer">Bank transfer</string>
+
     <!-- Housing: progress screen -->
     <string name="housing_progress_title">Repair progress</string>
     <string name="housing_progress_back">Back</string>
