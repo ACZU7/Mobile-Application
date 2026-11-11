@@ -66,8 +66,10 @@ fun NavGraphBuilder.housingGraph(navController: NavHostController) {
         composable(HousingRoutes.CONFIRMATION) { entry ->
             val viewModel = housingViewModel(navController, entry)
             val request by viewModel.selectedRequest.collectAsStateWithLifecycle()
+            val saveStatus by viewModel.saveStatus.collectAsStateWithLifecycle()
             RepairConfirmationScreen(
                 request = request,
+                saveStatus = saveStatus,
                 onViewProgress = { navController.navigate(HousingRoutes.PROGRESS) },
                 onDone = {
                     navController.navigate(HousingRoutes.FORM) {
@@ -101,5 +103,5 @@ private fun housingViewModel(
     entry: NavBackStackEntry
 ): HousingViewModel {
     val graphEntry = remember(entry) { navController.getBackStackEntry(HOUSING_GRAPH_ROUTE) }
-    return viewModel(viewModelStoreOwner = graphEntry)
+    return viewModel(viewModelStoreOwner = graphEntry, factory = HousingViewModel.Factory)
 }

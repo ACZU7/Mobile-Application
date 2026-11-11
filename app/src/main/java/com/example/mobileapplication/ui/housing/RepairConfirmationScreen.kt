@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -56,6 +57,8 @@ import java.time.LocalDate
  *
  * @param request The request that was just saved, or null if none is available
  * (for example if the screen is opened directly). A helpful message is shown instead.
+ * @param saveStatus Whether the request is still being saved or failed to save.
+ * While saving, a progress indicator is shown; on failure, a message and a way back to the form.
  * @param onViewProgress Called when the user taps "View progress".
  * @param onDone Called when the user wants to go back to a new, empty form.
  */
@@ -64,7 +67,8 @@ fun RepairConfirmationScreen(
     request: RepairRequest?,
     onViewProgress: () -> Unit,
     onDone: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    saveStatus: SaveStatus = SaveStatus.IDLE
 ) {
     Scaffold(
         modifier = modifier,
@@ -92,6 +96,21 @@ fun RepairConfirmationScreen(
                     .fillMaxWidth()
                     .padding(Dimens.ScreenPadding)
             ) {
+                if (saveStatus == SaveStatus.SAVING) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                    Text(stringResource(R.string.housing_confirmation_saving), style = MaterialTheme.typography.bodyMedium)
+                    return@Column
+                }
+                if (saveStatus == SaveStatus.FAILED) {
+                    Text(
+                        text = stringResource(R.string.housing_confirmation_save_failed),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center
+                    )
+                    SecondaryButton(text = stringResource(R.string.housing_confirmation_try_again), onClick = onDone)
+                    return@Column
+                }
                 if (request == null) {
                     Text(stringResource(R.string.housing_no_request), style = MaterialTheme.typography.bodyMedium)
                     SecondaryButton(text = stringResource(R.string.housing_confirmation_done), onClick = onDone)
@@ -216,5 +235,23 @@ private fun RepairConfirmationScreenPreview() {
             onViewProgress = {},
             onDone = {}
         )
+    }
+}
+
+/** Preview of the confirmation screen while the request is still being saved. */
+@Preview(showBackground = true)
+@Composable
+private fun RepairConfirmationScreenSavingPreview() {
+    MobileApplicationTheme {
+        RepairConfirmationScreen(request = null, onViewProgress = {}, onDone = {}, saveStatus = SaveStatus.SAVING)
+    }
+}
+
+/** Preview of the confirmation screen when saving failed. */
+@Preview(showBackground = true)
+@Composable
+private fun RepairConfirmationScreenFailedPreview() {
+    MobileApplicationTheme {
+        RepairConfirmationScreen(request = null, onViewProgress = {}, onDone = {}, saveStatus = SaveStatus.FAILED)
     }
 }

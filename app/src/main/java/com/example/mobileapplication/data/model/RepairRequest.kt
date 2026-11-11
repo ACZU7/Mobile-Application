@@ -18,6 +18,7 @@ import java.time.LocalDate
  * @property createdDate The date the request was made.
  * @property status How far the repair has progressed (demonstration value only).
  * @property imageUri An optional photo of the problem. It is null until photo support is added.
+ * @property isSample True for the built-in demonstration requests, so screens can label them as sample data.
  */
 data class RepairRequest(
     val reference: String,
@@ -27,7 +28,8 @@ data class RepairRequest(
     val appointmentPreference: AppointmentPreference,
     val createdDate: LocalDate,
     val status: RepairStatus,
-    val imageUri: String? = null
+    val imageUri: String? = null,
+    val isSample: Boolean = false
 )
 
 /**

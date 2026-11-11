@@ -90,6 +90,9 @@
     <string name="housing_confirmation_view_progress">View progress</string>
     <string name="housing_confirmation_done">Report another repair</string>
     <string name="housing_confirmation_reference_label">Your reference</string>
+    <string name="housing_confirmation_saving">Saving your repair request…</string>
+    <string name="housing_confirmation_save_failed">Sorry, your repair request could not be saved on this phone. Your answers have been kept – please try again.</string>
+    <string name="housing_confirmation_try_again">Back to the form</string>
 
     <!-- Housing: progress screen -->
     <string name="housing_progress_title">Repair progress</string>
