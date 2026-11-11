@@ -25,6 +25,9 @@ object HousingRoutes {
     /** The list of saved repair requests. */
     const val MY_REPAIRS = "housing/my-repairs"
 
+    /** The sample rent account. */
+    const val RENT_ACCOUNT = "housing/rent-account"
+
     /** The confirmation shown after a successful submit. */
     const val CONFIRMATION = "housing/confirmation"
 
@@ -53,7 +56,20 @@ fun NavGraphBuilder.housingGraph(navController: NavHostController) {
                 repairCount = requests?.size,
                 onReportRepair = { navController.navigate(HousingRoutes.FORM) },
                 onMyRepairs = { navController.navigate(HousingRoutes.MY_REPAIRS) },
-                onRentAccount = { /* Added with the rent account screen. */ }
+                onRentAccount = { navController.navigate(HousingRoutes.RENT_ACCOUNT) }
+            )
+        }
+
+        composable(HousingRoutes.RENT_ACCOUNT) {
+            // The rent screen has its own ViewModel; it doesn't need the repair state.
+            val viewModel: RentViewModel = viewModel()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+            RentAccountScreen(
+                state = state,
+                onPayRent = viewModel::onPayRentClicked,
+                onPaymentMessageShown = viewModel::onPaymentMessageShown,
+                onReportIssue = { navController.navigate(HousingRoutes.FORM) },
+                onBack = { navController.popBackStack() }
             )
         }
 

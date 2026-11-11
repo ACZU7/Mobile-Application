@@ -117,6 +117,22 @@
     <string name="housing_my_repairs_empty_title">No repairs reported yet</string>
     <string name="housing_my_repairs_empty_body">When you report a repair it will be saved on this phone and shown here.</string>
 
+    <!-- Housing: rent account screen (all sample data) -->
+    <string name="rent_title">Rent account</string>
+    <string name="rent_sample_notice_title">Sample data – not your real rent account</string>
+    <string name="rent_sample_notice_body">This prototype is not connected to Bristol City Council. The balance and payments below are made up for demonstration.</string>
+    <string name="rent_up_to_date">You\'re up to date</string>
+    <string name="rent_amount_owed">You owe %1$s</string>
+    <string name="rent_balance_description">Rent balance %1$s. %2$s.</string>
+    <string name="rent_next_payment">Next payment</string>
+    <string name="rent_pay_rent">Pay rent</string>
+    <string name="rent_payment_unavailable">Payments aren\'t available in this prototype. No money has been taken.</string>
+    <string name="rent_history_title">Payment history</string>
+    <string name="rent_history_subtitle">Last 6 months (sample data)</string>
+    <string name="rent_history_empty">No payments yet.</string>
+    <string name="rent_history_paid_amount">Paid %1$s</string>
+    <string name="rent_report_issue">Report a housing issue</string>
+
     <!-- Housing: rent account payment methods (sample data) -->
     <string name="rent_method_direct_debit">Direct Debit</string>
     <string name="rent_method_debit_card">Debit card</string>
