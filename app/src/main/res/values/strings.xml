@@ -138,6 +138,24 @@
     <string name="rent_method_debit_card">Debit card</string>
     <string name="rent_method_bank_transfer">Bank transfer</string>
 
+    <!-- Housing: rent reminder switch, permission explanation and notification -->
+    <string name="rent_remind_me">Remind me before rent is due</string>
+    <string name="rent_reminder_on">On</string>
+    <string name="rent_reminder_off">Off</string>
+    <string name="rent_reminder_explainer">We\'ll send a notification %1$d days before your next payment. Nothing is sent to the council.</string>
+    <string name="rent_reminder_scheduled">Reminder set for %1$s.</string>
+    <string name="rent_reminder_blocked_title">Notifications are off</string>
+    <string name="rent_reminder_blocked_body">Rent reminders need permission to show notifications, so the reminder has been turned off. You can still see your next payment on this screen, or allow notifications in Settings and try again.</string>
+    <string name="rent_reminder_too_late_title">Payment already due</string>
+    <string name="rent_reminder_too_late_body">This payment is already due, so a reminder can\'t be set for it.</string>
+    <string name="rent_open_settings">Open settings</string>
+    <string name="rent_not_now">Not now</string>
+    <string name="rent_ok">OK</string>
+    <string name="rent_notification_channel">Rent reminders</string>
+    <string name="rent_notification_channel_description">Reminders before your rent is due (sample data)</string>
+    <string name="rent_notification_title">Rent due soon (sample data)</string>
+    <string name="rent_notification_text">Your rent of %1$s is due on %2$s. This is sample data from the prototype, not your real rent account.</string>
+
     <!-- Housing: progress screen -->
     <string name="housing_progress_title">Repair progress</string>
     <string name="housing_progress_back">Back</string>
