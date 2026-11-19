@@ -9,20 +9,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.EventBusy
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.NotificationsOff
 import androidx.compose.material.icons.filled.PriorityHigh
 import androidx.compose.material.icons.outlined.ReportProblem
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -31,18 +36,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -63,7 +75,8 @@ import java.time.LocalDate
  *
  * From top to bottom: a prominent "Sample data" notice, the highlighted balance
  * card ("You're up to date" or the amount owed), the next payment with a
- * "Pay rent" button, the payment history and a link to report a housing issue.
+ * "Pay rent" button and the "Remind me before rent is due" switch, the payment
+ * history and a link to report a housing issue.
  *
  * "Pay rent" never takes a payment: it shows a message explaining that payments
  * aren't available in this prototype.
@@ -71,6 +84,11 @@ import java.time.LocalDate
  * @param state What to show, from [RentViewModel.uiState].
  * @param onPayRent Called when "Pay rent" is tapped.
  * @param onPaymentMessageShown Called once the "payments aren't available" message has been shown.
+ * @param onReminderSwitchedOn Called when the reminder switch is turned on, before permission is asked.
+ * @param onNotificationsAllowed Called once notifications are allowed (or already were).
+ * @param onNotificationsBlocked Called if notification permission is refused or notifications are off.
+ * @param onReminderSwitchedOff Called when the reminder switch is turned off.
+ * @param onReminderDialogDismissed Called when the reminder explanation dialog is closed.
  * @param onReportIssue Called when "Report a housing issue" is tapped.
  * @param onBack Called when the back arrow is tapped.
  */
@@ -79,10 +97,20 @@ fun RentAccountScreen(
     state: RentUiState,
     onPayRent: () -> Unit,
     onPaymentMessageShown: () -> Unit,
+    onReminderSwitchedOn: () -> Unit,
+    onNotificationsAllowed: () -> Unit,
+    onNotificationsBlocked: () -> Unit,
+    onReminderSwitchedOff: () -> Unit,
+    onReminderDialogDismissed: () -> Unit,
     onReportIssue: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Permission is only asked here, when the user turns the switch on.
+    val requestNotifications = rememberNotificationPermissionRequest(
+        onAllowed = onNotificationsAllowed,
+        onBlocked = onNotificationsBlocked
+    )
     val snackbarHostState = remember { SnackbarHostState() }
     val paymentMessage = stringResource(R.string.rent_payment_unavailable)
     LaunchedEffect(state.showPaymentUnavailable) {
@@ -115,7 +143,22 @@ fun RentAccountScreen(
             ) {
                 SampleDataNotice()
                 BalanceCard(state.account)
-                NextPaymentCard(state.account, onPayRent)
+                NextPaymentCard(
+                    account = state.account,
+                    reminderEnabled = state.reminderEnabled,
+                    reminderSet = state.reminderEnabled && !state.awaitingPermission,
+                    reminderDate = state.reminderDate,
+                    onPayRent = onPayRent,
+                    onReminderChanged = { turnedOn ->
+                        if (turnedOn) {
+                            onReminderSwitchedOn()
+                            requestNotifications()
+                        } else {
+                            onReminderSwitchedOff()
+                        }
+                    },
+                    onNotificationsBlocked = onNotificationsBlocked
+                )
                 PaymentHistory(state.account.paymentHistory)
                 HousingListRow(
                     icon = Icons.Outlined.ReportProblem,
@@ -127,6 +170,8 @@ fun RentAccountScreen(
             }
         }
     }
+
+    ReminderDialog(state.reminderDialog, onReminderDialogDismissed)
 }
 
 /** The prominent amber notice saying none of this is the user's real rent account. */
@@ -247,9 +292,20 @@ private fun CircleIcon(
     }
 }
 
-/** The "Next payment" card with the date, the amount and the coral "Pay rent" button. */
+/**
+ * The "Next payment" card with the date, the amount, the coral "Pay rent" button
+ * and the "Remind me before rent is due" switch.
+ */
 @Composable
-private fun NextPaymentCard(account: RentAccount, onPayRent: () -> Unit) {
+private fun NextPaymentCard(
+    account: RentAccount,
+    reminderEnabled: Boolean,
+    reminderSet: Boolean,
+    reminderDate: LocalDate,
+    onPayRent: () -> Unit,
+    onReminderChanged: (Boolean) -> Unit,
+    onNotificationsBlocked: () -> Unit
+) {
     val next = account.nextPayment
     AppCard {
         Column(
@@ -280,8 +336,115 @@ private fun NextPaymentCard(account: RentAccount, onPayRent: () -> Unit) {
                 )
             }
             PrimaryButton(text = stringResource(R.string.rent_pay_rent), onClick = onPayRent)
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            ReminderSwitch(reminderEnabled, reminderSet, reminderDate, onReminderChanged)
+            // Debug builds only: shows the notification now. Release builds draw nothing here.
+            RentReminderDebugButton(
+                payment = next,
+                onNotificationsBlocked = onNotificationsBlocked,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
+}
+
+/**
+ * The "Remind me before rent is due" row with a teal switch, as in the permit
+ * reminder on mockup screen 4. The whole row can be tapped, and below it a short
+ * line says when the reminder will come. [reminderSet] is false while permission is
+ * still being asked, so "Reminder set" only appears once it really is.
+ */
+@Composable
+private fun ReminderSwitch(
+    enabled: Boolean,
+    reminderSet: Boolean,
+    reminderDate: LocalDate,
+    onChanged: (Boolean) -> Unit
+) {
+    val stateText = stringResource(if (enabled) R.string.rent_reminder_on else R.string.rent_reminder_off)
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = Dimens.ButtonHeight)
+                .toggleable(value = enabled, role = Role.Switch, onValueChange = onChanged)
+                .semantics { stateDescription = stateText }
+        ) {
+            Text(
+                text = stringResource(R.string.rent_remind_me),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+            Switch(
+                checked = enabled,
+                onCheckedChange = null, // the whole row handles the tap
+                colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary)
+            )
+        }
+        Text(
+            text = if (reminderSet) {
+                stringResource(R.string.rent_reminder_scheduled, formatLongDate(reminderDate))
+            } else {
+                stringResource(R.string.rent_reminder_explainer, RentReminderTiming.DAYS_BEFORE_DUE.toInt())
+            },
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/** Explains why the reminder couldn't be turned on. Nothing is shown when [dialog] is null. */
+@Composable
+private fun ReminderDialog(dialog: RentReminderDialog?, onDismiss: () -> Unit) {
+    when (dialog) {
+        null -> Unit
+        RentReminderDialog.NOTIFICATIONS_BLOCKED -> {
+            val context = LocalContext.current
+            ReminderAlert(
+                icon = Icons.Filled.NotificationsOff,
+                title = stringResource(R.string.rent_reminder_blocked_title),
+                body = stringResource(R.string.rent_reminder_blocked_body),
+                confirmText = stringResource(R.string.rent_open_settings),
+                onConfirm = {
+                    onDismiss()
+                    openNotificationSettings(context)
+                },
+                dismissText = stringResource(R.string.rent_not_now),
+                onDismiss = onDismiss
+            )
+        }
+        RentReminderDialog.PAYMENT_ALREADY_DUE -> ReminderAlert(
+            icon = Icons.Filled.EventBusy,
+            title = stringResource(R.string.rent_reminder_too_late_title),
+            body = stringResource(R.string.rent_reminder_too_late_body),
+            confirmText = stringResource(R.string.rent_ok),
+            onConfirm = onDismiss,
+            dismissText = null,
+            onDismiss = onDismiss
+        )
+    }
+}
+
+/** A standard Material 3 alert with an icon, a message and one or two text buttons. */
+@Composable
+private fun ReminderAlert(
+    icon: ImageVector,
+    title: String,
+    body: String,
+    confirmText: String,
+    onConfirm: () -> Unit,
+    dismissText: String?,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
+        title = { Text(title) },
+        text = { Text(body) },
+        confirmButton = { TextButton(onClick = onConfirm) { Text(confirmText) } },
+        dismissButton = dismissText?.let { text -> { TextButton(onClick = onDismiss) { Text(text) } } }
+    )
 }
 
 /** The "Payment history" heading and a card listing each past payment. */
@@ -352,7 +515,23 @@ private fun RentAccountScreenUpToDatePreview() {
     MobileApplicationTheme {
         RentAccountScreen(
             state = RentUiState(RentRepository.sampleAccount(previewToday)),
-            onPayRent = {}, onPaymentMessageShown = {}, onReportIssue = {}, onBack = {}
+            onPayRent = {}, onPaymentMessageShown = {}, onReminderSwitchedOn = {}, onNotificationsAllowed = {},
+            onNotificationsBlocked = {}, onReminderSwitchedOff = {}, onReminderDialogDismissed = {},
+            onReportIssue = {}, onBack = {}
+        )
+    }
+}
+
+/** Preview with the rent reminder switched on. */
+@Preview(showBackground = true, heightDp = 1100)
+@Composable
+private fun RentAccountScreenReminderOnPreview() {
+    MobileApplicationTheme {
+        RentAccountScreen(
+            state = RentUiState(RentRepository.sampleAccount(previewToday), reminderEnabled = true),
+            onPayRent = {}, onPaymentMessageShown = {}, onReminderSwitchedOn = {}, onNotificationsAllowed = {},
+            onNotificationsBlocked = {}, onReminderSwitchedOff = {}, onReminderDialogDismissed = {},
+            onReportIssue = {}, onBack = {}
         )
     }
 }
@@ -364,7 +543,9 @@ private fun RentAccountScreenOwedPreview() {
     MobileApplicationTheme {
         RentAccountScreen(
             state = RentUiState(RentRepository.sampleAccount(previewToday, amountOwedPence = 12_050L)),
-            onPayRent = {}, onPaymentMessageShown = {}, onReportIssue = {}, onBack = {}
+            onPayRent = {}, onPaymentMessageShown = {}, onReminderSwitchedOn = {}, onNotificationsAllowed = {},
+            onNotificationsBlocked = {}, onReminderSwitchedOff = {}, onReminderDialogDismissed = {},
+            onReportIssue = {}, onBack = {}
         )
     }
 }
@@ -376,7 +557,9 @@ private fun RentAccountScreenNoHistoryPreview() {
     MobileApplicationTheme {
         RentAccountScreen(
             state = RentUiState(RentRepository.sampleAccount(previewToday).copy(paymentHistory = emptyList())),
-            onPayRent = {}, onPaymentMessageShown = {}, onReportIssue = {}, onBack = {}
+            onPayRent = {}, onPaymentMessageShown = {}, onReminderSwitchedOn = {}, onNotificationsAllowed = {},
+            onNotificationsBlocked = {}, onReminderSwitchedOff = {}, onReminderDialogDismissed = {},
+            onReportIssue = {}, onBack = {}
         )
     }
 }
@@ -388,7 +571,9 @@ private fun RentAccountScreenDarkPreview() {
     MobileApplicationTheme {
         RentAccountScreen(
             state = RentUiState(RentRepository.sampleAccount(previewToday)),
-            onPayRent = {}, onPaymentMessageShown = {}, onReportIssue = {}, onBack = {}
+            onPayRent = {}, onPaymentMessageShown = {}, onReminderSwitchedOn = {}, onNotificationsAllowed = {},
+            onNotificationsBlocked = {}, onReminderSwitchedOff = {}, onReminderDialogDismissed = {},
+            onReportIssue = {}, onBack = {}
         )
     }
 }

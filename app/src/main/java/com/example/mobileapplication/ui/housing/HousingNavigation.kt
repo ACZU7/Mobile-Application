@@ -62,12 +62,17 @@ fun NavGraphBuilder.housingGraph(navController: NavHostController) {
 
         composable(HousingRoutes.RENT_ACCOUNT) {
             // The rent screen has its own ViewModel; it doesn't need the repair state.
-            val viewModel: RentViewModel = viewModel()
+            val viewModel: RentViewModel = viewModel(factory = RentViewModel.Factory)
             val state by viewModel.uiState.collectAsStateWithLifecycle()
             RentAccountScreen(
                 state = state,
                 onPayRent = viewModel::onPayRentClicked,
                 onPaymentMessageShown = viewModel::onPaymentMessageShown,
+                onReminderSwitchedOn = viewModel::onReminderSwitchedOn,
+                onNotificationsAllowed = viewModel::onNotificationsAllowed,
+                onNotificationsBlocked = viewModel::onNotificationsBlocked,
+                onReminderSwitchedOff = viewModel::onReminderSwitchedOff,
+                onReminderDialogDismissed = viewModel::onReminderDialogDismissed,
                 onReportIssue = { navController.navigate(HousingRoutes.FORM) },
                 onBack = { navController.popBackStack() }
             )
