@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Strings used only in debug builds (testing tools that never appear in release). -->
+<resources>
+    <string name="rent_debug_test_reminder">Debug: show test reminder now</string>
+</resources>

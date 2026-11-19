@@ -51,15 +51,8 @@ class WorkManagerRentReminderScheduler(
         workManager.cancelUniqueWork(WORK_NAME)
     }
 
-    /**
-     * Shows the reminder for [payment] straight away. Used only by the debug-build
-     * test button, so the notification can be checked without waiting days.
-     */
-    fun showTestReminderNow(payment: UpcomingRentPayment) {
-        enqueue(TEST_WORK_NAME, payment, Duration.ZERO)
-    }
-
-    private fun enqueue(name: String, payment: UpcomingRentPayment, delay: Duration) {
+    /** Queues the reminder worker under the unique [name], replacing any earlier one with that name. */
+    internal fun enqueue(name: String, payment: UpcomingRentPayment, delay: Duration) {
         val request = OneTimeWorkRequestBuilder<RentReminderWorker>()
             .setInitialDelay(delay.toMillis(), TimeUnit.MILLISECONDS)
             .setInputData(
@@ -74,7 +67,6 @@ class WorkManagerRentReminderScheduler(
 
     internal companion object {
         const val WORK_NAME = "rent_due_reminder"
-        const val TEST_WORK_NAME = "rent_due_reminder_test"
         const val KEY_DUE_DATE = "due_date"
         const val KEY_AMOUNT_PENCE = "amount_pence"
     }
