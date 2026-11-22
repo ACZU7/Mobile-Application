@@ -19,6 +19,8 @@
 
 ## Proposed package layout
 
+Phase 4 integration (2026-11-22): Street Reports share Mohammad's `AppDatabase` rather than creating a second database. Schema version 2 adds `street_reports` through `MIGRATION_1_2`, preserving the version-one Housing table. The single sample permit and reminder choices continue to use DataStore. Street confirmation follows a successful Room write; a write failure keeps the draft and optional photo references for retry. The combined branch remains subject to human review before merge to main.
+
 ```text
 app/
   data/

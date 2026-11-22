@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mobileapplication.R
@@ -52,6 +53,7 @@ internal fun PermitZoneMap(zoneCode: String, modifier: Modifier = Modifier) {
     val dot = MaterialTheme.extendedColors.statusSubmitted.content.toArgb()
     val label = stringResource(R.string.permit_zone_label, zoneCode)
     val framed = remember { booleanArrayOf(false) }
+    val density = LocalDensity.current.density
 
     OsmMap(stringResource(R.string.permit_map_description, zoneCode), modifier, attributionBottomPadding = 24.dp) { map ->
         map.overlays.removeAll { it is Marker || it is Polygon }
@@ -59,7 +61,7 @@ internal fun PermitZoneMap(zoneCode: String, modifier: Modifier = Modifier) {
             points = SampleZoneGeometry.zoneOutline + SampleZoneGeometry.zoneOutline.first()
             fillPaint.color = zoneColour.copy(alpha = 0.22f).toArgb()
             outlinePaint.color = zoneColour.toArgb()
-            outlinePaint.strokeWidth = 2 * context.resources.displayMetrics.density
+            outlinePaint.strokeWidth = 2 * density
             setOnClickListener { _, _, _ -> false }
             infoWindow = null
         })

@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 /**
  * The app's single on-device Room database, stored in [DATABASE_NAME].
@@ -17,20 +19,32 @@ import androidx.room.RoomDatabase
  * Bristol City Council.
  */
 @Database(
-    entities = [RepairRequestEntity::class],
-    version = 1,
+    entities = [RepairRequestEntity::class, StreetReportEntity::class],
+    version = 2,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
 
     /** Access to the housing repair requests table. */
     abstract fun repairRequestDao(): RepairRequestDao
+    abstract fun streetReportDao(): StreetReportDao
 
     /** Holds the single database instance shared by the whole app. */
     companion object {
 
         /** The database file name on the device. */
         const val DATABASE_NAME = "bristol_companion.db"
+
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""CREATE TABLE IF NOT EXISTS `street_reports` (
+                    `reference` TEXT NOT NULL, `category` TEXT NOT NULL,
+                    `description` TEXT NOT NULL, `locationLabel` TEXT NOT NULL,
+                    `latitude` REAL NOT NULL, `longitude` REAL NOT NULL,
+                    `photos` TEXT NOT NULL, `createdEpochDay` INTEGER NOT NULL,
+                    `status` TEXT NOT NULL, PRIMARY KEY(`reference`))""")
+            }
+        }
 
         @Volatile
         private var instance: AppDatabase? = null
@@ -47,7 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     DATABASE_NAME
-                ).build().also { instance = it }
+                ).addMigrations(MIGRATION_1_2).build().also { instance = it }
             }
     }
 }

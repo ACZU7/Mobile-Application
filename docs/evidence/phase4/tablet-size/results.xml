@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.example.mobileapplication.PhaseFourUiTest" tests="7" failures="0" errors="0" skipped="4" time="22.318" timestamp="2026-11-22T21:29:31" hostname="localhost">
+  <properties>
+    <property name="device" value="Medium_Phone_API_37.0(AVD) - 17" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="parkingFiltersDetailsAndPermitRemainReachable" classname="com.example.mobileapplication.PhaseFourUiTest" time="6.996" />
+  <testcase name="sharedNavigationAndRentIntegration" classname="com.example.mobileapplication.PhaseFourUiTest" time="3.885" />
+  <testcase name="permitReminderAcrossReboot" classname="com.example.mobileapplication.PhaseFourUiTest" time="1.771">
+    <skipped />
+  </testcase>
+  <testcase name="permittedLocationSortsResults" classname="com.example.mobileapplication.PhaseFourUiTest" time="1.432">
+    <skipped />
+  </testcase>
+  <testcase name="cameraCaptureAndRemoval" classname="com.example.mobileapplication.PhaseFourUiTest" time="1.771">
+    <skipped />
+  </testcase>
+  <testcase name="deniedPermissionsKeepCoreFlowsUsable" classname="com.example.mobileapplication.PhaseFourUiTest" time="1.689">
+    <skipped />
+  </testcase>
+  <testcase name="streetValidationSubmissionAndStatus" classname="com.example.mobileapplication.PhaseFourUiTest" time="3.73" />
+</testsuite>

@@ -1,30 +1,57 @@
 package com.example.mobileapplication.data.repository
 
 import com.example.mobileapplication.data.model.*
+import android.content.Context
+import com.example.mobileapplication.data.local.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.time.LocalDate
 import java.util.Locale
 
-/** In-memory only. All data disappears when the process ends. */
-class StreetReportRepository(private val today: () -> LocalDate = { LocalDate.now() }, seedSamples: Boolean = true) {
-    private val records = MutableStateFlow(if (seedSamples) samples() else emptyList())
+/** Production uses the shared Room database; tests can use an isolated in-memory repository. */
+class StreetReportRepository(private val today: () -> LocalDate = { LocalDate.now() },
+    private val seedSamples: Boolean = true, private val dao: StreetReportDao? = null) {
+    private val records = MutableStateFlow(if (dao == null && seedSamples) samples() else emptyList())
     val reports = records.asStateFlow()
+    val persistent get() = dao != null
+    private val writeLock = Mutex()
+    private var loaded = dao == null
 
-    @Synchronized
-    fun save(category: StreetCategory, description: String, locationLabel: String, imageUris: List<String> = emptyList()): StreetReport {
-        val date = today()
-        val sequence = records.value.filter { it.createdDate.year == date.year }
-            .mapNotNull { it.reference.substringAfterLast('-').toIntOrNull() }.maxOrNull()?.plus(1) ?: 1
-        val report = StreetReport(formatReference(date.year, sequence), category, description.trim(),
-            locationLabel.trim(), SAMPLE_LATITUDE, SAMPLE_LONGITUDE, imageUris = imageUris, createdDate = date, status = StreetStatus.SUBMITTED)
-        records.value = listOf(report) + records.value
-        return report
+    suspend fun load() = writeLock.withLock {
+        if (!loaded) {
+            var rows = dao!!.getAll()
+            if (rows.isEmpty() && seedSamples) {
+                dao.insertSamples(samples().map { it.toEntity() })
+                rows = dao.getAll()
+            }
+            records.value = rows.map { it.toModel() }
+            loaded = true
+        }
+    }
+
+    suspend fun save(category: StreetCategory, description: String, locationLabel: String, imageUris: List<String> = emptyList()): StreetReport {
+        load()
+        return writeLock.withLock {
+            val date = today()
+            val sequence = records.value.filter { it.createdDate.year == date.year }
+                .mapNotNull { it.reference.substringAfterLast('-').toIntOrNull() }.maxOrNull()?.plus(1) ?: 1
+            val report = StreetReport(formatReference(date.year, sequence), category, description.trim(),
+                locationLabel.trim(), SAMPLE_LATITUDE, SAMPLE_LONGITUDE, imageUris = imageUris, createdDate = date, status = StreetStatus.SUBMITTED)
+            dao?.insert(report.toEntity())
+            records.value = listOf(report) + records.value
+            report
+        }
     }
     fun get(reference: String) = records.value.find { it.reference == reference }
 
     companion object {
-        val shared by lazy { StreetReportRepository() }
+        @Volatile private var instance: StreetReportRepository? = null
+        fun getInstance(context: Context): StreetReportRepository = instance ?: synchronized(this) {
+            instance ?: StreetReportRepository(dao = AppDatabase.getInstance(context).streetReportDao())
+                .also { instance = it }
+        }
         /** Fixed sample position used for new reports and shown on the form map (near Nelson Street). Not GPS. */
         const val SAMPLE_LATITUDE = 51.4566
         const val SAMPLE_LONGITUDE = -2.5937

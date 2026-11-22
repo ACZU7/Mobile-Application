@@ -40,6 +40,8 @@ Test every acceptance criterion manually on the primary emulator. Repeat key tes
 
 ## Phase 4 baseline — 2026-11-22
 
+This subsection is the initial checkpoint. The follow-up below supersedes its open-gap and no-device statements.
+
 Baseline: merged `main` commit `1887c29` (PR #5). Verification branch: `feature/phase-4-verification`. This is the start of final verification, not a full Phase 4 pass.
 
 - `./gradlew.bat test assembleDebug lintDebug`: BUILD SUCCESSFUL. The unit-test task was up to date; its existing XML results contain 154 tests and zero failures. No fresh execution of all tests is claimed.
@@ -58,6 +60,22 @@ Baseline: merged `main` commit `1887c29` (PR #5). Verification branch: `feature/
 | Housing/rent integration | Mohammad / both | Review and integrate the Phase 3 branch, then run shared navigation and combined build/tests. |
 | Final records/video | Both | Update merged PR references, retain final evidence and prepare each member's implementation explanation. |
 
+
+## Phase 4 follow-up — 2026-11-22
+
+Locally combined Mohammad's Phase 3 branch in merge `7f21003` on `feature/phase-4-verification`; main is unchanged. Added Room-backed Street Reports and a non-destructive database version 1-to-2 migration. Saving must succeed before confirmation; failed writes retain form/photos and show an error. Landscape Parking and permit screens now use adjacent map/results panels. This supersedes the baseline's in-memory Street Report and no-device findings.
+
+| Scope | Result |
+|---|---|
+| Build/unit/lint | Debug and release builds pass; 194 unit tests, zero failures/errors; lint has warnings but no errors. |
+| QR03 | Real Room database reopen restores reports and photo URI lists; version-one migration retains an existing Housing repair and permits Street submissions. Reference numbering continues after reload. |
+| T01–T05 / QR01 / T10 | Core Parking/Streets/permit journeys pass on the combined emulator build; separate runs pass denied camera/location/notifications, allowed camera capture/switch/remove and allowed location sorting. Reminder saved/scheduled state survives an emulator reboot and switch-off cancels it. |
+| T06–T08 | Housing invalid/valid wizard and progress pass. CAZ empty validation and no-charge/charge/unknown results show prototype statements and an official-checker action. This does not claim Housing photo support or repeat external browser hand-off. |
+| T09 | Core journeys pass at 150% font with dark mode, simulated tablet size, verified RTL, and actual landscape with networking disabled. Same API 37 emulator; no independent device/OS result claimed. |
+
+Full screenshots, test methods, configuration limits, defect/retest notes and assessment walkthrough preparation: [Phase 4 evidence](evidence/phase4/README.md). The default device suite skips parameter-dependent tests; these were executed separately with their corresponding permission/reboot setup.
+
+Final sign-off remains open for human review/merge, shared Home/mockup completion, agreement on existing Housing photo scope, fresh gallery/external Directions checks, physical-device/accessibility checks where available, and the students' assessment recording. The locally combined build is not a claim that main already contains Mohammad's branch.
 
 ## Phase 2 Street Issues automated verification ? 2026-10-30
 
