@@ -1,7 +1,9 @@
 package com.example.mobileapplication.ui.streetissues
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,12 +14,25 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
 import com.example.mobileapplication.R
 import com.example.mobileapplication.data.model.*
 import com.example.mobileapplication.ui.shared.*
+import com.example.mobileapplication.data.repository.StreetReportRepository
+import com.example.mobileapplication.ui.maps.MapMarkers
+import com.example.mobileapplication.ui.maps.OsmMap
+import com.example.mobileapplication.ui.maps.addMarker
+import com.example.mobileapplication.ui.maps.frame
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import org.osmdroid.views.overlay.Marker
+import org.osmdroid.util.GeoPoint as OsmPoint
 import com.example.mobileapplication.ui.theme.Dimens
 import com.example.mobileapplication.ui.theme.extendedColors
 
@@ -39,6 +54,7 @@ private fun StreetPage(title: Int, onBack: () -> Unit, content: @Composable Colu
 @Composable
 fun StreetFormScreen(state: StreetFormState, onCategory: (StreetCategory) -> Unit,
     onDescription: (String) -> Unit, onLocation: (String) -> Unit,
+    onAddPhoto: () -> Unit, onRemovePhoto: (String) -> Unit,
     onSubmit: () -> Unit, onReports: () -> Unit, onBack: () -> Unit) {
     var editing by rememberSaveable { mutableStateOf(false) }
     var draft by rememberSaveable { mutableStateOf("") }
@@ -58,13 +74,8 @@ fun StreetFormScreen(state: StreetFormState, onCategory: (StreetCategory) -> Uni
             }
         }
         state.categoryError?.let { StreetError(it) }
-        OutlinedCard {
-            Row(Modifier.padding(Dimens.ScreenPadding), verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing)) {
-                Icon(Icons.Default.AddAPhoto, null, tint = MaterialTheme.colorScheme.primary)
-                Text(stringResource(R.string.street_photo), style = MaterialTheme.typography.bodyMedium)
-            }
-        }
+        Text(stringResource(R.string.street_photos_heading), style = MaterialTheme.typography.titleSmall)
+        StreetPhotoRow(state.photos, state.canAddPhoto, onAddPhoto, onRemovePhoto)
         Text(stringResource(R.string.street_location), style = MaterialTheme.typography.titleSmall)
         OutlinedCard {
             SampleStreetMap()
@@ -106,26 +117,34 @@ private fun StreetError(message: Int) {
         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
 }
 
+/** Small fixed OpenStreetMap preview with the report pin; not draggable, so the form scrolls normally. */
 @Composable
 private fun SampleStreetMap() {
-    val colors = MaterialTheme.colorScheme
-    val description = stringResource(R.string.street_map_description)
-    Box(Modifier.fillMaxWidth().height(Dimens.ButtonHeight * 2).semantics { contentDescription = description },
-        contentAlignment = Alignment.Center) {
-        Canvas(Modifier.fillMaxSize()) {
-            drawRect(colors.surfaceVariant)
-            for (i in 0..5) {
-                val x = size.width * i / 5
-                drawLine(colors.surface, Offset(x, 0f), Offset(x + size.width / 4, size.height), strokeWidth = size.height / 12)
-            }
-            drawLine(colors.surface, Offset(0f, size.height / 2), Offset(size.width, size.height / 3), strokeWidth = size.height / 8)
+    val context = LocalContext.current
+    val colours = MaterialTheme.colorScheme
+    val pin = colours.secondary.toArgb()
+    val ring = colours.surface.toArgb()
+    val point = OsmPoint(StreetReportRepository.SAMPLE_LATITUDE, StreetReportRepository.SAMPLE_LONGITUDE)
+    OsmMap(stringResource(R.string.street_map_description), Modifier.fillMaxWidth().height(Dimens.ButtonHeight * 3), interactive = false) { map ->
+        if (map.overlays.none { it is Marker }) {
+            val icon = MapMarkers.pin(context, pin, ring, null, ring)
+            map.addMarker(point, icon, MapMarkers.pinAnchorY(icon, context))
+            map.frame(listOf(point), singlePointZoom = 16.0)
         }
-        Icon(Icons.Default.LocationOn, null, tint = colors.secondary, modifier = Modifier.size(Dimens.ButtonHeight))
     }
 }
 
 @Composable
 private fun ReportSummary(report: StreetReport) {
+    report.imageUris.firstOrNull()?.let { photo ->
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing)) {
+            StreetPhoto(photo, Modifier.size(Dimens.ButtonHeight * 1.5f))
+            if (report.imageUris.size > 1) {
+                Text(stringResource(R.string.street_photo_count, report.imageUris.size), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+    }
     Text(stringResource(report.category.labelRes), style = MaterialTheme.typography.titleMedium)
     Text(stringResource(R.string.street_reference, report.reference), style = MaterialTheme.typography.bodyMedium)
     Text(stringResource(R.string.street_date, report.createdDate.toString()), style = MaterialTheme.typography.bodySmall)
@@ -206,3 +225,45 @@ fun StreetStatusScreen(report: StreetReport?, onReports: () -> Unit, onBack: () 
         SecondaryButton(stringResource(R.string.street_reports), onReports)
     }
 }
+
+/** Mockup screen 6: photo thumbnails with a remove button, then an add tile while fewer than the maximum. */
+@Composable
+private fun StreetPhotoRow(photos: List<String>, canAdd: Boolean, onAdd: () -> Unit, onRemove: (String) -> Unit) {
+    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(Dimens.CardSpacing)) {
+        photos.forEachIndexed { index, photo ->
+            Box(Modifier.size(width = PhotoTileWidth, height = PhotoTileHeight)) {
+                StreetPhoto(photo, Modifier.fillMaxSize(), stringResource(R.string.street_photo_description, index + 1))
+                val removeDescription = stringResource(R.string.street_photo_remove, index + 1)
+                Surface(onClick = { onRemove(photo) }, shape = CircleShape, color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f),
+                    contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    modifier = Modifier.align(Alignment.TopEnd).padding(4.dp).size(Dimens.ButtonHeight)) {
+                    Box(contentAlignment = Alignment.Center) { Icon(Icons.Default.Close, removeDescription, Modifier.size(20.dp)) }
+                }
+            }
+        }
+        if (canAdd) {
+            Surface(onClick = onAdd, shape = MaterialTheme.shapes.medium, color = MaterialTheme.extendedColors.chipNeutral,
+                modifier = Modifier.size(width = PhotoTileWidth, height = PhotoTileHeight)) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(Dimens.GroupSpacing)) {
+                    Icon(Icons.Default.PhotoCamera, null, tint = MaterialTheme.colorScheme.primary)
+                    Text(stringResource(if (photos.isEmpty()) R.string.street_photo_add else R.string.street_photo_add_another),
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center)
+                }
+            }
+        }
+    }
+    Text(stringResource(R.string.street_photo_hint, STREET_MAX_PHOTOS), style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+/** A stored street photo. Coil reads it off the main thread and applies the camera's EXIF rotation. */
+@Composable
+private fun StreetPhoto(uri: String, modifier: Modifier, description: String? = null) {
+    AsyncImage(model = uri, contentDescription = description, contentScale = ContentScale.Crop,
+        modifier = modifier.clip(MaterialTheme.shapes.medium).background(MaterialTheme.extendedColors.chipNeutral))
+}
+
+private val PhotoTileWidth = 150.dp
+private val PhotoTileHeight = 112.dp

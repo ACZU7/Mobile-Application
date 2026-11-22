@@ -57,12 +57,20 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
+    // Housing repairs: local database (Room).
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-    // Rent reminder: saved switch setting (DataStore) and the scheduled reminder (WorkManager).
+    // Parking permit and rent reminders: saved settings (DataStore) and scheduled reminders (WorkManager).
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.work.runtime.ktx)
+    // Street Issues photos: in-app camera (CameraX) and thumbnails that respect photo orientation (Coil).
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.coil.compose)
+    // Real maps: OpenStreetMap tiles via osmdroid (no API key).
+    implementation(libs.osmdroid.android)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
