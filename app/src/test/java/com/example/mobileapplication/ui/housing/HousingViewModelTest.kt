@@ -5,18 +5,35 @@ import com.example.mobileapplication.data.model.AppointmentPreference
 import com.example.mobileapplication.data.model.IssueType
 import com.example.mobileapplication.data.model.Room
 import com.example.mobileapplication.data.repository.RepairRepository
+import com.example.mobileapplication.testutil.FakeRepairRequestDao
+import com.example.mobileapplication.testutil.MainDispatcherRule
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 
-/** Unit tests for the events and submit flow in [HousingViewModel]. */
+/**
+ * Unit tests for the events and submit flow in [HousingViewModel].
+ *
+ * The repository runs on an in-memory [FakeRepairRequestDao], so no device is needed.
+ */
 class HousingViewModelTest {
 
-    private val repository = RepairRepository(today = { LocalDate.of(2026, 10, 21) })
-    private val viewModel = HousingViewModel(repository)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    private val dao = FakeRepairRequestDao()
+    private val repository = RepairRepository(dao, today = { LocalDate.of(2026, 10, 21) })
+
+    // Created lazily so it is built after MainDispatcherRule has installed the test dispatcher.
+    private val viewModel by lazy { HousingViewModel(repository) }
 
     private fun fillValidForm() {
         viewModel.onRoomSelected(Room.BATHROOM)
@@ -30,7 +47,7 @@ class HousingViewModelTest {
         assertFalse(viewModel.submit())
 
         assertEquals(R.string.housing_error_room, viewModel.formState.value.roomError)
-        assertEquals(3, repository.requests.value.size)
+        assertTrue(dao.stored.none { !it.isSample })
         assertNull(viewModel.selectedRequest.value)
     }
 
@@ -44,7 +61,8 @@ class HousingViewModelTest {
         assertEquals("HR-2026-0004", selected.reference)
         assertEquals(Room.BATHROOM, selected.room)
         assertEquals("Shower is leaking through the ceiling", selected.description)
-        assertEquals(4, repository.requests.value.size)
+        assertEquals(4, dao.stored.size)
+        assertEquals(SaveStatus.IDLE, viewModel.saveStatus.value)
     }
 
     @Test
@@ -52,6 +70,18 @@ class HousingViewModelTest {
         fillValidForm()
         viewModel.submit()
         assertEquals(RepairFormState(), viewModel.formState.value)
+    }
+
+    @Test
+    fun failedSave_reportsFailureAndKeepsTheUsersAnswers() {
+        dao.failInserts = true
+        fillValidForm()
+
+        assertTrue(viewModel.submit())
+
+        assertEquals(SaveStatus.FAILED, viewModel.saveStatus.value)
+        assertNull(viewModel.selectedRequest.value)
+        assertEquals(Room.BATHROOM, viewModel.formState.value.room)
     }
 
     @Test
@@ -99,7 +129,7 @@ class HousingViewModelTest {
         assertEquals(RepairStep.APPOINTMENT, viewModel.formState.value.step)
 
         assertTrue(viewModel.onNext())
-        assertEquals(4, repository.requests.value.size)
+        assertEquals(4, dao.stored.size)
     }
 
     @Test
@@ -125,5 +155,28 @@ class HousingViewModelTest {
     fun selectRequest_selectsSampleByReference() {
         viewModel.selectRequest("HR-2026-0002")
         assertEquals(Room.BEDROOM, viewModel.selectedRequest.value?.room)
+    }
+
+    @Test
+    fun selectRequest_withRequestObject_selectsItImmediately() {
+        val sample = RepairRepository.sampleRequests().first()
+        viewModel.selectRequest(sample)
+        assertEquals(sample, viewModel.selectedRequest.value)
+    }
+
+    @Test
+    fun requests_listsSamplesThenIncludesNewSubmission() = runTest {
+        // stateIn(WhileSubscribed) only loads while something is collecting, like a screen would.
+        backgroundScope.launch(mainDispatcherRule.dispatcher) { viewModel.requests.collect() }
+
+        assertEquals(3, viewModel.requests.value?.size)
+
+        fillValidForm()
+        viewModel.submit()
+
+        val requests = viewModel.requests.value
+        assertNotNull(requests)
+        assertEquals(4, requests!!.size)
+        assertEquals("HR-2026-0004", requests.first().reference)
     }
 }

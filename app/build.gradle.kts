@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -37,6 +39,11 @@ android {
     }
 }
 
+room {
+    // Room writes each database version's schema here, so future migrations can be checked.
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -60,6 +67,10 @@ dependencies {
     implementation(libs.coil.compose)
     // Real maps: OpenStreetMap tiles via osmdroid (no API key).
     implementation(libs.osmdroid.android)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    // Rent reminder: saved switch setting (DataStore) and the scheduled reminder (WorkManager).
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)

@@ -90,6 +90,71 @@
     <string name="housing_confirmation_view_progress">View progress</string>
     <string name="housing_confirmation_done">Report another repair</string>
     <string name="housing_confirmation_reference_label">Your reference</string>
+    <string name="housing_confirmation_saving">Saving your repair request…</string>
+    <string name="housing_confirmation_save_failed">Sorry, your repair request could not be saved on this phone. Your answers have been kept – please try again.</string>
+    <string name="housing_confirmation_try_again">Back to the form</string>
+
+    <!-- Housing: home screen (start of the Housing tab) -->
+    <string name="housing_home_title">Housing</string>
+    <string name="housing_home_intro">What would you like to do?</string>
+    <string name="housing_home_report_repair">Report a repair</string>
+    <string name="housing_home_report_repair_subtitle">Tell us about something that needs fixing</string>
+    <string name="housing_home_my_repairs">My repairs</string>
+    <string name="housing_home_my_repairs_none">No repairs reported yet</string>
+    <plurals name="housing_home_my_repairs_count">
+        <item quantity="one">%1$d repair request saved</item>
+        <item quantity="other">%1$d repair requests saved</item>
+    </plurals>
+    <string name="housing_home_rent_account">Rent account</string>
+    <string name="housing_home_rent_account_subtitle">Balance, next payment and history (sample data)</string>
+    <string name="housing_loading">Loading…</string>
+
+    <!-- Housing: my repairs screen -->
+    <string name="housing_my_repairs_title">My repairs</string>
+    <string name="housing_my_repairs_row_subtitle">%1$s · %2$s</string>
+    <string name="housing_my_repairs_row_date">Reported %1$s</string>
+    <string name="housing_my_repairs_sample_label">Sample request</string>
+    <string name="housing_my_repairs_empty_title">No repairs reported yet</string>
+    <string name="housing_my_repairs_empty_body">When you report a repair it will be saved on this phone and shown here.</string>
+
+    <!-- Housing: rent account screen (all sample data) -->
+    <string name="rent_title">Rent account</string>
+    <string name="rent_sample_notice_title">Sample data – not your real rent account</string>
+    <string name="rent_sample_notice_body">This prototype is not connected to Bristol City Council. The balance and payments below are made up for demonstration.</string>
+    <string name="rent_up_to_date">You\'re up to date</string>
+    <string name="rent_amount_owed">You owe %1$s</string>
+    <string name="rent_balance_description">Rent balance %1$s. %2$s.</string>
+    <string name="rent_next_payment">Next payment</string>
+    <string name="rent_pay_rent">Pay rent</string>
+    <string name="rent_payment_unavailable">Payments aren\'t available in this prototype. No money has been taken.</string>
+    <string name="rent_history_title">Payment history</string>
+    <string name="rent_history_subtitle">Last 6 months (sample data)</string>
+    <string name="rent_history_empty">No payments yet.</string>
+    <string name="rent_history_paid_amount">Paid %1$s</string>
+    <string name="rent_report_issue">Report a housing issue</string>
+
+    <!-- Housing: rent account payment methods (sample data) -->
+    <string name="rent_method_direct_debit">Direct Debit</string>
+    <string name="rent_method_debit_card">Debit card</string>
+    <string name="rent_method_bank_transfer">Bank transfer</string>
+
+    <!-- Housing: rent reminder switch, permission explanation and notification -->
+    <string name="rent_remind_me">Remind me before rent is due</string>
+    <string name="rent_reminder_on">On</string>
+    <string name="rent_reminder_off">Off</string>
+    <string name="rent_reminder_explainer">We\'ll send a notification %1$d days before your next payment. Nothing is sent to the council.</string>
+    <string name="rent_reminder_scheduled">Reminder set for %1$s.</string>
+    <string name="rent_reminder_blocked_title">Notifications are off</string>
+    <string name="rent_reminder_blocked_body">Rent reminders need permission to show notifications, so the reminder has been turned off. You can still see your next payment on this screen, or allow notifications in Settings and try again.</string>
+    <string name="rent_reminder_too_late_title">Payment already due</string>
+    <string name="rent_reminder_too_late_body">This payment is already due, so a reminder can\'t be set for it.</string>
+    <string name="rent_open_settings">Open settings</string>
+    <string name="rent_not_now">Not now</string>
+    <string name="rent_ok">OK</string>
+    <string name="rent_notification_channel">Rent reminders</string>
+    <string name="rent_notification_channel_description">Reminders before your rent is due (sample data)</string>
+    <string name="rent_notification_title">Rent due soon (sample data)</string>
+    <string name="rent_notification_text">Your rent of %1$s is due on %2$s. This is sample data from the prototype, not your real rent account.</string>
 
     <!-- Housing: progress screen -->
     <string name="housing_progress_title">Repair progress</string>
