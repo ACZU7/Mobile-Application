@@ -12,12 +12,12 @@ class StreetReportRepository(private val today: () -> LocalDate = { LocalDate.no
     val reports = records.asStateFlow()
 
     @Synchronized
-    fun save(category: StreetCategory, description: String, locationLabel: String): StreetReport {
+    fun save(category: StreetCategory, description: String, locationLabel: String, imageUris: List<String> = emptyList()): StreetReport {
         val date = today()
         val sequence = records.value.filter { it.createdDate.year == date.year }
             .mapNotNull { it.reference.substringAfterLast('-').toIntOrNull() }.maxOrNull()?.plus(1) ?: 1
         val report = StreetReport(formatReference(date.year, sequence), category, description.trim(),
-            locationLabel.trim(), 51.457, -2.592, createdDate = date, status = StreetStatus.SUBMITTED)
+            locationLabel.trim(), SAMPLE_LATITUDE, SAMPLE_LONGITUDE, imageUris = imageUris, createdDate = date, status = StreetStatus.SUBMITTED)
         records.value = listOf(report) + records.value
         return report
     }
@@ -25,6 +25,9 @@ class StreetReportRepository(private val today: () -> LocalDate = { LocalDate.no
 
     companion object {
         val shared by lazy { StreetReportRepository() }
+        /** Fixed sample position used for new reports and shown on the form map (near Nelson Street). Not GPS. */
+        const val SAMPLE_LATITUDE = 51.4566
+        const val SAMPLE_LONGITUDE = -2.5937
         fun formatReference(year: Int, sequence: Int): String = String.format(Locale.ROOT, "SR-%d-%04d", year, sequence)
         private fun samples() = listOf(
             StreetReport(formatReference(2026, 3), StreetCategory.POTHOLE, "Fictional pothole near a sample crossing.", "Demo Nelson Street, Bristol", 51.457, -2.592, createdDate = LocalDate.of(2026, 10, 20), status = StreetStatus.IN_PROGRESS),

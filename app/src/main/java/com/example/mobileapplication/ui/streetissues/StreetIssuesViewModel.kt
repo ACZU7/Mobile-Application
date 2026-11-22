@@ -9,16 +9,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 const val STREET_DESCRIPTION_MAX = 500
+const val STREET_MAX_PHOTOS = 3
 
 data class StreetFormState(
     val category: StreetCategory? = null,
     val description: String = "",
     val locationLabel: String = "Demo Nelson Street, Bristol BS1 2JY",
+    /** Optional; the report can always be submitted without a photo. */
+    val photos: List<String> = emptyList(),
     val categoryError: Int? = null,
     val descriptionError: Int? = null,
     val locationError: Int? = null
 ) {
     val isValid get() = categoryError == null && descriptionError == null && locationError == null
+    val canAddPhoto get() = photos.size < STREET_MAX_PHOTOS
 }
 object StreetReportValidator {
     fun validate(form: StreetFormState) = form.copy(
@@ -44,12 +48,14 @@ class StreetIssuesViewModel(private val repository: StreetReportRepository = Str
     fun description(value: String) { form.update { it.copy(description = value, descriptionError = null) } }
     fun location(value: String) { form.update { it.copy(locationLabel = value, locationError = null) } }
     fun filter(value: StreetStatus?) { statusFilter.value = value }
+    fun addPhoto(uri: String) { form.update { if (it.canAddPhoto && uri !in it.photos) it.copy(photos = it.photos + uri) else it } }
+    fun removePhoto(uri: String) { form.update { it.copy(photos = it.photos - uri) } }
     fun select(reference: String) { selected.value = repository.get(reference) }
     fun submit(): Boolean {
         val checked = StreetReportValidator.validate(form.value)
         form.value = checked
         if (!checked.isValid) return false
-        selected.value = repository.save(checked.category!!, checked.description, checked.locationLabel)
+        selected.value = repository.save(checked.category!!, checked.description, checked.locationLabel, checked.photos)
         form.value = StreetFormState()
         return true
     }

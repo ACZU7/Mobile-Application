@@ -1,6 +1,7 @@
 package com.example.mobileapplication.ui.streetissues
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
@@ -11,15 +12,27 @@ private const val FORM = "streets/form"
 private const val CONFIRMATION = "streets/confirmation"
 private const val REPORTS = "streets/reports"
 private const val STATUS = "streets/status/{reference}"
+/** Full-screen camera; the app hides the bottom bar on this route. */
+const val STREET_CAMERA_ROUTE = "streets/camera"
 
 fun NavGraphBuilder.streetIssuesGraph(navController: NavHostController) {
     navigation(startDestination = FORM, route = STREET_GRAPH_ROUTE) {
         composable(FORM) { entry ->
             val vm = streetViewModel(navController, entry)
             val form by vm.formState.collectAsStateWithLifecycle()
+            val context = LocalContext.current
             StreetFormScreen(form, vm::category, vm::description, vm::location,
+                onAddPhoto = { navController.navigate(STREET_CAMERA_ROUTE) { launchSingleTop = true } },
+                onRemovePhoto = { vm.removePhoto(it); StreetPhotoStorage.delete(context, it) },
                 onSubmit = { if (vm.submit()) navController.navigate(CONFIRMATION) { popUpTo(FORM) } },
                 onReports = { navController.navigate(REPORTS) }, onBack = { navController.popBackStack() })
+        }
+        composable(STREET_CAMERA_ROUTE) { entry ->
+            val vm = streetViewModel(navController, entry)
+            val form by vm.formState.collectAsStateWithLifecycle()
+            StreetCameraScreen(form.category, vm::category,
+                onPhoto = { vm.addPhoto(it); navController.popBackStack() },
+                onClose = { navController.popBackStack() })
         }
         composable(CONFIRMATION) { entry ->
             val vm = streetViewModel(navController, entry)

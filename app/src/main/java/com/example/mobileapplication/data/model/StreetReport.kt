@@ -18,7 +18,8 @@ data class StreetReport(
     val locationLabel: String,
     val latitude: Double,
     val longitude: Double,
-    val imageUri: String? = null,
+    /** Optional photos, saved in this app's private storage (file URIs). Never uploaded. */
+    val imageUris: List<String> = emptyList(),
     val createdDate: LocalDate,
     val status: StreetStatus
 )
