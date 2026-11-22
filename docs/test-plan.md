@@ -35,6 +35,26 @@ Test every acceptance criterion manually on the primary emulator. Repeat key tes
 - Issues found, owner, fix and retest outcome.
 - Commit links for the feature that was tested.
 
+## Phase 4 baseline — 2026-11-22
+
+Baseline: merged `main` commit `1887c29` (PR #5). Verification branch: `feature/phase-4-verification`. This is the start of final verification, not a full Phase 4 pass.
+
+- `./gradlew.bat test assembleDebug lintDebug`: BUILD SUCCESSFUL. The unit-test task was up to date; its existing XML results contain 154 tests and zero failures. No fresh execution of all tests is claimed.
+- Android lint: no errors; warnings remain for dependency/target versions, plural resources, unused resources, Compose resource access and KTX suggestions. Reports are generated in `app/build/reports/lint-results-debug.html` and `.xml` (local build outputs).
+- `adb devices -l`: no connected devices. No new manual UI, accessibility, permission, offline-map or second-device pass is claimed for this baseline.
+- Mohammad's `feature/rent-account-persistence` branch is not included in this baseline. Repeat integration checks after its review and merge.
+
+| Follow-up | Owner | Status / acceptance evidence needed |
+|---|---|---|
+| FR01–FR03 / QR01: Parking and permit regression | Omar | Repeat filters, selection/details, location allowed/denied/off, directions fallback, reminder allowed/denied/cancel and persistence on the final build. |
+| FR04–FR05: Streets regression | Omar | Repeat invalid/valid submissions, camera/gallery/denial, photo removal, references, status/filter/empty states and Back on the final build. |
+| QR03: Street Report persistence | Omar | Open gap: `StreetReportRepository` is in memory, so submitted reports disappear after process death. Resolve and test restart recovery before claiming report persistence. |
+| T09 / NFR01 / NFR03 | Both, own features | Final-build large-font, landscape, dark-mode, RTL and second-screen-size evidence; older screenshots predate the complete Phase 3 build. |
+| Offline maps | Omar | Verify a usable no-network path and preserved report/parking actions. |
+| Reminder reboot and camera hardware | Omar | Verify reboot scheduling, camera switching and flash on supporting hardware; distinguish forced notification delivery from natural scheduling. |
+| Housing/rent integration | Mohammad / both | Review and integrate the Phase 3 branch, then run shared navigation and combined build/tests. |
+| Final records/video | Both | Update merged PR references, retain final evidence and prepare each member's implementation explanation. |
+
 
 ## Phase 2 Street Issues automated verification ? 2026-10-30
 
