@@ -16,8 +16,17 @@ const val HOUSING_GRAPH_ROUTE = "housing"
 
 /** The routes of the individual screens inside the Housing section. */
 object HousingRoutes {
-    /** The repair form (the first screen). */
+    /** The Housing home with its list of options (the first screen). */
+    const val HOME = "housing/home"
+
+    /** The repair form wizard. */
     const val FORM = "housing/form"
+
+    /** The list of saved repair requests. */
+    const val MY_REPAIRS = "housing/my-repairs"
+
+    /** The sample rent account. */
+    const val RENT_ACCOUNT = "housing/rent-account"
 
     /** The confirmation shown after a successful submit. */
     const val CONFIRMATION = "housing/confirmation"
@@ -27,16 +36,65 @@ object HousingRoutes {
 }
 
 /**
- * Adds the Housing repair screens to the app's navigation as one nested graph.
+ * Adds the Housing screens to the app's navigation as one nested graph, starting
+ * at the Housing home ([HousingRoutes.HOME]).
  *
  * To plug it into the main app, call `housingGraph(navController)` inside the
  * main `NavHost { ... }` and navigate to [HOUSING_GRAPH_ROUTE].
  *
- * All three screens share one [HousingViewModel] (see [housingViewModel]), so the
- * request saved on the form is still available on the confirmation and progress screens.
+ * The repair screens share one [HousingViewModel] (see [housingViewModel]), so the
+ * request saved on the form is still available on the confirmation and progress screens,
+ * and "My repairs" can pass the tapped request to the progress screen.
  */
 fun NavGraphBuilder.housingGraph(navController: NavHostController) {
-    navigation(startDestination = HousingRoutes.FORM, route = HOUSING_GRAPH_ROUTE) {
+    navigation(startDestination = HousingRoutes.HOME, route = HOUSING_GRAPH_ROUTE) {
+
+        composable(HousingRoutes.HOME) { entry ->
+            val viewModel = housingViewModel(navController, entry)
+            val requests by viewModel.requests.collectAsStateWithLifecycle()
+            HousingHomeScreen(
+                repairCount = requests?.size,
+                onReportRepair = { navController.navigate(HousingRoutes.FORM) },
+                onMyRepairs = { navController.navigate(HousingRoutes.MY_REPAIRS) },
+                onRentAccount = { navController.navigate(HousingRoutes.RENT_ACCOUNT) }
+            )
+        }
+
+        composable(HousingRoutes.RENT_ACCOUNT) {
+            // The rent screen has its own ViewModel; it doesn't need the repair state.
+            val viewModel: RentViewModel = viewModel(factory = RentViewModel.Factory)
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+            RentAccountScreen(
+                state = state,
+                onPayRent = viewModel::onPayRentClicked,
+                onPaymentMessageShown = viewModel::onPaymentMessageShown,
+                onReminderSwitchedOn = viewModel::onReminderSwitchedOn,
+                onNotificationsAllowed = viewModel::onNotificationsAllowed,
+                onNotificationsBlocked = viewModel::onNotificationsBlocked,
+                onReminderSwitchedOff = viewModel::onReminderSwitchedOff,
+                onReminderDialogDismissed = viewModel::onReminderDialogDismissed,
+                onReportIssue = { navController.navigate(HousingRoutes.FORM) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(HousingRoutes.MY_REPAIRS) { entry ->
+            val viewModel = housingViewModel(navController, entry)
+            val requests by viewModel.requests.collectAsStateWithLifecycle()
+            MyRepairsScreen(
+                requests = requests,
+                onRequestClick = { request ->
+                    viewModel.selectRequest(request)
+                    navController.navigate(HousingRoutes.PROGRESS)
+                },
+                onReportRepair = {
+                    navController.navigate(HousingRoutes.FORM) {
+                        popUpTo(HousingRoutes.MY_REPAIRS) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
 
         composable(HousingRoutes.FORM) { entry ->
             val viewModel = housingViewModel(navController, entry)
@@ -66,8 +124,10 @@ fun NavGraphBuilder.housingGraph(navController: NavHostController) {
         composable(HousingRoutes.CONFIRMATION) { entry ->
             val viewModel = housingViewModel(navController, entry)
             val request by viewModel.selectedRequest.collectAsStateWithLifecycle()
+            val saveStatus by viewModel.saveStatus.collectAsStateWithLifecycle()
             RepairConfirmationScreen(
                 request = request,
+                saveStatus = saveStatus,
                 onViewProgress = { navController.navigate(HousingRoutes.PROGRESS) },
                 onDone = {
                     navController.navigate(HousingRoutes.FORM) {
@@ -101,5 +161,5 @@ private fun housingViewModel(
     entry: NavBackStackEntry
 ): HousingViewModel {
     val graphEntry = remember(entry) { navController.getBackStackEntry(HOUSING_GRAPH_ROUTE) }
-    return viewModel(viewModelStoreOwner = graphEntry)
+    return viewModel(viewModelStoreOwner = graphEntry, factory = HousingViewModel.Factory)
 }
