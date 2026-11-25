@@ -214,9 +214,6 @@
     <string name="caz_official_checker_button">Use the official checker</string>
     <string name="caz_official_checker_fallback">No app on this phone can open web links. To use the official checker, go to %1$s</string>
 
-    <!-- Temporary: lets testers open features that are not in the bottom navigation yet -->
-    <string name="temp_open_clean_air_zone">Open Clean Air Zone checker (temporary)</string>
-
     <!-- Profile (local demo profile) -->
     <string name="profile_title">Profile</string>
     <string name="profile_demo_notice">Demo profile, stored only on this phone. Not a council account.</string>
@@ -279,4 +276,10 @@
     <string name="home_service_rent_account">Rent account</string>
     <string name="home_service_rent_account_keywords">rent payment balance pay housing tenancy</string>
 
+    <!-- Bottom navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_parking">Parking</string>
+    <string name="nav_streets">Streets</string>
+    <string name="nav_housing">Housing</string>
+    <string name="nav_profile">Profile</string>
 </resources>
