@@ -1,5 +1,9 @@
 # Omar final handover verification
 
+## Merged main checkpoint
+
+PR [#7](https://github.com/ACZU7/Mobile-Application/pull/7) was merged to `main` at `c7f48b3bf081536bb2e74c6156d3a7fe06bf30e3` on 25 November 2026 at Omar's explicit request. The local checkout was fast-forwarded to that commit, preserving the existing local IDE settings. Post-merge `gradlew.bat test assembleDebug assembleRelease lintDebug` passed. The earlier branch-pending/merge-pending statements below are historical and superseded by this checkpoint; no human peer approval is inferred from the merge. Profile remains a minimal Admin entry placeholder for Mohammad's future dashboard.
+
 Date: 25 November 2026. This records coding-agent-operated checks, not human peer approval. The final feature branch remains separate from `main` for review.
 
 Remote refresh confirmed Mohammad's PR #6 merged at `f875d1e`. Merge `1455b6e` brings that main into the handover branch. Three dependency/manifest conflicts were resolved using main's equivalent declaration ordering and comments; no dependency versions or Housing/CAZ feature code changed. Post-integration build/unit/lint verification is recorded with the PR checks.

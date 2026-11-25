@@ -34,7 +34,7 @@ After reviewing the documents, run `tools/package-submission.ps1 -GroupId YOUR_G
 - Confirm Group ID and Mohammad's student number; review the design and contribution text together.
 - Both members sign the mini report and supply the final video or accessible link.
 - Mohammad resolves/accepts his existing Housing photo gap; Omar's work does not claim it is implemented.
-- Human peer review and merge of the final feature branch, then verification of the merged commit.
+- PR #7 is merged into `main` at `c7f48b3`; post-merge local build/unit/lint checks pass. Record human peer review separately; no approval is inferred from the requested merge.
 - Check Blackboard for any later assessment announcements before uploading individually.
 
 ## Use of AI
