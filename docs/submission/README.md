@@ -21,6 +21,10 @@ The student number is held only in the local generated report/package. Group ID 
 - [Final verification](../evidence/finalization/README.md): actual test results and screenshot evidence.
 - `tools/package-submission.ps1`: creates the review ZIP from tracked project files and the documents, excluding local caches, credentials and build directories.
 
+To regenerate the mini report, install `docx` with `npm install --prefix .tooling docx`, put your numeric `studentNumber` in the ignored `.tooling/submission-details.json`, and run `node tools/build-mini-report.cjs`. Close the generated report in Word before regenerating it. The design-copy helper accepts the source DOCX path and requires `python-docx` in `.tooling/python`.
+
+After reviewing the documents, run `tools/package-submission.ps1 -GroupId YOUR_GROUP_ID -StudentNumber YOUR_STUDENT_NUMBER`. Do not publish generated assessment documents or archives to the public repository.
+
 ## Remaining student actions
 
 - Confirm Group ID and Mohammad's student number; review the design and contribution text together.

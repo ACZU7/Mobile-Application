@@ -2,6 +2,8 @@
 
 Date: 25 November 2026. This records coding-agent-operated checks, not human peer approval. The final feature branch remains separate from `main` for review.
 
+Remote refresh confirmed Mohammad's PR #6 merged at `f875d1e`. Merge `1455b6e` brings that main into the handover branch. Three dependency/manifest conflicts were resolved using main's equivalent declaration ordering and comments; no dependency versions or Housing/CAZ feature code changed. Post-integration build/unit/lint verification is recorded with the PR checks.
+
 ## Completed scope
 
 - Home replaces the placeholder with the approved six-service grid, service search/empty state, report/status shortcut and working service navigation. Five-item navigation includes a guest demonstration Profile.
