@@ -46,6 +46,16 @@ class StreetReportRepository(private val today: () -> LocalDate = { LocalDate.no
     }
     fun get(reference: String) = records.value.find { it.reference == reference }
 
+    /** Publish the new status only after storage succeeds. Resident and staff screens share this flow. */
+    suspend fun updateStatus(reference: String, status: StreetStatus) {
+        load()
+        writeLock.withLock {
+            requireNotNull(get(reference)) { "Unknown report" }
+            if (dao != null) check(dao.updateStatus(reference, status.name) == 1) { "Report was not updated" }
+            records.value = records.value.map { if (it.reference == reference) it.copy(status = status) else it }
+        }
+    }
+
     companion object {
         @Volatile private var instance: StreetReportRepository? = null
         fun getInstance(context: Context): StreetReportRepository = instance ?: synchronized(this) {

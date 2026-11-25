@@ -17,6 +17,13 @@ class StreetStorageTest {
     private class FakeDao : StreetReportDao {
         val rows = mutableListOf<StreetReportEntity>()
         var failWrites = false
+        override suspend fun updateStatus(reference: String, status: String): Int {
+            if (failWrites) throw IOException("Disk full")
+            val index = rows.indexOfFirst { it.reference == reference }
+            if (index < 0) return 0
+            rows[index] = rows[index].copy(status = status)
+            return 1
+        }
         override suspend fun getAll() = rows.toList()
         override suspend fun insert(report: StreetReportEntity) {
             if (failWrites) throw IOException("Disk full")
@@ -58,6 +65,23 @@ class StreetStorageTest {
             assertTrue(vm.submit())
             assertEquals(1, repo.reports.value.size)
         } finally { kotlinx.coroutines.Dispatchers.resetMain() }
+    }
+
+    @Test fun statusChangePersistsAndFailedChangeIsNotPublished() = runTest {
+        val dao = FakeDao()
+        val repo = StreetReportRepository(dao = dao)
+        repo.load()
+        val reference = repo.reports.value.first().reference
+        repo.updateStatus(reference, StreetStatus.FIXED)
+        val reopened = StreetReportRepository(dao = dao)
+        reopened.load()
+        assertEquals(StreetStatus.FIXED, reopened.get(reference)?.status)
+        dao.failWrites = true
+        try { repo.updateStatus(reference, StreetStatus.SUBMITTED); fail("Expected storage failure") }
+        catch (_: IOException) { }
+        assertEquals(StreetStatus.FIXED, repo.get(reference)?.status)
+        try { repo.updateStatus("missing", StreetStatus.FIXED); fail("Expected missing report rejection") }
+        catch (_: IllegalArgumentException) { }
     }
 
     @Test fun concurrentSubmissionsHaveDifferentReferences() = runTest {

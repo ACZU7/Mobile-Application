@@ -2,6 +2,8 @@
 
 ## Test approach
 
+Latest Omar handover: [25 November final verification](evidence/finalization/README.md). This adds Home/Profile/Staff, persisted report status changes, parking sample management and the main-thread gallery-return fix. It supersedes the earlier Home-placeholder and unrefreshed-gallery gaps for this branch. Human review, signatures, video and the existing Mohammad-owned Housing-photo gap remain open.
+
 Test every acceptance criterion manually on the primary emulator. Repeat key tests on a second Android screen size and, if available, a physical Android device. Keep screenshots or short screen recordings as evidence.
 
 ## Core test cases

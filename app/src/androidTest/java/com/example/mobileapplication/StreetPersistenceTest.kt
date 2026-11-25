@@ -27,11 +27,12 @@ class StreetPersistenceTest {
             val repo = StreetReportRepository(dao = db.streetReportDao())
             val saved = repo.save(StreetCategory.GRAFFITI, "Fictional wall damage", "Demo lane",
                 listOf("file:///private/photo one.jpg", "file:///private/صورة.jpg"))
+            repo.updateStatus(saved.reference, StreetStatus.FIXED)
             db.close()
             db = open(name)
             val restored = StreetReportRepository(dao = db.streetReportDao())
             restored.load()
-            assertEquals(saved, restored.get(saved.reference))
+            assertEquals(saved.copy(status = StreetStatus.FIXED), restored.get(saved.reference))
             assertEquals(3, restored.reports.value.size)
             val next = restored.save(StreetCategory.POTHOLE, "Fictional road damage", "Demo road")
             assertNotEquals(saved.reference, next.reference)

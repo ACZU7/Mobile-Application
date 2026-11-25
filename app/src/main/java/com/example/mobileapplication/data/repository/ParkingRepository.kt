@@ -1,14 +1,15 @@
 package com.example.mobileapplication.data.repository
 
 import com.example.mobileapplication.R
+import kotlinx.coroutines.flow.asStateFlow
 import com.example.mobileapplication.data.model.CarPark
 import com.example.mobileapplication.data.model.ParkingCategory
 import com.example.mobileapplication.data.model.ParkingArea
 import com.example.mobileapplication.data.model.ParkingType
 
 /** Fixed fictional Bristol examples, held in memory. No live Council data or services. */
-class ParkingRepository {
-    val carParks: List<CarPark> = listOf(
+class ParkingRepository(private val preferences: android.content.SharedPreferences? = null) {
+    private val defaults: List<CarPark> = listOf(
         sample("sample-01", R.string.parking_name_01, ParkingType.CAR_PARK, ParkingArea.CENTRE, R.string.parking_address_01, 51.454, -2.593),
         sample("sample-02", R.string.parking_name_02, ParkingType.CAR_PARK, ParkingArea.CENTRE, R.string.parking_address_02, 51.452, -2.599),
         sample("sample-03", R.string.parking_name_03, ParkingType.CAR_PARK, ParkingArea.NORTH, R.string.parking_address_03, 51.49, -2.59),
@@ -19,7 +20,36 @@ class ParkingRepository {
         sample("sample-08", R.string.parking_name_08, ParkingType.PARK_AND_RIDE, ParkingArea.EAST, R.string.parking_address_08, 51.47, -2.52)
     )
 
+    private val records = kotlinx.coroutines.flow.MutableStateFlow(defaults.map { park ->
+        preferences?.let { prefs -> park.copy(
+            sampleSpaces = prefs.getInt("${park.id}.spaces", park.sampleSpaces),
+            sampleHourlyPrice = prefs.getFloat("${park.id}.price", park.sampleHourlyPrice.toFloat()).toDouble(),
+            hasEvCharging = prefs.getBoolean("${park.id}.ev", park.hasEvCharging),
+            category = runCatching { ParkingCategory.valueOf(prefs.getString("${park.id}.category", park.category.name)!!) }.getOrDefault(park.category)
+        ) } ?: park
+    })
+    val changes = records.asStateFlow()
+    val carParks: List<CarPark> get() = records.value
     fun getCarPark(id: String): CarPark? = carParks.find { it.id == id }
+
+    @Synchronized
+    fun updateSample(id: String, spaces: Int, price: Double, ev: Boolean, category: ParkingCategory) {
+        require(spaces in 0..10000 && price.isFinite() && price in 0.0..100.0)
+        requireNotNull(getCarPark(id))
+        val saved = preferences?.edit()?.putInt("$id.spaces", spaces)?.putFloat("$id.price", price.toFloat())
+            ?.putBoolean("$id.ev", ev)?.putString("$id.category", category.name)?.commit()
+        check(saved != false) { "Could not save parking sample" }
+        records.value = carParks.map { if (it.id == id) it.copy(sampleSpaces = spaces, sampleHourlyPrice = price,
+            hasEvCharging = ev, category = category) else it }
+    }
+
+    companion object {
+        @Volatile private var instance: ParkingRepository? = null
+        fun getInstance(context: android.content.Context): ParkingRepository = instance ?: synchronized(this) {
+            instance ?: ParkingRepository(context.applicationContext.getSharedPreferences("parking_samples", android.content.Context.MODE_PRIVATE))
+                .also { instance = it }
+        }
+    }
 
     private fun sample(
         id: String, name: Int, type: ParkingType, area: ParkingArea,

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.example.mobileapplication.DashboardUiTest" tests="2" failures="0" errors="0" skipped="0" time="21.426" timestamp="2026-11-25T16:46:44" hostname="localhost">
+  <properties>
+    <property name="device" value="Medium_Phone_API_37.0(AVD) - 17" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="homeSearchAndAllServiceDestinations" classname="com.example.mobileapplication.DashboardUiTest" time="10.184" />
+  <testcase name="staffStatusAndParkingEditsReachResidentScreens" classname="com.example.mobileapplication.DashboardUiTest" time="10.9" />
+</testsuite>

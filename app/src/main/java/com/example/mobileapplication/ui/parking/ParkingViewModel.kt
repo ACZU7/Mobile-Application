@@ -1,6 +1,8 @@
 package com.example.mobileapplication.ui.parking
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import com.example.mobileapplication.data.model.CarPark
 import com.example.mobileapplication.data.model.ParkingCategory
 import com.example.mobileapplication.data.model.ParkingArea
@@ -52,6 +54,15 @@ data class ParkingUiState(
 class ParkingViewModel(private val repository: ParkingRepository = ParkingRepository()) : ViewModel() {
     private val _uiState = MutableStateFlow(ParkingUiState(repository.carParks))
     val uiState = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            repository.changes.collect { parks ->
+                _uiState.update { state -> filter(state.copy(allCarParks = parks,
+                    selectedCarPark = parks.find { it.id == state.selectedCarPark?.id })) }
+            }
+        }
+    }
 
     fun onTypeSelected(type: ParkingType?) {
         _uiState.update { filter(it.copy(type = type)) }
