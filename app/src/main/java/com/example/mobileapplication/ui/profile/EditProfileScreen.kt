@@ -30,12 +30,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mobileapplication.R
 import com.example.mobileapplication.ui.shared.FieldError
 import com.example.mobileapplication.ui.shared.PrimaryButton
 import com.example.mobileapplication.ui.shared.SecondaryButton
 import com.example.mobileapplication.ui.shared.TopBar
+import com.example.mobileapplication.ui.shared.UpperCaseVisualTransformation
 import com.example.mobileapplication.ui.theme.Dimens
 import com.example.mobileapplication.ui.theme.MobileApplicationTheme
 
@@ -114,6 +116,7 @@ fun EditProfileScreen(
                     placeholder = R.string.profile_placeholder_postcode,
                     icon = Icons.Filled.LocationOn,
                     error = form.postcodeError,
+                    visualTransformation = UpperCaseVisualTransformation,
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Characters,
                         autoCorrectEnabled = false,
@@ -127,6 +130,7 @@ fun EditProfileScreen(
                     placeholder = R.string.caz_plate_placeholder,
                     icon = Icons.Filled.DirectionsCar,
                     error = form.vehicleError,
+                    visualTransformation = UpperCaseVisualTransformation,
                     supporting = R.string.profile_vehicle_hint,
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Characters,
@@ -158,7 +162,8 @@ private fun ProfileField(
     error: Int?,
     keyboardOptions: KeyboardOptions,
     supporting: Int? = null,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     OutlinedTextField(
         value = value,
@@ -175,6 +180,7 @@ private fun ProfileField(
         singleLine = true,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
+        visualTransformation = visualTransformation,
         shape = MaterialTheme.shapes.small,
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,

@@ -64,6 +64,7 @@ import com.example.mobileapplication.domain.cleanairzone.RegistrationError
 import com.example.mobileapplication.ui.shared.PrimaryButton
 import com.example.mobileapplication.ui.shared.SecondaryButton
 import com.example.mobileapplication.ui.shared.TopBar
+import com.example.mobileapplication.ui.shared.UpperCaseVisualTransformation
 import com.example.mobileapplication.ui.theme.Dimens
 import com.example.mobileapplication.ui.theme.MobileApplicationTheme
 import com.example.mobileapplication.ui.theme.extendedColors
@@ -257,6 +258,8 @@ private fun PlateTextField(
         singleLine = true,
         textStyle = textStyle,
         cursorBrush = SolidColor(plateText),
+        // Shown in capitals like a real plate, without changing the typed text.
+        visualTransformation = UpperCaseVisualTransformation,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Characters,
             autoCorrectEnabled = false,

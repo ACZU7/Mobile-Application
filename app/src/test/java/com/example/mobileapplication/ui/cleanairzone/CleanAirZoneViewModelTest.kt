@@ -57,12 +57,24 @@ class CleanAirZoneViewModelTest {
     }
 
     @Test
-    fun typing_updatesRegistrationInCapitals() {
+    fun typing_keepsTheTextAsTyped() {
+        // Not converted while typing: rewriting the text mid-composition can make the keyboard drop letters.
         viewModel.onRegistrationChanged("ib15 ptl")
 
-        assertEquals("IB15 PTL", viewModel.state.value.registration)
+        assertEquals("ib15 ptl", viewModel.state.value.registration)
         assertNull(viewModel.state.value.error)
         assertNull(viewModel.state.value.result)
+    }
+
+    @Test
+    fun checkingLowerCaseInput_findsTheVehicleAndShowsCapitals() {
+        viewModel.onRegistrationChanged("ib15 ptl")
+        viewModel.onCheck()
+
+        val result = viewModel.state.value.result!!
+        assertNull(viewModel.state.value.error)
+        assertEquals("IB15 PTL", result.registration)
+        assertEquals(CazOutcome.NO_CHARGE, result.outcome)
     }
 
     @Test

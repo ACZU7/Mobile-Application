@@ -80,7 +80,7 @@ class ProfileViewModel(
      * Called when the postcode text changes. Also clears its error.
      *
      * The text is kept exactly as typed (changing it here while the keyboard is
-     * still composing can lose letters); the keyboard offers capitals, and
+     * still composing can lose letters); the screen shows it in capitals, and
      * [save] stores the standard form, for example "BS1 5TR".
      */
     fun onPostcodeChanged(text: String) = _form.update { it.copy(postcode = text, postcodeError = null) }

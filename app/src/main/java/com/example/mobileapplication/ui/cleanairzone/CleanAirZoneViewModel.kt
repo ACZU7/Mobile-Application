@@ -82,11 +82,15 @@ class CleanAirZoneViewModel(
     val demoRegistrations: List<String> get() = repository.registrations
 
     /**
-     * Called every time the plate text changes. The text is shown in capitals,
-     * and the old error and result are cleared because they no longer match it.
+     * Called every time the plate text changes. The old error and result are
+     * cleared because they no longer match it.
+     *
+     * The text is kept exactly as typed: changing it here while the keyboard is
+     * still composing can lose letters. The screen shows it in capitals, and
+     * [onCheck] converts it.
      */
     fun onRegistrationChanged(text: String) {
-        _state.update { CleanAirZoneState(registration = text.uppercase(), savedRegistration = it.savedRegistration) }
+        _state.update { CleanAirZoneState(registration = text, savedRegistration = it.savedRegistration) }
     }
 
     /**
@@ -106,7 +110,7 @@ class CleanAirZoneViewModel(
      * unknown outcome rather than an error.
      */
     fun onCheck() {
-        val entered = _state.value.registration
+        val entered = _state.value.registration.uppercase()
         when (val validation = RegistrationValidator.validate(entered)) {
             is RegistrationValidation.Invalid -> _state.update {
                 it.copy(error = validation.error, result = null)
