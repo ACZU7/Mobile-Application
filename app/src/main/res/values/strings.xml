@@ -253,4 +253,30 @@
     <string name="profile_error_email">Enter an email address like name@example.com.</string>
     <string name="profile_error_postcode">Enter a UK postcode like BS1 5TR.</string>
 
+    <!-- Home dashboard -->
+    <string name="home_greeting_morning">Good morning, %1$s</string>
+    <string name="home_greeting_afternoon">Good afternoon, %1$s</string>
+    <string name="home_greeting_evening">Good evening, %1$s</string>
+    <string name="home_greeting_welcome">Welcome</string>
+    <string name="home_subtitle">How can we help you today?</string>
+    <string name="home_search_placeholder">Search services or report an issue</string>
+    <string name="home_search_clear">Clear search</string>
+    <string name="home_search_no_results">No services match \u201c%1$s\u201d. Try parking, repair or rent.</string>
+    <string name="home_latest_repair_label">Your latest repair</string>
+    <string name="home_latest_repair_detail">%1$s · %2$s</string>
+
+    <!-- Home dashboard: service tiles and the extra words search matches -->
+    <string name="home_service_find_parking">Find parking</string>
+    <string name="home_service_find_parking_keywords">car park parking spaces nearest</string>
+    <string name="home_service_permit_zones">Permit zones</string>
+    <string name="home_service_permit_zones_keywords">resident permit zone parking</string>
+    <string name="home_service_report_issue">Report an issue</string>
+    <string name="home_service_report_issue_keywords">street pothole street light fly-tipping graffiti problem</string>
+    <string name="home_service_clean_air_zone">Clean Air Zone</string>
+    <string name="home_service_clean_air_zone_keywords">caz vehicle car charge emissions registration</string>
+    <string name="home_service_report_repair">Report a repair</string>
+    <string name="home_service_report_repair_keywords">housing repair leak heating damp mould council home</string>
+    <string name="home_service_rent_account">Rent account</string>
+    <string name="home_service_rent_account_keywords">rent payment balance pay housing tenancy</string>
+
 </resources>
