@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-   Sample data extraction rules file; uncomment and customize as necessary.
+   Backup and device-transfer rules for Android 12 (API 31) and newer.
+   Android 11 and older use backup_rules.xml instead; keep the two in step.
    See https://developer.android.com/about/versions/12/backup-restore#xml-changes
-   for details.
+
+   Only exclusions are listed, so everything else is still backed up and
+   transferred as before.
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <!-- The demo profile is "stored only on this phone", so it is never backed up. -->
+        <exclude domain="file" path="datastore/demo_profile.preferences_pb" />
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <!-- Nor is it copied to a new phone. -->
+        <exclude domain="file" path="datastore/demo_profile.preferences_pb" />
     </device-transfer>
-    -->
 </data-extraction-rules>
