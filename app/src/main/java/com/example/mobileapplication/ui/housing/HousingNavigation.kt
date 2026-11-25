@@ -1,6 +1,8 @@
 package com.example.mobileapplication.ui.housing
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -8,7 +10,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 
 /** Route of the whole Housing section. The main navigation navigates here to open it. */
@@ -33,7 +37,16 @@ object HousingRoutes {
 
     /** The progress screen for the selected request. */
     const val PROGRESS = "housing/progress"
+
+    /** The progress screen for one request, chosen by its reference. Build it with [progressFor]. */
+    const val PROGRESS_FOR_REFERENCE = "housing/progress/{$REFERENCE_ARG}"
+
+    /** The route that opens the progress screen for [reference], for example from the Home dashboard. */
+    fun progressFor(reference: String): String = "housing/progress/${Uri.encode(reference)}"
 }
+
+/** Name of the reference argument in [HousingRoutes.PROGRESS_FOR_REFERENCE]. */
+private const val REFERENCE_ARG = "reference"
 
 /**
  * Adds the Housing screens to the app's navigation as one nested graph, starting
@@ -134,6 +147,21 @@ fun NavGraphBuilder.housingGraph(navController: NavHostController) {
                         popUpTo(HousingRoutes.CONFIRMATION) { inclusive = true }
                     }
                 }
+            )
+        }
+
+        composable(
+            HousingRoutes.PROGRESS_FOR_REFERENCE,
+            arguments = listOf(navArgument(REFERENCE_ARG) { type = NavType.StringType })
+        ) { entry ->
+            val viewModel = housingViewModel(navController, entry)
+            val reference = entry.arguments?.getString(REFERENCE_ARG).orEmpty()
+            LaunchedEffect(reference) { viewModel.selectRequest(reference) }
+            val selected by viewModel.selectedRequest.collectAsStateWithLifecycle()
+            RepairProgressScreen(
+                // Ignore a request selected earlier until the one asked for has loaded.
+                request = selected?.takeIf { it.reference == reference },
+                onBack = { navController.popBackStack() }
             )
         }
 

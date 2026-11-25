@@ -38,7 +38,7 @@ class PhaseFourSharedServicesTest {
     }
 
     @Test fun cazValidationAndEveryOutcomeKeepsPrototypeNotice() {
-        node(R.string.temp_open_clean_air_zone).reveal().performClick()
+        node(R.string.home_service_clean_air_zone).reveal().performClick()
         node(R.string.caz_check_button).reveal().performClick()
         node(R.string.caz_error_empty).assertExists()
         val field = ui.onNode(hasSetTextAction())

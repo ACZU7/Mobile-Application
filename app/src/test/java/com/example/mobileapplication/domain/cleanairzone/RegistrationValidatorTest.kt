@@ -69,4 +69,16 @@ class RegistrationValidatorTest {
     fun lettersOnly_isNoDigitsError() {
         assertEquals(RegistrationError.NO_DIGITS, errorOf("abcdef"))
     }
+
+    @Test
+    fun format_addsTheSpaceToCurrentStylePlates() {
+        assertEquals("AB12 CDE", RegistrationValidator.format("ab12cde"))
+        assertEquals("AB12 CDE", RegistrationValidator.format(" AB12 CDE "))
+    }
+
+    @Test
+    fun format_leavesOtherPlatesNormalised() {
+        assertEquals("A123BCD", RegistrationValidator.format("a123 bcd"))
+        assertEquals("K1", RegistrationValidator.format("k 1"))
+    }
 }

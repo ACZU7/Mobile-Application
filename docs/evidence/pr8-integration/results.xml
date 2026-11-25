@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="com.example.mobileapplication.DashboardUiTest" tests="4" failures="0" errors="0" skipped="0" time="20.87" timestamp="2026-11-25T18:08:07" hostname="localhost">
+  <properties>
+    <property name="device" value="Medium_Phone_API_37.0(AVD) - 17" />
+    <property name="flavor" value="" />
+    <property name="project" value=":app" />
+  </properties>
+  <testcase name="staffStatusAndParkingEditsReachResidentScreens" classname="com.example.mobileapplication.DashboardUiTest" time="8.086" />
+  <testcase name="homeServicesAndProfileEditorKeepAdminReachable" classname="com.example.mobileapplication.HomeProfileIntegrationTest" time="6.516" />
+  <testcase name="housingRepairSubmissionAndProgress" classname="com.example.mobileapplication.PhaseFourSharedServicesTest" time="3.122" />
+  <testcase name="cazValidationAndEveryOutcomeKeepsPrototypeNotice" classname="com.example.mobileapplication.PhaseFourSharedServicesTest" time="2.813" />
+</testsuite>

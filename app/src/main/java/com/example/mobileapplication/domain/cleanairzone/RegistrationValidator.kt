@@ -38,6 +38,18 @@ object RegistrationValidator {
 
     /** Trims, removes all spaces and makes the letters upper case, so "ab12 cde" becomes "AB12CDE". */
     fun normalise(input: String): String = input.filterNot { it.isWhitespace() }.uppercase()
+
+    /**
+     * Formats a plate for display. Current-style plates get the usual space,
+     * so "ab12cde" becomes "AB12 CDE"; other formats are only normalised.
+     */
+    fun format(input: String): String {
+        val plate = normalise(input)
+        return if (CURRENT_STYLE.matches(plate)) "${plate.take(4)} ${plate.drop(4)}" else plate
+    }
+
+    /** Plates issued since 2001: two letters, two digits, three letters. */
+    private val CURRENT_STYLE = Regex("^[A-Z]{2}[0-9]{2}[A-Z]{3}$")
 }
 
 /** The result of [RegistrationValidator.validate]. */

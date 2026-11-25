@@ -40,7 +40,8 @@ class DashboardUiTest {
         val desired = if (original == StreetStatus.FIXED) StreetStatus.SUBMITTED else StreetStatus.FIXED
         try {
             tap("Profile")
-            ui.onNodeWithText("Admin dashboard").assertIsDisplayed()
+            ui.waitUntil(10000) { ui.onAllNodesWithText("Admin dashboard").fetchSemanticsNodes().isNotEmpty() }
+            ui.onNodeWithText("Admin dashboard").performScrollTo().assertIsDisplayed()
             screenshot("01-profile-admin-entry")
             tap("Admin dashboard")
             ui.waitUntil(10000) { ui.onAllNodesWithText("All statuses").fetchSemanticsNodes().isNotEmpty() }
