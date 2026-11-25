@@ -7,6 +7,7 @@
     <string name="shared_step_current">current step</string>
     <string name="shared_step_upcoming">not started</string>
     <string name="shared_step_description">Step %1$d of %2$d: %3$s, %4$s</string>
+    <string name="shared_error_icon_description">Error</string>
 
     <!-- Housing: rooms -->
     <string name="housing_room_kitchen">Kitchen</string>
