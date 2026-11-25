@@ -214,6 +214,10 @@
     <string name="caz_official_checker_button">Use the official checker</string>
     <string name="caz_official_checker_fallback">No app on this phone can open web links. To use the official checker, go to %1$s</string>
 
+    <!-- Clean Air Zone: saved vehicle from the demo profile -->
+    <string name="caz_saved_vehicle_chip">Check my saved vehicle</string>
+    <string name="caz_saved_vehicle_chip_description">Check my saved vehicle, %1$s</string>
+
     <!-- Profile (local demo profile) -->
     <string name="profile_title">Profile</string>
     <string name="profile_demo_notice">Demo profile, stored only on this phone. Not a council account.</string>

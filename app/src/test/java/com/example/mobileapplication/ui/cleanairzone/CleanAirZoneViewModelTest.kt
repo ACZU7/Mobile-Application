@@ -5,14 +5,56 @@ import com.example.mobileapplication.data.model.EuroStandard
 import com.example.mobileapplication.data.model.FuelType
 import com.example.mobileapplication.data.repository.SampleVehicleRepository
 import com.example.mobileapplication.domain.cleanairzone.RegistrationError
+import com.example.mobileapplication.testutil.MainDispatcherRule
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Rule
 import org.junit.Test
 
 /** Unit tests for the events in [CleanAirZoneViewModel]. */
 class CleanAirZoneViewModelTest {
 
-    private val viewModel = CleanAirZoneViewModel(SampleVehicleRepository())
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    // Created lazily so it is built after MainDispatcherRule has installed the test dispatcher.
+    private val viewModel by lazy { CleanAirZoneViewModel(SampleVehicleRepository()) }
+
+    @Test
+    fun noSavedVehicle_hidesTheChip() {
+        assertNull(viewModel.state.value.savedRegistration)
+    }
+
+    @Test
+    fun savedVehicle_isOfferedFormatted() {
+        val vm = CleanAirZoneViewModel(SampleVehicleRepository(), savedVehicle = flowOf("IB15PTL"))
+
+        assertEquals("IB15 PTL", vm.state.value.savedRegistration)
+    }
+
+    @Test
+    fun useSavedVehicle_fillsThePlateAndKeepsTheChip() {
+        val vm = CleanAirZoneViewModel(SampleVehicleRepository(), savedVehicle = flowOf("IB15PTL"))
+        vm.onRegistrationChanged("AB")
+
+        vm.onUseSavedVehicle()
+
+        assertEquals("IB15 PTL", vm.state.value.registration)
+        assertEquals("IB15 PTL", vm.state.value.savedRegistration)
+        assertNull(vm.state.value.result)
+    }
+
+    @Test
+    fun savedVehicle_followsProfileChanges() {
+        val saved = MutableStateFlow<String?>("IB15PTL")
+        val vm = CleanAirZoneViewModel(SampleVehicleRepository(), savedVehicle = saved)
+
+        saved.value = null
+
+        assertNull(vm.state.value.savedRegistration)
+    }
 
     @Test
     fun typing_updatesRegistrationInCapitals() {

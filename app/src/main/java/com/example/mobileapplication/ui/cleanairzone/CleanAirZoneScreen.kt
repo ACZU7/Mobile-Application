@@ -19,14 +19,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -76,6 +80,7 @@ import com.example.mobileapplication.ui.theme.extendedColors
  * @param state The plate text, error and last result.
  * @param demoRegistrations The sample registrations users can try.
  * @param onRegistrationChanged Called whenever the plate text changes.
+ * @param onUseSavedVehicle Called when the user taps "Check my saved vehicle".
  * @param onCheck Called when the user taps "Check vehicle" or the keyboard's Done key.
  * @param onOpenOfficialChecker Called when the user taps "Use the official checker".
  * @param onBack Called when the back arrow is tapped. Pass null to hide the arrow.
@@ -85,6 +90,7 @@ fun CleanAirZoneScreen(
     state: CleanAirZoneState,
     demoRegistrations: List<String>,
     onRegistrationChanged: (String) -> Unit,
+    onUseSavedVehicle: () -> Unit,
     onCheck: () -> Unit,
     onOpenOfficialChecker: () -> Unit,
     onBack: (() -> Unit)?,
@@ -131,6 +137,10 @@ fun CleanAirZoneScreen(
                     onDone = onCheck
                 )
                 Spacer(Modifier.height(Dimens.GroupSpacing))
+                state.savedRegistration?.let { saved ->
+                    SavedVehicleChip(registration = saved, onClick = onUseSavedVehicle)
+                    Spacer(Modifier.height(4.dp))
+                }
                 state.error?.let {
                     FieldError(it.messageRes)
                     Spacer(Modifier.height(4.dp))
@@ -274,6 +284,34 @@ private fun PlateTextField(
     )
 }
 
+/**
+ * "Check my saved vehicle": fills the plate with the registration saved in the
+ * demo profile. Screen readers also hear which plate it is.
+ */
+@Composable
+private fun SavedVehicleChip(registration: String, onClick: () -> Unit) {
+    val description = stringResource(R.string.caz_saved_vehicle_chip_description, registration)
+    AssistChip(
+        onClick = onClick,
+        label = { Text(stringResource(R.string.caz_saved_vehicle_chip)) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Filled.DirectionsCar,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(AssistChipDefaults.IconSize)
+            )
+        },
+        shape = CircleShape,
+        colors = AssistChipDefaults.assistChipColors(
+            containerColor = MaterialTheme.extendedColors.chipNeutral,
+            labelColor = MaterialTheme.colorScheme.onSurface
+        ),
+        border = null,
+        modifier = Modifier.semantics { contentDescription = description }
+    )
+}
+
 /** Width of the bridge illustration next to the intro text. */
 private val IllustrationWidth = 136.dp
 
@@ -348,6 +386,7 @@ private fun CleanAirZonePreview(state: CleanAirZoneState, darkTheme: Boolean = f
             state = state,
             demoRegistrations = previewDemoRegistrations,
             onRegistrationChanged = {},
+            onUseSavedVehicle = {},
             onCheck = {},
             onOpenOfficialChecker = {},
             onBack = {}
@@ -360,6 +399,13 @@ private fun CleanAirZonePreview(state: CleanAirZoneState, darkTheme: Boolean = f
 @Composable
 private fun CleanAirZoneEmptyPreview() {
     CleanAirZonePreview(CleanAirZoneState())
+}
+
+/** Preview with a vehicle saved in the demo profile, showing the "Check my saved vehicle" chip. */
+@Preview(showBackground = true, heightDp = 700)
+@Composable
+private fun CleanAirZoneSavedVehiclePreview() {
+    CleanAirZonePreview(CleanAirZoneState(savedRegistration = "IB15 PTL"))
 }
 
 /** Preview with a registration typed but not yet checked. */

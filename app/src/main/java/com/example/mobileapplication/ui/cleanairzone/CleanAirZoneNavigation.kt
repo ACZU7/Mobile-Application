@@ -29,7 +29,7 @@ fun NavGraphBuilder.cleanAirZoneGraph(navController: NavHostController) {
     navigation(startDestination = CleanAirZoneRoutes.CHECKER, route = CLEAN_AIR_ZONE_GRAPH_ROUTE) {
 
         composable(CleanAirZoneRoutes.CHECKER) { entry ->
-            val viewModel: CleanAirZoneViewModel = viewModel()
+            val viewModel: CleanAirZoneViewModel = viewModel(factory = CleanAirZoneViewModel.Factory)
             val state by viewModel.state.collectAsStateWithLifecycle()
             // Only offer a back arrow if there is a screen to go back to.
             val canLeave = remember(entry) { navController.previousBackStackEntry != null }
@@ -39,6 +39,7 @@ fun NavGraphBuilder.cleanAirZoneGraph(navController: NavHostController) {
                 state = state,
                 demoRegistrations = viewModel.demoRegistrations,
                 onRegistrationChanged = viewModel::onRegistrationChanged,
+                onUseSavedVehicle = viewModel::onUseSavedVehicle,
                 onCheck = viewModel::onCheck,
                 onOpenOfficialChecker = { viewModel.onOpenOfficialChecker(linkOpener) },
                 onBack = if (canLeave) ({ navController.popBackStack() }) else null
