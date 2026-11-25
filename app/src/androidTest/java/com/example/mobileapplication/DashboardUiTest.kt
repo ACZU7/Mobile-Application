@@ -15,7 +15,7 @@ import java.io.File
 class DashboardUiTest {
     @get:Rule val ui = createAndroidComposeRule<MainActivity>()
     private fun tap(text: String) {
-        val node = if (text in listOf("Home", "Parking", "Streets", "Housing", "Profile"))
+        val node = if (text in listOf("Home", "Parking", "Streets", "Housing", "Admin"))
             ui.onNode(hasText(text) and isSelectable()) else ui.onNodeWithText(text)
         if (!node.isDisplayed()) node.performScrollTo()
         node.performClick()
@@ -29,20 +29,6 @@ class DashboardUiTest {
         File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()
     }
-    @Test fun homeSearchAndAllServiceDestinations() {
-        screenshot("01-home")
-        ui.onNodeWithText("Search services or report an issue").performTextInput("nothing matches")
-        ui.onNodeWithText("No services match your search.").assertExists()
-        ui.onNodeWithText("Search services or report an issue").performTextClearance()
-        listOf("Find parking" to "Nearest car parks", "Permit zones" to "Your resident's permit",
-            "Report an issue" to "Submit report", "Clean Air Zone" to "Clean Air Zone checker",
-            "Report a repair" to "Which room is the problem in?", "Rent account" to "Pay rent").forEach { (tile, expected) ->
-            tap(tile)
-            try { ui.waitUntil(10000) { ui.onAllNodesWithText(expected).fetchSemanticsNodes().isNotEmpty() } }
-            catch (failure: Throwable) { screenshot("failure-service"); throw AssertionError("Home tile $tile did not show $expected", failure) }
-            tap("Home")
-        }
-    }
     @Test fun staffStatusAndParkingEditsReachResidentScreens() = runBlocking {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val repo = StreetReportRepository.getInstance(context)
@@ -53,7 +39,7 @@ class DashboardUiTest {
         val park = parking.carParks.first()
         val desired = if (original == StreetStatus.FIXED) StreetStatus.SUBMITTED else StreetStatus.FIXED
         try {
-            tap("Profile"); tap("Open staff demonstration")
+            tap("Admin")
             ui.waitUntil(10000) { ui.onAllNodesWithText("All statuses").fetchSemanticsNodes().isNotEmpty() }
             screenshot("02-staff-reports")
             // Select just the first report using its current category and status filters.
@@ -74,11 +60,12 @@ class DashboardUiTest {
             ui.onNodeWithText("Sample hourly price (£0–£100)").performTextReplacement("3.25")
             tap("Update")
             ui.waitUntil(10000) { parking.carParks.first().sampleSpaces == 17 }
+            ui.waitUntil(10000) { ui.onAllNodesWithText("Edit parking sample").fetchSemanticsNodes().isEmpty() }
             screenshot("06-parking-updated")
             val reopened = ParkingRepository(context.getSharedPreferences("parking_samples", 0))
             assertEquals(17, reopened.carParks.first().sampleSpaces)
             assertEquals(3.25, reopened.carParks.first().sampleHourlyPrice, 0.001)
-            tap("Home"); tap("Your street reports")
+            tap("Streets"); tap("My reports")
             ui.onAllNodesWithText(context.getString(desired.labelRes)).onFirst().assertExists()
             screenshot("07-resident-status")
             tap("Parking")

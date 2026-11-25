@@ -12,7 +12,7 @@ Omar clarified this allocation on 25 November 2026. It supersedes earlier generi
 | Mohammad AlAbwah | Home dashboard, Profile, Housing and Clean Air Zone |
 | Both | Navigation integration, shared components, testing and assessment deliverables |
 
-Home/Profile code prepared by the coding agent in the final handover branch is support pending Mohammad's review; it is not claimed as Omar's individual work.
+The agent-created Home/Profile implementation has been removed at Omar's request. Home retains its pre-existing placeholder and Profile is not implemented in this branch. Admin is directly accessible through its own navigation tab.
 
 ## Working rules
 

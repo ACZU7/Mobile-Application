@@ -104,7 +104,7 @@ fun StaffScreen(vm: DashboardViewModel, onBack: () -> Unit) {
                             Text(stringResource(R.string.parking_row_summary, park.sampleDistanceMiles, park.sampleSpaces))
                             Text(stringResource(R.string.parking_row_price, park.sampleHourlyPrice))
                             Text(stringResource(park.category.labelRes))
-                            OutlinedButton(onClick = { editing = park }, enabled = !busy) { Text(stringResource(R.string.staff_edit_parking)) }
+                            OutlinedButton(onClick = { vm.dismissNotice(); editing = park }, enabled = !busy) { Text(stringResource(R.string.staff_edit_parking)) }
                         }
                     }
                 }

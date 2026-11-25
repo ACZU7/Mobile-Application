@@ -61,18 +61,18 @@ document.add_paragraph('Approved composites: Home 2; Parking 3–4; Streets 5–
 
 document.add_page_break()
 document.add_heading('Appendix D Implementation review', 1)
-document.add_paragraph('Ownership clarified by Omar on 25 November 2026: Omar owns Admin/Staff, Parking and Streets. Mohammad owns Home, Profile, Housing and Clean Air Zone. The Home/Profile code prepared by the coding agent on the handover branch is support pending Mohammad’s review; it is not claimed as Omar’s individual contribution or as code authored by Mohammad.')
+document.add_paragraph('Ownership clarified by Omar on 25 November 2026: Omar owns Admin/Staff, Parking and Streets. Mohammad owns Home, Profile, Housing and Clean Air Zone. The agent-created Home/Profile implementation has been removed. Home retains its pre-existing placeholder and Profile is not implemented in this branch. Admin has a direct navigation tab.')
 document.add_paragraph('The completed Parking and Streets journeys use local demonstration data. Maps show real OpenStreetMap tiles but sample car parks and a fictional permit zone. A Street Report’s location label can be edited; its map pin remains a fixed illustrative location. This distinction avoids presenting sample coordinates as GPS reports.')
-document.add_paragraph('Home uses the existing bridge illustration, a guest welcome, service search and the six approved service tiles. It links to saved Street Reports, with a status preview, and provides five-item navigation including a local demonstration Profile. The illustration and guest wording replace the composite’s photographic named-user header because the MVP has no authenticated personal profile.')
+document.add_paragraph('Home and Profile remain Mohammad’s responsibility. This branch restores the pre-existing Home placeholder and removes the agent-created Home/Profile implementation. Admin is accessible from a dedicated navigation tab. This temporary integration entry replaces the proposed Profile slot until the group agrees its final resident/staff navigation.')
 document.add_paragraph('The Staff demonstration follows mockup 11: report filters, cards, status changes, map and summary counts. Status updates are saved before being published to the resident views. At Omar’s request a Parking tab also edits spaces, hourly price, EV charging and category for the existing fictional car parks. It has validation and local persistence. It is not a secured production staff portal.')
 document.add_paragraph('Housing and CAZ remain Mohammad’s responsibilities. Housing photos remain unavailable in the current build; the implemented flow must not be described as complete photo support. Saved favourites, Firebase authentication, Arabic translation and stretch services are not part of the implemented MVP. RTL layout tests are not translation tests.')
 document.add_paragraph('The original research references and access dates are retained from the source design. Final implementation evidence, device configurations and limits are in docs/evidence/finalization and docs/evidence/phase4. Both members should review this edition against their agreed scope and the supplied Blackboard template before submission.')
 
 document.add_page_break()
 document.add_heading('Appendix E Application in context', 1)
-document.add_paragraph('Screenshots of the running Android pilot show the implemented Home and Staff report views. They are captured emulator outputs; all report and parking information is illustrative.')
+document.add_paragraph('Screenshots of the running Android pilot show the retained Staff report and parking administration views. They are captured emulator outputs; all report and parking information is illustrative.')
 table = document.add_table(rows=1, cols=2)
-for cell, name in zip(table.rows[0].cells, ['01-home.png', '02-staff-reports.png']):
+for cell, name in zip(table.rows[0].cells, ['02-staff-reports.png', '06-parking-updated.png']):
     cell.paragraphs[0].add_run().add_picture(str(root / 'docs/evidence/finalization' / name), width=Inches(2.5))
 document.add_paragraph('GenAI support assisted implementation, debugging, testing and documentation preparation. Students remain responsible for reviewing the work and explaining the accepted code and design decisions. This review copy does not record a completed peer approval or assessment recording.')
 output = root / 'docs/submission/Design_Document_Review.docx'

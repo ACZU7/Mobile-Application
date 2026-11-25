@@ -1,36 +1,35 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<testsuite name="com.example.mobileapplication.DashboardUiTest" tests="16" failures="0" errors="0" skipped="6" time="74.993" timestamp="2026-11-25T16:53:03" hostname="localhost">
+<testsuite name="com.example.mobileapplication.DashboardUiTest" tests="15" failures="0" errors="0" skipped="6" time="65.143" timestamp="2026-11-25T17:17:31" hostname="localhost">
   <properties>
     <property name="device" value="Medium_Phone_API_37.0(AVD) - 17" />
     <property name="flavor" value="" />
     <property name="project" value=":app" />
   </properties>
-  <testcase name="homeSearchAndAllServiceDestinations" classname="com.example.mobileapplication.DashboardUiTest" time="9.574" />
-  <testcase name="staffStatusAndParkingEditsReachResidentScreens" classname="com.example.mobileapplication.DashboardUiTest" time="8.666" />
-  <testcase name="useAppContext" classname="com.example.mobileapplication.ExampleInstrumentedTest" time="0.004" />
-  <testcase name="systemGalleryPhotoIsCopiedAndCanBeRemoved" classname="com.example.mobileapplication.ExternalFlowUiTest" time="2.278">
+  <testcase name="staffStatusAndParkingEditsReachResidentScreens" classname="com.example.mobileapplication.DashboardUiTest" time="14.833" />
+  <testcase name="useAppContext" classname="com.example.mobileapplication.ExampleInstrumentedTest" time="0.001" />
+  <testcase name="systemGalleryPhotoIsCopiedAndCanBeRemoved" classname="com.example.mobileapplication.ExternalFlowUiTest" time="2.888">
     <skipped />
   </testcase>
-  <testcase name="directionsHandOffAndNoHandlerFallback" classname="com.example.mobileapplication.ExternalFlowUiTest" time="2.729">
+  <testcase name="directionsHandOffAndNoHandlerFallback" classname="com.example.mobileapplication.ExternalFlowUiTest" time="3.289">
     <skipped />
   </testcase>
-  <testcase name="housingRepairSubmissionAndProgress" classname="com.example.mobileapplication.PhaseFourSharedServicesTest" time="4.671" />
-  <testcase name="cazValidationAndEveryOutcomeKeepsPrototypeNotice" classname="com.example.mobileapplication.PhaseFourSharedServicesTest" time="4.205" />
-  <testcase name="parkingFiltersDetailsAndPermitRemainReachable" classname="com.example.mobileapplication.PhaseFourUiTest" time="5.553" />
-  <testcase name="sharedNavigationAndRentIntegration" classname="com.example.mobileapplication.PhaseFourUiTest" time="4.307" />
-  <testcase name="permitReminderAcrossReboot" classname="com.example.mobileapplication.PhaseFourUiTest" time="12.206">
+  <testcase name="housingRepairSubmissionAndProgress" classname="com.example.mobileapplication.PhaseFourSharedServicesTest" time="6.794" />
+  <testcase name="cazValidationAndEveryOutcomeKeepsPrototypeNotice" classname="com.example.mobileapplication.PhaseFourSharedServicesTest" time="5.616" />
+  <testcase name="parkingFiltersDetailsAndPermitRemainReachable" classname="com.example.mobileapplication.PhaseFourUiTest" time="7.269" />
+  <testcase name="sharedNavigationAndRentIntegration" classname="com.example.mobileapplication.PhaseFourUiTest" time="5.554" />
+  <testcase name="permitReminderAcrossReboot" classname="com.example.mobileapplication.PhaseFourUiTest" time="2.733">
     <skipped />
   </testcase>
-  <testcase name="permittedLocationSortsResults" classname="com.example.mobileapplication.PhaseFourUiTest" time="3.817">
+  <testcase name="permittedLocationSortsResults" classname="com.example.mobileapplication.PhaseFourUiTest" time="2.979">
     <skipped />
   </testcase>
-  <testcase name="cameraCaptureAndRemoval" classname="com.example.mobileapplication.PhaseFourUiTest" time="3.692">
+  <testcase name="cameraCaptureAndRemoval" classname="com.example.mobileapplication.PhaseFourUiTest" time="2.831">
     <skipped />
   </testcase>
-  <testcase name="deniedPermissionsKeepCoreFlowsUsable" classname="com.example.mobileapplication.PhaseFourUiTest" time="3.844">
+  <testcase name="deniedPermissionsKeepCoreFlowsUsable" classname="com.example.mobileapplication.PhaseFourUiTest" time="3.089">
     <skipped />
   </testcase>
-  <testcase name="streetValidationSubmissionAndStatus" classname="com.example.mobileapplication.PhaseFourUiTest" time="7.716" />
-  <testcase name="reportsAndPhotoReferencesSurviveDatabaseReopen" classname="com.example.mobileapplication.StreetPersistenceTest" time="0.108" />
-  <testcase name="versionOneMigrationKeepsHousingAndAllowsStreetReports" classname="com.example.mobileapplication.StreetPersistenceTest" time="0.133" />
+  <testcase name="streetValidationSubmissionAndStatus" classname="com.example.mobileapplication.PhaseFourUiTest" time="6.118" />
+  <testcase name="reportsAndPhotoReferencesSurviveDatabaseReopen" classname="com.example.mobileapplication.StreetPersistenceTest" time="0.209" />
+  <testcase name="versionOneMigrationKeepsHousingAndAllowsStreetReports" classname="com.example.mobileapplication.StreetPersistenceTest" time="0.106" />
 </testsuite>

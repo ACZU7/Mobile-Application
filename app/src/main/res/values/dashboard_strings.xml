@@ -1,24 +1,9 @@
 <resources>
+    <string name="admin_nav_title">Admin</string>
     <string name="nav_home">Home</string>
     <string name="nav_parking">Parking</string>
     <string name="nav_streets">Streets</string>
     <string name="nav_housing">Housing</string>
-    <string name="home_greeting">Welcome to Bristol Connect</string>
-    <string name="home_subtitle">How can we help you today?</string>
-    <string name="home_search">Search services or report an issue</string>
-    <string name="home_parking">Find parking</string>
-    <string name="home_permit">Permit zones</string>
-    <string name="home_street">Report an issue</string>
-    <string name="home_caz">Clean Air Zone</string>
-    <string name="home_repair">Report a repair</string>
-    <string name="home_rent">Rent account</string>
-    <string name="home_reports">Your street reports</string>
-    <string name="home_empty">No services match your search.</string>
-    <string name="home_demo">Local demonstration • Sample data • No Council submissions</string>
-    <string name="profile_title">Profile</string>
-    <string name="profile_guest">Guest demonstration profile</string>
-    <string name="profile_privacy">Reports and photos stay on this device. No Council account is connected. Uninstalling or clearing app data removes local records.</string>
-    <string name="staff_entry">Open staff demonstration</string>
     <string name="staff_title">Bristol Connect Staff</string>
     <string name="staff_demo">Local staff demonstration. Changes affect this device only. No staff authentication or live Council access.</string>
     <string name="staff_reports">Reports</string>
