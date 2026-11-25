@@ -37,7 +37,7 @@ app/
 
 ## Guardrails
 
-Ownership correction from Omar (25 November 2026): Home dashboard and Profile belong to Mohammad; Admin/Staff belongs to Omar, alongside Parking and Streets. The agent-created Home/Profile implementation was removed at Omar's request. The Home placeholder is restored and Profile is not implemented on this branch. Admin uses its own navigation tab; the fifth slot temporarily represents Admin rather than the proposed Profile screen.
+Ownership correction from Omar (25 November 2026): Home dashboard and Profile belong to Mohammad; Admin/Staff belongs to Omar, alongside Parking and Streets. The agent-created Home/Profile implementation was removed at Omar's request. The Home placeholder is restored and the full Profile dashboard is not implemented on this branch. Profile is the fifth navigation tab. Its minimal placeholder contains only an Admin dashboard entry; Mohammad owns the full Profile dashboard and should retain this entry when building it.
 
 Final Omar scope (2026-11-25): the user requested the Staff dashboard and parking sample administration. Staff is an explicitly labelled local demonstration accessed through Profile, with no production authentication or live Council access. It uses the same `StreetReportRepository` singleton/Room table as resident screens; only successful writes are published. Parking keeps its eight resource-based fictional locations and stores validated staff overrides in private preferences; a shared state flow refreshes the finder/details. Writes run off the UI thread. These implementation changes and retained limitations are described in the local design review edition. Housing/CAZ implementations were not changed by this work.
 

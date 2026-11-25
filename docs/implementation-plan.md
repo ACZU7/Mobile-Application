@@ -12,7 +12,11 @@ Omar clarified this allocation on 25 November 2026. It supersedes earlier generi
 | Mohammad AlAbwah | Home dashboard, Profile, Housing and Clean Air Zone |
 | Both | Navigation integration, shared components, testing and assessment deliverables |
 
-The agent-created Home/Profile implementation has been removed at Omar's request. Home retains its pre-existing placeholder and Profile is not implemented in this branch. Admin is directly accessible through its own navigation tab.
+The agent-created Home/Profile implementation has been removed at Omar's request. Home retains its pre-existing placeholder and the full Profile dashboard is not implemented in this branch. Admin is reached through Profile → Admin dashboard; the full Profile dashboard remains Mohammad’s work.
+
+## Profile handover to Mohammad
+
+Omar wants his Admin dashboard to be accessible from the Profile dashboard. The current Profile route is deliberately just a placeholder containing an **Admin dashboard** button. Mohammad owns the full Profile UI, profile data and settings; when replacing the placeholder, retain this entry and navigate to the existing `staff` route. The code contains the matching `TODO(Mohammad)` at the integration point. No account, settings or full Profile dashboard has been implemented here.
 
 ## Working rules
 

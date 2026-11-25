@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<testsuite name="com.example.mobileapplication.DashboardUiTest" tests="1" failures="0" errors="0" skipped="0" time="15.161" timestamp="2026-11-25T17:18:46" hostname="localhost">
+<testsuite name="com.example.mobileapplication.DashboardUiTest" tests="1" failures="0" errors="0" skipped="0" time="14.533" timestamp="2026-11-25T17:27:20" hostname="localhost">
   <properties>
     <property name="device" value="Medium_Phone_API_37.0(AVD) - 17" />
     <property name="flavor" value="" />
     <property name="project" value=":app" />
   </properties>
-  <testcase name="staffStatusAndParkingEditsReachResidentScreens" classname="com.example.mobileapplication.DashboardUiTest" time="14.697" />
+  <testcase name="staffStatusAndParkingEditsReachResidentScreens" classname="com.example.mobileapplication.DashboardUiTest" time="13.801" />
 </testsuite>

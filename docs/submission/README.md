@@ -15,7 +15,7 @@ The student number is held only in the local generated report/package. Group ID 
 
 ## Ownership
 
-Omar: Admin/Staff dashboard, Parking and Streets. Mohammad: Home dashboard, Profile, Housing and Clean Air Zone. Shared work covers navigation integration, common components, testing and assessment deliverables. The agent-created Home/Profile implementation has been removed; Home is back to its pre-existing placeholder and Profile is not implemented. Admin has its own navigation tab.
+Omar: Admin/Staff dashboard, Parking and Streets. Mohammad: Home dashboard, Profile, Housing and Clean Air Zone. Shared work covers navigation integration, common components, testing and assessment deliverables. The agent-created Home/Profile implementation has been removed; Home is back to its pre-existing placeholder and the full Profile dashboard is not implemented. Admin is reached through Profile → Admin dashboard; Profile is only a navigation placeholder.
 
 ## Prepared material
 

@@ -1,5 +1,7 @@
 <resources>
     <string name="admin_nav_title">Admin</string>
+    <string name="profile_nav_title">Profile</string>
+    <string name="profile_admin_entry">Admin dashboard</string>
     <string name="nav_home">Home</string>
     <string name="nav_parking">Parking</string>
     <string name="nav_streets">Streets</string>

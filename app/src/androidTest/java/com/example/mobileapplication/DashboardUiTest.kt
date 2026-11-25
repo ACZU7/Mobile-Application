@@ -15,7 +15,7 @@ import java.io.File
 class DashboardUiTest {
     @get:Rule val ui = createAndroidComposeRule<MainActivity>()
     private fun tap(text: String) {
-        val node = if (text in listOf("Home", "Parking", "Streets", "Housing", "Admin"))
+        val node = if (text in listOf("Home", "Parking", "Streets", "Housing", "Profile"))
             ui.onNode(hasText(text) and isSelectable()) else ui.onNodeWithText(text)
         if (!node.isDisplayed()) node.performScrollTo()
         node.performClick()
@@ -39,7 +39,10 @@ class DashboardUiTest {
         val park = parking.carParks.first()
         val desired = if (original == StreetStatus.FIXED) StreetStatus.SUBMITTED else StreetStatus.FIXED
         try {
-            tap("Admin")
+            tap("Profile")
+            ui.onNodeWithText("Admin dashboard").assertIsDisplayed()
+            screenshot("01-profile-admin-entry")
+            tap("Admin dashboard")
             ui.waitUntil(10000) { ui.onAllNodesWithText("All statuses").fetchSemanticsNodes().isNotEmpty() }
             screenshot("02-staff-reports")
             // Select just the first report using its current category and status filters.

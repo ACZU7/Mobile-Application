@@ -59,7 +59,8 @@ fun BristolCityCompanionApp() {
         topBar = {
             if (!isParking && !isStreets && !isHousing && !isCleanAirZone && currentDestination?.route != AppDestination.Admin.route) {
             CenterAlignedTopAppBar(
-                title = { Text("Bristol City Companion") },
+                title = { if (currentDestination?.route == AppDestination.Profile.route)
+                    Text(stringResource(R.string.profile_nav_title)) else Text("Bristol City Companion") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 )
@@ -72,7 +73,8 @@ fun BristolCityCompanionApp() {
                 AppDestination.bottomNavigation.forEach { destination ->
                     NavigationBarItem(
                         // hierarchy also matches nested graphs, so Housing stays selected on every housing screen.
-                        selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true,
+                        selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true ||
+                            (destination == AppDestination.Profile && currentDestination?.route == AppDestination.Admin.route),
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             selectedTextColor = MaterialTheme.colorScheme.primary,
@@ -110,6 +112,15 @@ fun BristolCityCompanionApp() {
                     // TEMPORARY: opens the Clean Air Zone checker for testing until Home has service tiles.
                     TextButton(onClick = { navController.navigate(CLEAN_AIR_ZONE_GRAPH_ROUTE) }) {
                         Text(stringResource(R.string.temp_open_clean_air_zone))
+                    }
+                }
+            }
+            composable(AppDestination.Profile.route) {
+                // Integration placeholder only: Mohammad owns the full Profile dashboard.
+                // TODO(Mohammad): retain Omar's Admin entry here when implementing Profile.
+                Column(Modifier.fillMaxSize().padding(16.dp)) {
+                    TextButton(onClick = { navController.navigate(AppDestination.Admin.route) }) {
+                        Text(stringResource(R.string.profile_admin_entry))
                     }
                 }
             }

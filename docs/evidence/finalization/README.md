@@ -8,11 +8,11 @@ Post-integration `test assembleDebug assembleRelease lintDebug` passed locally. 
 
 ## Ownership
 
-Omar owns Admin/Staff, Parking and Streets. Mohammad owns Home, Profile, Housing and CAZ. The agent-created Home/Profile implementation has been removed at Omar's request. The original Home placeholder is restored and Profile is not implemented. Admin has its own navigation tab. The checks below cover the combined build.
+Omar owns Admin/Staff, Parking and Streets. Mohammad owns Home, Profile, Housing and CAZ. The agent-created Home/Profile implementation has been removed at Omar's request. The original Home placeholder is restored and the full Profile dashboard is not implemented. Admin is reached through Profile → Admin dashboard; Profile is only a navigation placeholder. The checks below cover the combined build.
 
 ## Completed scope
 
-- The Admin tab opens the Staff demonstration from mockup 11. Reports have status/category filters, a live filtered count, photos/details and saved status updates. Map displays filtered illustrative locations; Analytics counts the same filtered reports.
+- Profile → Admin dashboard opens the Staff demonstration from mockup 11. Reports have status/category filters, a live filtered count, photos/details and saved status updates. Map displays filtered illustrative locations; Analytics counts the same filtered reports.
 - Staff Parking edits the eight existing fictional car parks' spaces, hourly price, EV flag and category. Invalid input is rejected. Preferences are saved off the UI thread before the shared flow updates the resident finder/details. A failed save retains the editing dialog and values.
 - Staff report status updates save through Room before publishing the shared report flow. The resident status/list reads that same data. No database schema change is needed for the existing status column.
 - Fresh gallery verification found that the private photo copy succeeded but navigation after the asynchronous copy could run off the main thread. Launching the gallery callback coroutine explicitly on `Dispatchers.Main.immediate` fixed the return to the form; attachment/removal passed on retest.
@@ -20,10 +20,13 @@ Omar owns Admin/Staff, Parking and Streets. Mohammad owns Home, Profile, Housing
 
 The current records below supersede the earlier Home/Profile completion and test claims. Those screens and their added test/screenshots have been removed.
 
+Admin placement update: Profile now contains only an **Admin dashboard** button. This is the requested integration marker for Mohammad, not a completed Profile dashboard. The dedicated entry test/results supersede the older direct-Admin entry used by the earlier core run.
+
 ## Actual checks
 
 | Check | Result and evidence |
 |---|---|
+| Profile entry placeholder | Profile contains only an Admin dashboard button; opening it reaches Staff and the existing report/parking edit journey passes. Debug/release builds and lint pass. This leaves the full Profile dashboard for Mohammad. [Entry](01-profile-admin-entry.png), [dedicated result](profile-entry-results.xml). |
 | Build/unit/lint | `gradlew.bat test assembleDebug assembleRelease lintDebug connectedDebugAndroidTest '-Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true'` succeeded. 197 JVM unit tests, zero failures/errors. Lint: 52 warnings, zero errors. Debug/release APKs build. |
 | Default device suite | Retained XML contains 15 test cases: 9 passed, 6 setup-dependent cases skipped, zero failures/errors. The Gradle console's progress totals differ from the actual XML; this record uses the XML. See [core results](core-results.xml). |
 | Staff/resident integration | Changed a report status, checked the repository/resident list, exercised map/analytics, rejected invalid parking input, saved spaces/price and checked resident finder data. Tests restore the original report status and parking sample. [Staff](02-staff-reports.png), [updated status](03-status-updated.png), [map](04-staff-map.png), [analytics](05-staff-analytics.png), [parking edit](06-parking-updated.png), [resident report](07-resident-status.png). |
