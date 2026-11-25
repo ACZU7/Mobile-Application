@@ -29,6 +29,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mobileapplication.R
+import com.example.mobileapplication.ui.dashboard.DashboardViewModel
+import com.example.mobileapplication.ui.dashboard.StaffScreen
+import com.example.mobileapplication.data.repository.ParkingRepository
+import com.example.mobileapplication.data.repository.StreetReportRepository
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.mobileapplication.ui.cleanairzone.CLEAN_AIR_ZONE_GRAPH_ROUTE
 import com.example.mobileapplication.ui.cleanairzone.cleanAirZoneGraph
 import com.example.mobileapplication.ui.housing.HOUSING_GRAPH_ROUTE
@@ -49,9 +57,10 @@ fun BristolCityCompanionApp() {
 
     Scaffold(
         topBar = {
-            if (!isParking && !isStreets && !isHousing && !isCleanAirZone) {
+            if (!isParking && !isStreets && !isHousing && !isCleanAirZone && currentDestination?.route != AppDestination.Admin.route) {
             CenterAlignedTopAppBar(
-                title = { Text("Bristol City Companion") },
+                title = { if (currentDestination?.route == AppDestination.Profile.route)
+                    Text(stringResource(R.string.profile_nav_title)) else Text("Bristol City Companion") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 )
@@ -64,7 +73,8 @@ fun BristolCityCompanionApp() {
                 AppDestination.bottomNavigation.forEach { destination ->
                     NavigationBarItem(
                         // hierarchy also matches nested graphs, so Housing stays selected on every housing screen.
-                        selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true,
+                        selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true ||
+                            (destination == AppDestination.Profile && currentDestination?.route == AppDestination.Admin.route),
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             selectedTextColor = MaterialTheme.colorScheme.primary,
@@ -81,8 +91,8 @@ fun BristolCityCompanionApp() {
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(destination.icon, contentDescription = destination.label) },
-                        label = { Text(destination.label) }
+                        icon = { Icon(destination.icon, contentDescription = stringResource(destination.labelRes)) },
+                        label = { Text(stringResource(destination.labelRes)) }
                     )
                 }
             }
@@ -104,6 +114,22 @@ fun BristolCityCompanionApp() {
                         Text(stringResource(R.string.temp_open_clean_air_zone))
                     }
                 }
+            }
+            composable(AppDestination.Profile.route) {
+                // Integration placeholder only: Mohammad owns the full Profile dashboard.
+                // TODO(Mohammad): retain Omar's Admin entry here when implementing Profile.
+                Column(Modifier.fillMaxSize().padding(16.dp)) {
+                    TextButton(onClick = { navController.navigate(AppDestination.Admin.route) }) {
+                        Text(stringResource(R.string.profile_admin_entry))
+                    }
+                }
+            }
+            composable(AppDestination.Admin.route) {
+                val context = LocalContext.current.applicationContext
+                val vm: DashboardViewModel = viewModel(factory = viewModelFactory {
+                    initializer { DashboardViewModel(StreetReportRepository.getInstance(context), ParkingRepository.getInstance(context)) }
+                })
+                StaffScreen(vm) { navController.popBackStack() }
             }
             parkingGraph(navController)
             streetIssuesGraph(navController)

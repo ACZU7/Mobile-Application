@@ -19,6 +19,8 @@
 
 ## Proposed package layout
 
+Phase 4 integration (2026-11-22): Street Reports share Mohammad's `AppDatabase` rather than creating a second database. Schema version 2 adds `street_reports` through `MIGRATION_1_2`, preserving the version-one Housing table. The single sample permit and reminder choices continue to use DataStore. Street confirmation follows a successful Room write; a write failure keeps the draft and optional photo references for retry. The combined branch remains subject to human review before merge to main.
+
 ```text
 app/
   data/
@@ -34,6 +36,10 @@ app/
 ```
 
 ## Guardrails
+
+Ownership correction from Omar (25 November 2026): Home dashboard and Profile belong to Mohammad; Admin/Staff belongs to Omar, alongside Parking and Streets. The agent-created Home/Profile implementation was removed at Omar's request. The Home placeholder is restored and the full Profile dashboard is not implemented on this branch. Profile is the fifth navigation tab. Its minimal placeholder contains only an Admin dashboard entry; Mohammad owns the full Profile dashboard and should retain this entry when building it.
+
+Final Omar scope (2026-11-25): the user requested the Staff dashboard and parking sample administration. Staff is an explicitly labelled local demonstration accessed through Profile, with no production authentication or live Council access. It uses the same `StreetReportRepository` singleton/Room table as resident screens; only successful writes are published. Parking keeps its eight resource-based fictional locations and stores validated staff overrides in private preferences; a shared state flow refreshes the finder/details. Writes run off the UI thread. These implementation changes and retained limitations are described in the local design review edition. Housing/CAZ implementations were not changed by this work.
 
 - No live payments or real Council-account integration.
 - No claim that a sample car-park result, report status, rent balance or CAZ answer is official/live data.

@@ -7,8 +7,9 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ParkingViewModelTest {
+    @get:org.junit.Rule val mainDispatcher = com.example.mobileapplication.testutil.MainDispatcherRule()
     private val repository = ParkingRepository()
-    private val viewModel = ParkingViewModel(repository)
+    private val viewModel by lazy { ParkingViewModel(repository) }
 
     @Test
     fun initialState_exposesEverySample() {
