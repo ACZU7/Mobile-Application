@@ -1,4 +1,7 @@
 <resources>
+    <string name="street_storage_error_title">Reports unavailable</string>
+    <string name="street_storage_error">Could not load or save local reports. Your current form is kept. Please try again.</string>
+    <string name="street_saving">Saving report…</string>
     <string name="street_title">Report a street issue</string>
     <string name="street_reports">My reports</string>
     <string name="street_category">Issue type (required)</string>
@@ -43,7 +46,7 @@
     <string name="street_save_location">Use sample location</string>
     <string name="street_cancel">Cancel</string>
     <string name="street_submit">Submit report</string>
-    <string name="street_demo">Fictional demonstration data. Reports and statuses are stored in memory only and reset when the app closes.</string>
+    <string name="street_demo">Fictional demonstration data. Reports, statuses and photos are saved only on this device.</string>
     <string name="street_disclaimer">Prototype report only - this has not been submitted to Bristol City Council.</string>
     <string name="street_saved">Report saved locally</string>
     <string name="street_view_status">View report status</string>

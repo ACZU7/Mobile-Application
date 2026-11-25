@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mobileapplication.R
 import com.example.mobileapplication.data.model.UserProfile
 import com.example.mobileapplication.domain.cleanairzone.RegistrationValidator
+import com.example.mobileapplication.ui.shared.SecondaryButton
 import com.example.mobileapplication.ui.shared.PrimaryButton
 import com.example.mobileapplication.ui.shared.TopBar
 import com.example.mobileapplication.ui.theme.Dimens
@@ -73,6 +74,7 @@ fun ProfileScreen(
     onClearDismissed: () -> Unit,
     onClearConfirmed: () -> Unit,
     onMessageShown: () -> Unit,
+    onAdmin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -119,6 +121,11 @@ fun ProfileScreen(
                 PrimaryButton(
                     text = stringResource(if (profile.isEmpty) R.string.profile_set_up else R.string.profile_edit),
                     onClick = onEdit
+                )
+                // Omar's local Staff dashboard stays accessible inside Mohammad's Profile.
+                SecondaryButton(
+                    text = stringResource(R.string.profile_admin_entry),
+                    onClick = onAdmin
                 )
                 TextButton(
                     onClick = onClearRequested,
@@ -303,7 +310,7 @@ private val previewProfile = UserProfile(
 @Composable
 private fun ProfilePreview(state: ProfileUiState, darkTheme: Boolean = false) {
     MobileApplicationTheme(darkTheme = darkTheme) {
-        ProfileScreen(state, onEdit = {}, onClearRequested = {}, onClearDismissed = {}, onClearConfirmed = {}, onMessageShown = {})
+        ProfileScreen(state, onEdit = {}, onClearRequested = {}, onClearDismissed = {}, onClearConfirmed = {}, onMessageShown = {}, onAdmin = {})
     }
 }
 

@@ -17,6 +17,7 @@ Design and evaluate a usable Android application that helps Bristol residents co
 | FR07 | View repair progress locally. | Mohammad AlAbwah | A submitted repair appears with a reference, selected preference and visible demonstration progress. |
 | FR08 | Check a vehicle against prototype CAZ rules. | Mohammad AlAbwah | A user can enter a valid-format registration and see a plainly labelled demonstration result plus an Official Checker action. |
 | FR09 | Provide shared navigation. | Omar Abdelatty + Mohammad AlAbwah | A user can reach Home, Parking, Streets and Housing from consistent navigation, and Android back behaviour is predictable. |
+| FR10 | Manage local sample data through Admin/Staff. | Omar Abdelatty | A user can filter reports, inspect the report map/counts, persist status updates and edit validated parking sample values reflected in resident views. |
 
 ## Quality-core requirements
 

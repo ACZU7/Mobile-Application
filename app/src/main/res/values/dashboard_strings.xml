@@ -1,0 +1,35 @@
+<resources>
+    <string name="admin_nav_title">Admin</string>
+    <string name="profile_admin_entry">Admin dashboard</string>
+    <string name="staff_title">Bristol Connect Staff</string>
+    <string name="staff_demo">Local staff demonstration. Changes affect this device only. No staff authentication or live Council access.</string>
+    <string name="staff_reports">Reports</string>
+    <string name="staff_map">Map</string>
+    <string name="staff_analytics">Analytics</string>
+    <string name="staff_parking">Parking</string>
+    <string name="staff_all_status">All statuses</string>
+    <string name="staff_all_types">All types</string>
+    <string name="staff_count">%1$d reports</string>
+    <string name="staff_status">Change status</string>
+    <string name="staff_update">Update</string>
+    <string name="staff_saved">Saved on this device.</string>
+    <string name="staff_error">Could not load or save local data. Your changes have not been saved. Try again.</string>
+    <string name="staff_retry">Retry</string>
+    <string name="staff_loading">Loading local data…</string>
+    <string name="staff_empty">No local reports match these filters.</string>
+    <string name="staff_map_description">Sample Street Report locations</string>
+    <string name="staff_map_notice">Illustrative locations only. Filtered reports are also listed below the map.</string>
+    <string name="staff_summary">Local report summary</string>
+    <string name="staff_metric">%1$s: %2$d</string>
+    <string name="staff_parking_notice">Edit existing fictional car parks. Saved values update the resident finder; they are not live availability or prices.</string>
+    <string name="staff_spaces">Sample spaces (0–10,000)</string>
+    <string name="staff_price">Sample hourly price (£0–£100)</string>
+    <string name="staff_ev">EV charging</string>
+    <string name="staff_invalid_parking">Enter whole spaces from 0 to 10,000 and a price from 0 to 100 with up to two decimal places.</string>
+    <string name="staff_cancel">Cancel</string>
+    <string name="staff_back">Back</string>
+    <string name="staff_edit_parking">Edit sample</string>
+    <string name="staff_photo">Report photo</string>
+    <string name="staff_edit_title">Edit parking sample</string>
+    <string name="staff_saving">Saving…</string>
+</resources>

@@ -78,7 +78,7 @@ fun StreetCameraScreen(
         if (!granted) blocked = CameraBlocked.PERMISSION_DENIED
     }
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
-        if (uri != null) scope.launch {
+        if (uri != null) scope.launch(kotlinx.coroutines.Dispatchers.Main.immediate) {
             val copy = StreetPhotoStorage.copyFromPicker(context, uri)
             if (copy != null) onPhoto(copy) else importFailed = true
         }

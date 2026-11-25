@@ -21,9 +21,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.mobileapplication.ui.dashboard.DashboardViewModel
+import com.example.mobileapplication.ui.dashboard.StaffScreen
+import com.example.mobileapplication.data.repository.ParkingRepository
+import com.example.mobileapplication.data.repository.StreetReportRepository
 import com.example.mobileapplication.ui.cleanairzone.CLEAN_AIR_ZONE_GRAPH_ROUTE
 import com.example.mobileapplication.ui.cleanairzone.cleanAirZoneGraph
 import com.example.mobileapplication.ui.home.HOME_ROUTE
@@ -101,7 +110,16 @@ fun BristolCityCompanionApp() {
             streetIssuesGraph(navController)
             housingGraph(navController)
             cleanAirZoneGraph(navController)
-            profileGraph(navController)
+            profileGraph(navController, onAdmin = {
+                navController.navigate(AppDestination.Admin.route) { launchSingleTop = true }
+            })
+            composable(AppDestination.Admin.route) {
+                val context = LocalContext.current.applicationContext
+                val vm: DashboardViewModel = viewModel(factory = viewModelFactory {
+                    initializer { DashboardViewModel(StreetReportRepository.getInstance(context), ParkingRepository.getInstance(context)) }
+                })
+                StaffScreen(vm) { navController.popBackStack() }
+            }
         }
     }
 }

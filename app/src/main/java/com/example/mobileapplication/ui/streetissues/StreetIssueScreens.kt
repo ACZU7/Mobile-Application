@@ -55,7 +55,7 @@ private fun StreetPage(title: Int, onBack: () -> Unit, content: @Composable Colu
 fun StreetFormScreen(state: StreetFormState, onCategory: (StreetCategory) -> Unit,
     onDescription: (String) -> Unit, onLocation: (String) -> Unit,
     onAddPhoto: () -> Unit, onRemovePhoto: (String) -> Unit,
-    onSubmit: () -> Unit, onReports: () -> Unit, onBack: () -> Unit) {
+    onSubmit: () -> Unit, onReports: () -> Unit, onBack: () -> Unit, saving: Boolean = false) {
     var editing by rememberSaveable { mutableStateOf(false) }
     var draft by rememberSaveable { mutableStateOf("") }
     StreetPage(R.string.street_title, onBack) {
@@ -96,7 +96,7 @@ fun StreetFormScreen(state: StreetFormState, onCategory: (StreetCategory) -> Uni
                 }
             }, modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small)
         Text(stringResource(R.string.street_disclaimer), style = MaterialTheme.typography.bodySmall)
-        PrimaryButton(stringResource(R.string.street_submit), onSubmit)
+        PrimaryButton(stringResource(if (saving) R.string.street_saving else R.string.street_submit), onSubmit, enabled = !saving)
     }
     if (editing) AlertDialog(onDismissRequest = { editing = false },
         title = { Text(stringResource(R.string.street_edit_location)) },

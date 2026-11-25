@@ -28,7 +28,7 @@ object ProfileRoutes {
  * Adds the Profile screens as one nested graph. Both screens share one
  * [ProfileViewModel], so the edit form starts from the values shown on the profile.
  */
-fun NavGraphBuilder.profileGraph(navController: NavHostController) {
+fun NavGraphBuilder.profileGraph(navController: NavHostController, onAdmin: () -> Unit) {
     navigation(startDestination = ProfileRoutes.VIEW, route = PROFILE_GRAPH_ROUTE) {
 
         composable(ProfileRoutes.VIEW) { entry ->
@@ -43,6 +43,7 @@ fun NavGraphBuilder.profileGraph(navController: NavHostController) {
                 onClearRequested = viewModel::onClearRequested,
                 onClearDismissed = viewModel::onClearDismissed,
                 onClearConfirmed = viewModel::onClearConfirmed,
+                onAdmin = onAdmin,
                 onMessageShown = viewModel::onMessageShown
             )
         }

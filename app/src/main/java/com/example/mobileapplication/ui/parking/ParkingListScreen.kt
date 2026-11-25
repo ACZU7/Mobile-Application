@@ -57,18 +57,20 @@ fun ParkingListScreen(
 ) {
     val locatingDescription = stringResource(R.string.parking_location_finding)
     BoxWithConstraints(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
-        val sheetHeight = maxHeight * if (maxHeight < 440.dp) 0.43f else 0.40f
+        val compact = maxHeight < 480.dp
+        val panelWidth = if (compact) 0.5f else 1f
+        val sheetHeight = if (compact) maxHeight else maxHeight * 0.40f
         ParkingMap(
             carParks = state.filteredCarParks,
             highlightedId = state.highlightedCarParkId,
             userLocation = state.userLocation,
             onPinSelected = onMapPinSelected,
-            attributionBottomPadding = 24.dp,
-            modifier = Modifier.fillMaxWidth().height(maxHeight - sheetHeight + 24.dp)
+            attributionBottomPadding = if (compact) 0.dp else 24.dp,
+            modifier = Modifier.fillMaxWidth(panelWidth).height(if (compact) maxHeight else maxHeight - sheetHeight + 24.dp)
         )
         Column(
-            Modifier.align(Alignment.TopCenter).widthIn(max = Dimens.MaxContentWidth)
-                .fillMaxWidth().padding(horizontal = Dimens.ScreenPadding, vertical = Dimens.GroupSpacing)
+            Modifier.align(if (compact) Alignment.TopStart else Alignment.TopCenter)
+                .fillMaxWidth(panelWidth).widthIn(max = Dimens.MaxContentWidth).padding(horizontal = Dimens.ScreenPadding, vertical = Dimens.GroupSpacing)
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing), verticalAlignment = Alignment.CenterVertically) {
                 OutlinedTextField(
@@ -107,7 +109,8 @@ fun ParkingListScreen(
         FloatingActionButton(
             onClick = { if (!locating) onFindLocation() }, shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.surface, contentColor = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(end = Dimens.ScreenPadding, bottom = sheetHeight + Dimens.CardSpacing).size(48.dp)
+            modifier = Modifier.align(Alignment.BottomEnd).padding(end = Dimens.ScreenPadding + (if (compact) maxWidth / 2 else 0.dp),
+                bottom = (if (compact) 0.dp else sheetHeight) + Dimens.CardSpacing).size(48.dp)
         ) {
             if (locating) {
                 CircularProgressIndicator(
@@ -118,7 +121,7 @@ fun ParkingListScreen(
                 Icon(Icons.Default.Navigation, contentDescription = stringResource(R.string.parking_location_action))
             }
         }
-        ParkingResultsSheet(state, onClearFilters, onCarParkSelected, onOpenPermitZones, Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(sheetHeight))
+        ParkingResultsSheet(state, onClearFilters, onCarParkSelected, onOpenPermitZones, Modifier.align(if (compact) Alignment.BottomEnd else Alignment.BottomCenter).fillMaxWidth(panelWidth).height(sheetHeight))
     }
     if (state.filtersVisible) {
         AlertDialog(

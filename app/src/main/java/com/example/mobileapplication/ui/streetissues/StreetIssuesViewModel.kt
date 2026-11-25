@@ -1,6 +1,9 @@
 package com.example.mobileapplication.ui.streetissues
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 import com.example.mobileapplication.R
 import com.example.mobileapplication.data.model.*
 import com.example.mobileapplication.data.repository.StreetReportRepository
@@ -36,7 +39,19 @@ object StreetReportValidator {
         locationError = if (form.locationLabel.isBlank()) R.string.street_error_location else null
     )
 }
-class StreetIssuesViewModel(private val repository: StreetReportRepository = StreetReportRepository.shared) : ViewModel() {
+class StreetIssuesViewModel(private val repository: StreetReportRepository) : ViewModel() {
+    private val storageFailure = MutableStateFlow(false)
+    val storageError = storageFailure.asStateFlow()
+    private val busy = MutableStateFlow(false)
+    val saving = busy.asStateFlow()
+    init {
+        if (repository.persistent) viewModelScope.launch {
+            try { repository.load() }
+            catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { storageFailure.value = true }
+        }
+    }
+    fun dismissStorageError() { storageFailure.value = false }
     private val form = MutableStateFlow(StreetFormState())
     val formState = form.asStateFlow()
     val reports = repository.reports
@@ -51,13 +66,20 @@ class StreetIssuesViewModel(private val repository: StreetReportRepository = Str
     fun addPhoto(uri: String) { form.update { if (it.canAddPhoto && uri !in it.photos) it.copy(photos = it.photos + uri) else it } }
     fun removePhoto(uri: String) { form.update { it.copy(photos = it.photos - uri) } }
     fun select(reference: String) { selected.value = repository.get(reference) }
-    fun submit(): Boolean {
+    suspend fun submit(): Boolean {
+        if (busy.value) return false
         val checked = StreetReportValidator.validate(form.value)
         form.value = checked
         if (!checked.isValid) return false
-        selected.value = repository.save(checked.category!!, checked.description, checked.locationLabel, checked.photos)
-        form.value = StreetFormState()
-        return true
+        busy.value = true
+        return try {
+            selected.value = repository.save(checked.category!!, checked.description, checked.locationLabel, checked.photos)
+            storageFailure.value = false
+            form.value = StreetFormState()
+            true
+        } catch (cancelled: CancellationException) { throw cancelled }
+        catch (_: Exception) { storageFailure.value = true; false }
+        finally { busy.value = false }
     }
     companion object {
         fun filtered(reports: List<StreetReport>, status: StreetStatus?) = reports.filter { status == null || it.status == status }

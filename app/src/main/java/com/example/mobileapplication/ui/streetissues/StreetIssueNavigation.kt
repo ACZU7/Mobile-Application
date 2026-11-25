@@ -6,6 +6,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.composable
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.compose.material3.*
+import androidx.compose.ui.res.stringResource
+import com.example.mobileapplication.R
+import com.example.mobileapplication.data.repository.StreetReportRepository
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
 
 const val STREET_GRAPH_ROUTE = "streets"
 private const val FORM = "streets/form"
@@ -21,11 +29,15 @@ fun NavGraphBuilder.streetIssuesGraph(navController: NavHostController) {
             val vm = streetViewModel(navController, entry)
             val form by vm.formState.collectAsStateWithLifecycle()
             val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+            val saving by vm.saving.collectAsStateWithLifecycle()
             StreetFormScreen(form, vm::category, vm::description, vm::location,
                 onAddPhoto = { navController.navigate(STREET_CAMERA_ROUTE) { launchSingleTop = true } },
                 onRemovePhoto = { vm.removePhoto(it); StreetPhotoStorage.delete(context, it) },
-                onSubmit = { if (vm.submit()) navController.navigate(CONFIRMATION) { popUpTo(FORM) } },
-                onReports = { navController.navigate(REPORTS) }, onBack = { navController.popBackStack() })
+                onSubmit = { scope.launch(Dispatchers.Main.immediate) {
+                    if (vm.submit()) navController.navigate(CONFIRMATION) { popUpTo(FORM) }
+                } },
+                onReports = { navController.navigate(REPORTS) }, onBack = { navController.popBackStack() }, saving = saving)
         }
         composable(STREET_CAMERA_ROUTE) { entry ->
             val vm = streetViewModel(navController, entry)
@@ -62,5 +74,14 @@ fun NavGraphBuilder.streetIssuesGraph(navController: NavHostController) {
 @Composable
 private fun streetViewModel(navController: NavHostController, entry: NavBackStackEntry): StreetIssuesViewModel {
     val graph = remember(entry) { navController.getBackStackEntry(STREET_GRAPH_ROUTE) }
-    return viewModel(viewModelStoreOwner = graph)
+    val context = LocalContext.current.applicationContext
+    val vm: StreetIssuesViewModel = viewModel(viewModelStoreOwner = graph, factory = viewModelFactory {
+        initializer { StreetIssuesViewModel(StreetReportRepository.getInstance(context)) }
+    })
+    val failed by vm.storageError.collectAsStateWithLifecycle()
+    if (failed) AlertDialog(onDismissRequest = vm::dismissStorageError,
+        title = { Text(stringResource(R.string.street_storage_error_title)) },
+        text = { Text(stringResource(R.string.street_storage_error)) },
+        confirmButton = { TextButton(onClick = vm::dismissStorageError) { Text(stringResource(R.string.street_cancel)) } })
+    return vm
 }

@@ -48,10 +48,13 @@ fun PermitZoneScreen(
     onOpenNotificationSettings: () -> Unit
 ) {
     BoxWithConstraints(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
-        val sheetHeight = maxHeight * if (maxHeight < 480.dp) 0.62f else 0.50f
-        PermitZoneMap(state.zone.code, Modifier.fillMaxWidth().height(maxHeight - sheetHeight + 24.dp))
+        val compact = maxHeight < 480.dp
+        val panelWidth = if (compact) 0.5f else 1f
+        val sheetHeight = if (compact) maxHeight else maxHeight * 0.50f
+        PermitZoneMap(state.zone.code, Modifier.fillMaxWidth(panelWidth).height(if (compact) maxHeight else maxHeight - sheetHeight + 24.dp))
         Column(
-            Modifier.align(Alignment.TopCenter).widthIn(max = Dimens.MaxContentWidth).fillMaxWidth()
+            Modifier.align(if (compact) Alignment.TopStart else Alignment.TopCenter)
+                .fillMaxWidth(panelWidth).widthIn(max = Dimens.MaxContentWidth)
                 .padding(horizontal = Dimens.ScreenPadding, vertical = Dimens.GroupSpacing),
             verticalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing)
         ) {
@@ -95,7 +98,7 @@ fun PermitZoneScreen(
         }
         }
         Surface(
-            modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(sheetHeight),
+            modifier = Modifier.align(if (compact) Alignment.BottomEnd else Alignment.BottomCenter).fillMaxWidth(panelWidth).height(sheetHeight),
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
             color = MaterialTheme.colorScheme.surface, shadowElevation = 2.dp
         ) {

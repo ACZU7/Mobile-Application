@@ -28,3 +28,9 @@ The pilot uses sample/local data until an appropriate public integration is veri
 
 See `docs/` for requirements, technical decisions and the test plan. See `contributions.md` for individual ownership and contribution evidence.
 
+## Local staff demonstration
+
+Open **Profile → Admin dashboard** to filter Street Reports, inspect their map/summary, change local statuses and edit the existing parking samples. Updates are saved on this device and appear in the resident views. This is a demonstration, without staff authentication or a connection to Council systems.
+
+Final checks and limitations are indexed in [Omar's final verification](docs/evidence/finalization/README.md). Assessment packaging and the under-eight-minute walkthrough are in [submission instructions](docs/submission/README.md). Generated reports and ZIPs are kept local.
+

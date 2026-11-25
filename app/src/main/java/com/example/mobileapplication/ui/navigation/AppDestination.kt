@@ -2,6 +2,7 @@ package com.example.mobileapplication.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.HomeRepairService
@@ -39,13 +40,17 @@ sealed class AppDestination(
     )
     data object Streets : AppDestination("streets", R.string.nav_streets, Icons.Default.ReportProblem)
     data object Housing : AppDestination("housing", R.string.nav_housing, Icons.Default.HomeRepairService)
-    data object Profile : AppDestination(PROFILE_GRAPH_ROUTE, R.string.nav_profile, Icons.Default.Person)
+    data object Admin : AppDestination("staff", R.string.admin_nav_title, Icons.Default.AdminPanelSettings)
+    data object Profile : AppDestination(
+        PROFILE_GRAPH_ROUTE, R.string.nav_profile, Icons.Default.Person,
+        alsoSelectedFor = setOf(Admin.route)
+    )
 
     /** True when [destination] belongs to this tab, so its icon is highlighted. */
     fun isSelected(destination: NavDestination?): Boolean =
         destination?.hierarchy?.any { it.route == route || it.route in alsoSelectedFor } == true
 
     companion object {
-        val bottomNavigation = listOf(Home, Parking, Streets, Housing, Profile)
+        val bottomNavigation get() = listOf(Home, Parking, Streets, Housing, Profile)
     }
 }

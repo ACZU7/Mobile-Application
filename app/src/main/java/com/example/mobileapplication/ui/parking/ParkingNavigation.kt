@@ -13,6 +13,7 @@ import androidx.navigation.navigation
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.mobileapplication.data.repository.DataStorePermitStore
+import com.example.mobileapplication.data.repository.ParkingRepository
 import com.example.mobileapplication.ui.parking.permit.PermitViewModel
 import com.example.mobileapplication.ui.parking.permit.PermitZoneScreen
 import com.example.mobileapplication.ui.parking.permit.WorkManagerPermitReminderScheduler
@@ -32,7 +33,10 @@ fun NavGraphBuilder.parkingGraph(navController: NavHostController) {
     navigation(startDestination = ParkingRoutes.LIST, route = PARKING_GRAPH_ROUTE) {
         composable(ParkingRoutes.LIST) { entry ->
             val graphEntry = remember(entry) { navController.getBackStackEntry(PARKING_GRAPH_ROUTE) }
-            val viewModel: ParkingViewModel = viewModel(viewModelStoreOwner = graphEntry)
+            val appContext = LocalContext.current.applicationContext
+            val viewModel: ParkingViewModel = viewModel(viewModelStoreOwner = graphEntry, factory = viewModelFactory {
+                initializer { ParkingViewModel(ParkingRepository.getInstance(appContext)) }
+            })
             val state by viewModel.uiState.collectAsStateWithLifecycle()
             val requestLocation = rememberLocationRequest(
                 onLocating = viewModel::onLocating,
@@ -59,7 +63,10 @@ fun NavGraphBuilder.parkingGraph(navController: NavHostController) {
         }
         composable(ParkingRoutes.DETAILS) { entry ->
             val graphEntry = remember(entry) { navController.getBackStackEntry(PARKING_GRAPH_ROUTE) }
-            val viewModel: ParkingViewModel = viewModel(viewModelStoreOwner = graphEntry)
+            val appContext = LocalContext.current.applicationContext
+            val viewModel: ParkingViewModel = viewModel(viewModelStoreOwner = graphEntry, factory = viewModelFactory {
+                initializer { ParkingViewModel(ParkingRepository.getInstance(appContext)) }
+            })
             val state by viewModel.uiState.collectAsStateWithLifecycle()
             val context = LocalContext.current
             val directionsLauncher = remember(context) { MapsDirectionsLauncher(context) }

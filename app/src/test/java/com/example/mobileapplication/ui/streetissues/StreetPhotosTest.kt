@@ -6,6 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlinx.coroutines.test.runTest
 import java.time.LocalDate
 
 class StreetPhotosTest {
@@ -17,13 +18,13 @@ class StreetPhotosTest {
         vm.description("A fictional pothole by the crossing.")
     }
 
-    @Test fun photoIsOptional() {
+    @Test fun photoIsOptional() = runTest {
         fillValidForm()
         assertTrue(vm.submit())
         assertTrue(repo.reports.value.single().imageUris.isEmpty())
     }
 
-    @Test fun addedPhotosAreSavedWithTheReportInOrder() {
+    @Test fun addedPhotosAreSavedWithTheReportInOrder() = runTest {
         fillValidForm()
         vm.addPhoto("file:///photo1.jpg")
         vm.addPhoto("file:///photo2.jpg")
@@ -31,21 +32,21 @@ class StreetPhotosTest {
         assertEquals(listOf("file:///photo1.jpg", "file:///photo2.jpg"), repo.reports.value.single().imageUris)
     }
 
-    @Test fun formIsClearedOfPhotosAfterSubmit() {
+    @Test fun formIsClearedOfPhotosAfterSubmit() = runTest {
         fillValidForm()
         vm.addPhoto("file:///photo1.jpg")
         vm.submit()
         assertTrue(vm.formState.value.photos.isEmpty())
     }
 
-    @Test fun photoCanBeRemovedBeforeSubmit() {
+    @Test fun photoCanBeRemovedBeforeSubmit() = runTest {
         vm.addPhoto("file:///photo1.jpg")
         vm.addPhoto("file:///photo2.jpg")
         vm.removePhoto("file:///photo1.jpg")
         assertEquals(listOf("file:///photo2.jpg"), vm.formState.value.photos)
     }
 
-    @Test fun atMostThreePhotos() {
+    @Test fun atMostThreePhotos() = runTest {
         (1..4).forEach { vm.addPhoto("file:///photo$it.jpg") }
         assertEquals(STREET_MAX_PHOTOS, vm.formState.value.photos.size)
         assertFalse(vm.formState.value.canAddPhoto)
@@ -53,19 +54,19 @@ class StreetPhotosTest {
         assertTrue(vm.formState.value.canAddPhoto)
     }
 
-    @Test fun samePhotoIsNotAddedTwice() {
+    @Test fun samePhotoIsNotAddedTwice() = runTest {
         vm.addPhoto("file:///photo1.jpg")
         vm.addPhoto("file:///photo1.jpg")
         assertEquals(1, vm.formState.value.photos.size)
     }
 
-    @Test fun photosDoNotAffectValidation() {
+    @Test fun photosDoNotAffectValidation() = runTest {
         vm.addPhoto("file:///photo1.jpg")
         assertFalse(vm.submit())
         assertEquals(listOf("file:///photo1.jpg"), vm.formState.value.photos)
     }
 
-    @Test fun cameraCategoryChoiceUpdatesTheForm() {
+    @Test fun cameraCategoryChoiceUpdatesTheForm() = runTest {
         vm.category(StreetCategory.GRAFFITI)
         assertEquals(StreetCategory.GRAFFITI, vm.formState.value.category)
     }
