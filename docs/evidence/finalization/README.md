@@ -6,6 +6,10 @@ Remote refresh confirmed Mohammad's PR #6 merged at `f875d1e`. Merge `1455b6e` b
 
 Post-integration `test assembleDebug assembleRelease lintDebug` passed locally. Remote [Actions run](https://github.com/ACZU7/Mobile-Application/actions/runs/45659929990) failed before either job executed a step because of a GitHub account-side runner restriction. No remote CI pass is claimed; the repository owner must resolve that restriction before rerunning the workflow.
 
+## Ownership
+
+Omar owns Admin/Staff, Parking and Streets. Mohammad owns Home, Profile, Housing and CAZ. The agent-prepared Home/Profile changes on this branch are integration support pending Mohammad's review, not part of Omar's individual contribution claim. The checks below cover the combined build.
+
 ## Completed scope
 
 - Home replaces the placeholder with the approved six-service grid, service search/empty state, report/status shortcut and working service navigation. Five-item navigation includes a guest demonstration Profile.

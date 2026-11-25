@@ -26,7 +26,7 @@ try {
         $source = [System.IO.File]::OpenRead($absolute)
         try { $source.CopyTo($destination) } finally { $source.Dispose(); $destination.Dispose() }
     }
-    foreach ($name in 'Contribution_Mini_Report_Review.docx', 'Design_Document_Review.docx') {
+    foreach ($name in 'Contribution_Mini_Report.docx', 'Design_Document_Review.docx') {
         $absolute = Join-Path $projectRoot "docs/submission/$name"
         if (-not (Test-Path -LiteralPath $absolute)) { throw "Missing required review document: $name" }
         $entry = $archive.CreateEntry($name)

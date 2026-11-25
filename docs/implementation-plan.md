@@ -2,6 +2,18 @@
 
 This is the working roadmap for the Bristol City Companion implementation phase. The priority is a stable, testable native Android pilot using clearly labelled local/sample data. Complete the MVP before quality-core or stretch features.
 
+## Current ownership
+
+Omar clarified this allocation on 25 November 2026. It supersedes earlier generic references to a shared dashboard.
+
+| Owner | Screens and features |
+|---|---|
+| Omar Abdelatty | Admin/Staff dashboard, Parking and Streets |
+| Mohammad AlAbwah | Home dashboard, Profile, Housing and Clean Air Zone |
+| Both | Navigation integration, shared components, testing and assessment deliverables |
+
+Home/Profile code prepared by the coding agent in the final handover branch is support pending Mohammad's review; it is not claimed as Omar's individual work.
+
 ## Working rules
 
 - Build with Kotlin, Jetpack Compose, Material 3, Navigation Compose and a feature-based MVVM structure.
@@ -55,7 +67,7 @@ app/
 
 ### Both
 
-- Create the dashboard and bottom navigation: Home, Parking, Streets and Housing.
+- Mohammad owns the Home dashboard and Profile. Both integrate bottom navigation: Home, Parking, Streets, Housing and Profile.
 - Agree route names before feature development begins.
 - Confirm the app builds from a clean clone on both machines.
 - Create GitHub Issues for every task below, assigning each to its owner.

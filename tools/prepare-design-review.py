@@ -9,6 +9,12 @@ root = Path(__file__).resolve().parents[1]
 source = Path(sys.argv[1])
 document = Document(source)
 replacements = {
+    'Dashboard, Navigation Compose, theme/design system, integration, testing, design document and demo.':
+        'Navigation integration, theme/design system, testing, design document and demo. Home and Profile belong to Mohammad; Admin belongs to Omar.',
+    'Parking finder, parking filters/details/directions, street issue report, issue status and parking permit reminder.':
+        'Admin/Staff dashboard, parking finder, parking filters/details/directions, street issue report, issue status and parking permit reminder.',
+    'Housing repair flow/progress, Clean Air Zone checker, rent account/reminder and local persistence.':
+        'Home dashboard, Profile, Housing repair flow/progress, Clean Air Zone checker, rent account/reminder and local persistence.',
     'Owner A and Owner B': 'Omar Abdelatty and Mohammad AlAbwah',
     'Stage 2 design draft - research, scope and requirements': 'Design review edition — 25 November 2026',
     '5.1 Low-fidelity wireframes to create': '5.1 Low fidelity wireframe coverage',
@@ -44,6 +50,8 @@ for table in document.tables:
         for cell in row.cells:
             for paragraph in cell.paragraphs:
                 update(paragraph)
+        if len(row.cells) == 4 and row.cells[0].text.strip() == 'FR11':
+            row.cells[3].text = 'Mohammad (Home/Profile); navigation integration shared'
 
 document.add_page_break()
 document.add_heading('Appendix C Approved visual design', 1)
@@ -53,6 +61,7 @@ document.add_paragraph('Approved composites: Home 2; Parking 3–4; Streets 5–
 
 document.add_page_break()
 document.add_heading('Appendix D Implementation review', 1)
+document.add_paragraph('Ownership clarified by Omar on 25 November 2026: Omar owns Admin/Staff, Parking and Streets. Mohammad owns Home, Profile, Housing and Clean Air Zone. The Home/Profile code prepared by the coding agent on the handover branch is support pending Mohammad’s review; it is not claimed as Omar’s individual contribution or as code authored by Mohammad.')
 document.add_paragraph('The completed Parking and Streets journeys use local demonstration data. Maps show real OpenStreetMap tiles but sample car parks and a fictional permit zone. A Street Report’s location label can be edited; its map pin remains a fixed illustrative location. This distinction avoids presenting sample coordinates as GPS reports.')
 document.add_paragraph('Home uses the existing bridge illustration, a guest welcome, service search and the six approved service tiles. It links to saved Street Reports, with a status preview, and provides five-item navigation including a local demonstration Profile. The illustration and guest wording replace the composite’s photographic named-user header because the MVP has no authenticated personal profile.')
 document.add_paragraph('The Staff demonstration follows mockup 11: report filters, cards, status changes, map and summary counts. Status updates are saved before being published to the resident views. At Omar’s request a Parking tab also edits spaces, hourly price, EV charging and category for the existing fictional car parks. It has validation and local persistence. It is not a secured production staff portal.')

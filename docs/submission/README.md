@@ -13,9 +13,13 @@ The brief requires one ZIP named `MACoursework_GroupID_StudentNumber.zip`, conta
 
 The student number is held only in the local generated report/package. Group ID has not been supplied. The output ZIP is a review package until its filename, signatures and video are completed. Generated Word files and submission ZIPs are excluded from this public repository.
 
+## Ownership
+
+Omar: Admin/Staff dashboard, Parking and Streets. Mohammad: Home dashboard, Profile, Housing and Clean Air Zone. Shared work covers navigation integration, common components, testing and assessment deliverables. Agent-prepared Home/Profile changes await Mohammad's review and are excluded from Omar's individual contribution claim.
+
 ## Prepared material
 
-- `Contribution_Mini_Report_Review.docx`: contribution/environment record for both members to review and sign. The named ownership follows `contributions.md`; no signature or peer approval is fabricated.
+- `Contribution_Mini_Report.docx`: corrected contribution/environment record for both members to review and sign. This supersedes the earlier `Contribution_Mini_Report_Review.docx`. Home/Profile is assigned to Mohammad and Admin to Omar; no signature, authorship or peer approval is fabricated.
 - `Design_Document_Review.docx`: review copy of the existing design draft, with named owners, corrected implementation choices, approved mockups and implementation changes distinguished from the original proposal. The original Desktop document is preserved.
 - [Omar walkthrough](omar-walkthrough.md): timed code/UI explanation and rehearsal questions.
 - [Final verification](../evidence/finalization/README.md): actual test results and screenshot evidence.
