@@ -1,5 +1,7 @@
 package com.example.mobileapplication
 
+import com.example.mobileapplication.data.model.Role
+import org.junit.rules.RuleChain
 import android.content.ActivityNotFoundException
 import android.content.ContextWrapper
 import android.content.Intent
@@ -17,7 +19,9 @@ import org.junit.Test
 import java.io.File
 
 class ExternalFlowUiTest {
-    @get:Rule val ui = createAndroidComposeRule<MainActivity>()
+    val ui = createAndroidComposeRule<MainActivity>()
+    // Signs in as the demo resident before the activity starts, so the test begins on Home rather than Login.
+    @get:Rule val signedIn: RuleChain = RuleChain.outerRule(SignedInRule(Role.RESIDENT)).around(ui)
     private val instrumentation get() = InstrumentationRegistry.getInstrumentation()
     private fun screenshot(name: String) {
         val image = instrumentation.uiAutomation.takeScreenshot()

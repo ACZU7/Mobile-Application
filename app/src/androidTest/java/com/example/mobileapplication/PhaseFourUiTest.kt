@@ -1,5 +1,7 @@
 package com.example.mobileapplication
 
+import com.example.mobileapplication.data.model.Role
+import org.junit.rules.RuleChain
 import android.graphics.Bitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -11,7 +13,9 @@ import java.io.File
 
 /** End-to-end checks on the combined build. Screenshots are retained in app-private files. */
 class PhaseFourUiTest {
-    @get:Rule val ui = createAndroidComposeRule<MainActivity>()
+    val ui = createAndroidComposeRule<MainActivity>()
+    // Signs in as the demo resident before the activity starts, so the test begins on Home rather than Login.
+    @get:Rule val signedIn: RuleChain = RuleChain.outerRule(SignedInRule(Role.RESIDENT)).around(ui)
     private fun SemanticsNodeInteraction.reveal(): SemanticsNodeInteraction {
         if (!isDisplayed()) performScrollTo()
         return this

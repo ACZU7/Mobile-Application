@@ -1,5 +1,7 @@
 package com.example.mobileapplication
 
+import com.example.mobileapplication.data.model.Role
+import org.junit.rules.RuleChain
 import android.graphics.Bitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -13,7 +15,9 @@ import org.junit.Assert.*
 import java.io.File
 
 class DashboardUiTest {
-    @get:Rule val ui = createAndroidComposeRule<MainActivity>()
+    val ui = createAndroidComposeRule<MainActivity>()
+    // Signs in as the demo admin, because this test opens the Admin dashboard before the activity starts, so the test begins on Home rather than Login.
+    @get:Rule val signedIn: RuleChain = RuleChain.outerRule(SignedInRule(Role.ADMIN)).around(ui)
     private fun tap(text: String) {
         val node = if (text in listOf("Home", "Parking", "Streets", "Housing", "Profile"))
             ui.onNode(hasText(text) and isSelectable()) else ui.onNodeWithText(text)

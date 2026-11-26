@@ -1,5 +1,7 @@
 package com.example.mobileapplication
 
+import com.example.mobileapplication.data.model.Role
+import org.junit.rules.RuleChain
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.espresso.Espresso
@@ -11,7 +13,9 @@ import java.io.File
 
 /** Cross-tab navigation after combining Mohammad's Home/Profile with Omar's Staff route. */
 class HomeProfileIntegrationTest {
-    @get:Rule val ui = createAndroidComposeRule<MainActivity>()
+    val ui = createAndroidComposeRule<MainActivity>()
+    // Signs in as the demo admin, because this test opens the Admin dashboard before the activity starts, so the test begins on Home rather than Login.
+    @get:Rule val signedIn: RuleChain = RuleChain.outerRule(SignedInRule(Role.ADMIN)).around(ui)
     private fun tab(label: String) = ui.onNode(hasText(label) and isSelectable()).performClick()
     private fun visible(text: String) {
         ui.waitUntil(10000) { ui.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
