@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.mobileapplication.data.model.Session
 import com.example.mobileapplication.data.model.UserProfile
+import com.example.mobileapplication.data.repository.AuthRepository
 import com.example.mobileapplication.data.repository.DataStoreProfileRepository
 import com.example.mobileapplication.data.repository.ProfileRepository
+import com.example.mobileapplication.data.repository.SessionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,11 +26,13 @@ import kotlinx.coroutines.launch
  * Everything the Profile screen shows.
  *
  * @property profile The saved profile, or null while it is still loading.
+ * @property session Who is signed in (a guest, resident or admin), or null if nobody is.
  * @property showClearDialog True while the "Clear my data" confirmation is open.
  * @property message A one-off message to show in a snackbar, or null.
  */
 data class ProfileUiState(
     val profile: UserProfile? = null,
+    val session: Session? = null,
     val showClearDialog: Boolean = false,
     val message: ProfileMessage? = null
 )
@@ -47,17 +52,23 @@ enum class ProfileMessage {
  * user types on the edit form, validates it with [ProfileFormValidator], saves
  * it, and clears it after the user confirms.
  *
+ * It also shows who is signed in and signs out through the [SessionManager].
+ * Signing out keeps the demo profile; "Clear my data" is separate.
+ *
  * Both screens share one instance (scoped to the profile navigation graph).
  */
 class ProfileViewModel(
-    private val repository: ProfileRepository
+    private val repository: ProfileRepository,
+    private val sessions: SessionManager
 ) : ViewModel() {
 
     private val dialogAndMessage = MutableStateFlow(ProfileUiState())
 
     /** The state of the Profile screen. */
     val uiState: StateFlow<ProfileUiState> =
-        combine(repository.profile, dialogAndMessage) { profile, extra -> extra.copy(profile = profile) }
+        combine(repository.profile, sessions.session, dialogAndMessage) { profile, session, extra ->
+            extra.copy(profile = profile, session = session)
+        }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS), ProfileUiState())
 
     private val _form = MutableStateFlow(ProfileFormState())
@@ -136,6 +147,14 @@ class ProfileViewModel(
         }
     }
 
+    /**
+     * Called when the user taps "Sign out". Ends the session only: the profile
+     * stays on the phone. The app shell then returns to Login.
+     */
+    fun signOut() {
+        viewModelScope.launch { sessions.signOut() }
+    }
+
     /** Called once the screen has shown [ProfileUiState.message]. */
     fun onMessageShown() = dialogAndMessage.update { it.copy(message = null) }
 
@@ -145,7 +164,10 @@ class ProfileViewModel(
 
         /** Factory used by `viewModel(factory = ProfileViewModel.Factory)`. */
         val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer { ProfileViewModel(DataStoreProfileRepository(this[APPLICATION_KEY]!!)) }
+            initializer {
+                val app = this[APPLICATION_KEY]!!
+                ProfileViewModel(DataStoreProfileRepository(app), AuthRepository.getInstance(app))
+            }
         }
     }
 }

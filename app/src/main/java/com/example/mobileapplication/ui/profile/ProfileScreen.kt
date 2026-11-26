@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Email
@@ -51,9 +52,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mobileapplication.R
+import com.example.mobileapplication.data.model.Role
+import com.example.mobileapplication.data.model.Session
 import com.example.mobileapplication.data.model.UserProfile
 import com.example.mobileapplication.domain.cleanairzone.RegistrationValidator
 import com.example.mobileapplication.ui.shared.SecondaryButton
+import com.example.mobileapplication.ui.navigation.RouteAccess
 import com.example.mobileapplication.ui.shared.PrimaryButton
 import com.example.mobileapplication.ui.shared.TopBar
 import com.example.mobileapplication.ui.theme.Dimens
@@ -62,7 +66,9 @@ import com.example.mobileapplication.ui.theme.extendedColors
 
 /**
  * The Profile tab (the profile part of mockup screen 12): an avatar with
- * initials, the saved details, an Edit button, the demo notice and "Clear my data".
+ * initials, who is signed in with a "Sign out" button, the saved details, an
+ * Edit button, the demo notice and "Clear my data". Only admins see the
+ * "Admin dashboard" button.
  *
  * Stateless: it draws [state] and reports taps through the callbacks.
  */
@@ -75,6 +81,7 @@ fun ProfileScreen(
     onClearConfirmed: () -> Unit,
     onMessageShown: () -> Unit,
     onAdmin: () -> Unit,
+    onSignOut: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -108,6 +115,7 @@ fun ProfileScreen(
                     .padding(Dimens.ScreenPadding)
             ) {
                 ProfileHeader(profile)
+                AccountCard(session = state.session, onSignOut = onSignOut)
                 DemoProfileNotice()
                 Text(
                     text = stringResource(R.string.profile_details_heading),
@@ -122,11 +130,13 @@ fun ProfileScreen(
                     text = stringResource(if (profile.isEmpty) R.string.profile_set_up else R.string.profile_edit),
                     onClick = onEdit
                 )
-                // Omar's local Staff dashboard stays accessible inside Mohammad's Profile.
-                SecondaryButton(
-                    text = stringResource(R.string.profile_admin_entry),
-                    onClick = onAdmin
-                )
+                // Omar's local Staff dashboard, for demo admin accounts only.
+                if (RouteAccess.canOpenAdmin(state.session?.role)) {
+                    SecondaryButton(
+                        text = stringResource(R.string.profile_admin_entry),
+                        onClick = onAdmin
+                    )
+                }
                 TextButton(
                     onClick = onClearRequested,
                     enabled = !profile.isEmpty,
@@ -145,6 +155,56 @@ fun ProfileScreen(
 
     if (state.showClearDialog) {
         ClearDataDialog(onConfirm = onClearConfirmed, onDismiss = onClearDismissed)
+    }
+}
+
+/**
+ * Who is using the app: "Signed in as resident@example.com (Resident)" or
+ * "Guest", with a "Sign out" button. Signing out keeps the profile.
+ */
+@Composable
+private fun AccountCard(session: Session?, onSignOut: () -> Unit) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        border = BorderStroke(Dimens.BorderWidth, MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Dimens.GroupSpacing),
+            modifier = Modifier.padding(Dimens.ScreenPadding)
+        ) {
+            Text(
+                text = stringResource(R.string.profile_account_heading),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(text = accountText(session), style = MaterialTheme.typography.bodyLarge)
+            SecondaryButton(
+                text = stringResource(R.string.profile_sign_out),
+                onClick = onSignOut,
+                icon = Icons.AutoMirrored.Filled.Logout
+            )
+        }
+    }
+}
+
+/** "Signed in as <email> (Resident/Admin)", or "Guest". */
+@Composable
+private fun accountText(session: Session?): String {
+    val email = session?.email
+    val roleRes = when (session?.role) {
+        Role.RESIDENT -> R.string.profile_role_resident
+        Role.ADMIN -> R.string.profile_role_admin
+        Role.GUEST, null -> null
+    }
+    return if (email != null && roleRes != null) {
+        stringResource(R.string.profile_signed_in_as, email, stringResource(roleRes))
+    } else {
+        stringResource(R.string.profile_guest)
     }
 }
 
@@ -310,33 +370,50 @@ private val previewProfile = UserProfile(
 @Composable
 private fun ProfilePreview(state: ProfileUiState, darkTheme: Boolean = false) {
     MobileApplicationTheme(darkTheme = darkTheme) {
-        ProfileScreen(state, onEdit = {}, onClearRequested = {}, onClearDismissed = {}, onClearConfirmed = {}, onMessageShown = {}, onAdmin = {})
+        ProfileScreen(
+            state,
+            onEdit = {},
+            onClearRequested = {},
+            onClearDismissed = {},
+            onClearConfirmed = {},
+            onMessageShown = {},
+            onAdmin = {},
+            onSignOut = {}
+        )
     }
 }
 
-/** A filled-in profile. */
-@Preview(showBackground = true, heightDp = 800)
-@Composable
-private fun ProfileFilledPreview() = ProfilePreview(ProfileUiState(profile = previewProfile))
+private val residentSession = Session(email = "resident@example.com", role = Role.RESIDENT)
+private val adminSession = Session(email = "admin@example.com", role = Role.ADMIN)
 
-/** Nothing saved yet: person icon, "Not set" rows and "Set up profile". */
-@Preview(showBackground = true, heightDp = 800)
+/** A filled-in profile, signed in as a resident: no Admin dashboard button. */
+@Preview(showBackground = true, heightDp = 900)
 @Composable
-private fun ProfileEmptyPreview() = ProfilePreview(ProfileUiState(profile = UserProfile()))
+private fun ProfileFilledPreview() = ProfilePreview(ProfileUiState(profile = previewProfile, session = residentSession))
+
+/** Signed in as an admin: the Admin dashboard button is shown. */
+@Preview(showBackground = true, heightDp = 900)
+@Composable
+private fun ProfileAdminPreview() = ProfilePreview(ProfileUiState(profile = previewProfile, session = adminSession))
+
+/** A guest with nothing saved yet: person icon, "Guest", "Not set" rows and "Set up profile". */
+@Preview(showBackground = true, heightDp = 900)
+@Composable
+private fun ProfileEmptyPreview() = ProfilePreview(ProfileUiState(profile = UserProfile(), session = Session.Guest))
 
 /** Only a name saved, in dark mode. */
-@Preview(showBackground = true, heightDp = 800)
+@Preview(showBackground = true, heightDp = 900)
 @Composable
 private fun ProfilePartialDarkPreview() =
-    ProfilePreview(ProfileUiState(profile = UserProfile(name = "Sam")), darkTheme = true)
+    ProfilePreview(ProfileUiState(profile = UserProfile(name = "Sam"), session = adminSession), darkTheme = true)
 
 /** The "Clear my data" confirmation. */
-@Preview(showBackground = true, heightDp = 800)
+@Preview(showBackground = true, heightDp = 900)
 @Composable
 private fun ProfileClearDialogPreview() =
-    ProfilePreview(ProfileUiState(profile = previewProfile, showClearDialog = true))
+    ProfilePreview(ProfileUiState(profile = previewProfile, session = residentSession, showClearDialog = true))
 
 /** Large font (200%). */
-@Preview(showBackground = true, heightDp = 900, fontScale = 2f)
+@Preview(showBackground = true, heightDp = 1600, fontScale = 2f)
 @Composable
-private fun ProfileLargeFontPreview() = ProfilePreview(ProfileUiState(profile = previewProfile))
+private fun ProfileLargeFontPreview() = ProfilePreview(ProfileUiState(profile = previewProfile, session = adminSession))

@@ -1,7 +1,12 @@
 package com.example.mobileapplication.ui.profile
 
 import com.example.mobileapplication.R
+import com.example.mobileapplication.data.model.Role
+import com.example.mobileapplication.data.model.Session
 import com.example.mobileapplication.data.model.UserProfile
+import com.example.mobileapplication.data.repository.AuthRepository
+import com.example.mobileapplication.data.repository.AuthState
+import com.example.mobileapplication.testutil.FakeAuthStore
 import com.example.mobileapplication.testutil.FakeProfileRepository
 import com.example.mobileapplication.testutil.MainDispatcherRule
 import kotlinx.coroutines.flow.collect
@@ -15,12 +20,17 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
+import kotlin.coroutines.EmptyCoroutineContext
 
 /** Unit tests for [ProfileViewModel], using an in-memory [FakeProfileRepository]. */
 class ProfileViewModelTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
+
+    /** Signed in as the demo resident; tests that sign out check it is cleared. */
+    private val authStore = FakeAuthStore(AuthState(session = Session("resident@example.com", Role.RESIDENT)))
+    private val sessions = AuthRepository(authStore, hashContext = EmptyCoroutineContext)
 
     private val saved = UserProfile(
         name = "Sam Wilson",
@@ -36,7 +46,7 @@ class ProfileViewModelTest {
 
     @Test
     fun uiState_showsTheSavedProfile() = runTest {
-        val viewModel = ProfileViewModel(FakeProfileRepository(saved))
+        val viewModel = ProfileViewModel(FakeProfileRepository(saved), sessions)
         observe(viewModel)
 
         assertEquals(saved, viewModel.uiState.value.profile)
@@ -44,7 +54,7 @@ class ProfileViewModelTest {
 
     @Test
     fun startEditing_fillsTheFormWithTheSavedValues() = runTest {
-        val viewModel = ProfileViewModel(FakeProfileRepository(saved))
+        val viewModel = ProfileViewModel(FakeProfileRepository(saved), sessions)
         observe(viewModel)
 
         viewModel.startEditing()
@@ -59,7 +69,7 @@ class ProfileViewModelTest {
     @Test
     fun save_validForm_storesNormalisedValuesAndShowsMessage() = runTest {
         val repository = FakeProfileRepository()
-        val viewModel = ProfileViewModel(repository)
+        val viewModel = ProfileViewModel(repository, sessions)
         observe(viewModel)
         viewModel.onNameChanged("  Sam   Wilson ")
         viewModel.onEmailChanged(" sam@example.com ")
@@ -78,7 +88,7 @@ class ProfileViewModelTest {
     @Test
     fun save_emptyForm_isValidAndSavesAnEmptyProfile() = runTest {
         val repository = FakeProfileRepository(saved)
-        val viewModel = ProfileViewModel(repository)
+        val viewModel = ProfileViewModel(repository, sessions)
         observe(viewModel)
         viewModel.startEditing()
         viewModel.onNameChanged("")
@@ -94,7 +104,7 @@ class ProfileViewModelTest {
     @Test
     fun save_invalidFields_showsAnErrorNextToEachAndSavesNothing() = runTest {
         val repository = FakeProfileRepository()
-        val viewModel = ProfileViewModel(repository)
+        val viewModel = ProfileViewModel(repository, sessions)
         viewModel.onEmailChanged("sam@")
         viewModel.onPostcodeChanged("BS99")
         viewModel.onVehicleChanged("AB-12")
@@ -111,7 +121,7 @@ class ProfileViewModelTest {
 
     @Test
     fun typingInAField_clearsOnlyThatFieldsError() = runTest {
-        val viewModel = ProfileViewModel(FakeProfileRepository())
+        val viewModel = ProfileViewModel(FakeProfileRepository(), sessions)
         viewModel.onEmailChanged("bad")
         viewModel.onPostcodeChanged("bad")
         viewModel.save()
@@ -124,7 +134,7 @@ class ProfileViewModelTest {
 
     @Test
     fun postcodeAndRegistration_areKeptAsTypedUntilSaved() = runTest {
-        val viewModel = ProfileViewModel(FakeProfileRepository())
+        val viewModel = ProfileViewModel(FakeProfileRepository(), sessions)
         viewModel.onPostcodeChanged("bs1 5tr")
         viewModel.onVehicleChanged("ab12 cde")
 
@@ -135,7 +145,7 @@ class ProfileViewModelTest {
     @Test
     fun save_failure_showsFailureMessage() = runTest {
         val repository = FakeProfileRepository().apply { failWrites = true }
-        val viewModel = ProfileViewModel(repository)
+        val viewModel = ProfileViewModel(repository, sessions)
         observe(viewModel)
         viewModel.onNameChanged("Sam")
 
@@ -147,7 +157,7 @@ class ProfileViewModelTest {
     @Test
     fun clear_asksForConfirmationFirst() = runTest {
         val repository = FakeProfileRepository(saved)
-        val viewModel = ProfileViewModel(repository)
+        val viewModel = ProfileViewModel(repository, sessions)
         observe(viewModel)
 
         viewModel.onClearRequested()
@@ -159,7 +169,7 @@ class ProfileViewModelTest {
     @Test
     fun clear_cancelled_keepsTheProfile() = runTest {
         val repository = FakeProfileRepository(saved)
-        val viewModel = ProfileViewModel(repository)
+        val viewModel = ProfileViewModel(repository, sessions)
         observe(viewModel)
 
         viewModel.onClearRequested()
@@ -172,7 +182,7 @@ class ProfileViewModelTest {
     @Test
     fun clear_confirmed_deletesTheProfile() = runTest {
         val repository = FakeProfileRepository(saved)
-        val viewModel = ProfileViewModel(repository)
+        val viewModel = ProfileViewModel(repository, sessions)
         observe(viewModel)
 
         viewModel.onClearRequested()
@@ -186,12 +196,33 @@ class ProfileViewModelTest {
 
     @Test
     fun messageShown_clearsTheMessage() = runTest {
-        val viewModel = ProfileViewModel(FakeProfileRepository(saved))
+        val viewModel = ProfileViewModel(FakeProfileRepository(saved), sessions)
         observe(viewModel)
         viewModel.onClearConfirmed()
 
         viewModel.onMessageShown()
 
         assertNull(viewModel.uiState.value.message)
+    }
+
+    @Test
+    fun uiState_showsWhoIsSignedIn() = runTest {
+        val viewModel = ProfileViewModel(FakeProfileRepository(saved), sessions)
+        observe(viewModel)
+
+        assertEquals(Session("resident@example.com", Role.RESIDENT), viewModel.uiState.value.session)
+    }
+
+    @Test
+    fun signOut_endsTheSessionButKeepsTheProfile() = runTest {
+        val repository = FakeProfileRepository(saved)
+        val viewModel = ProfileViewModel(repository, sessions)
+        observe(viewModel)
+
+        viewModel.signOut()
+
+        assertNull(authStore.current.session)
+        assertNull(viewModel.uiState.value.session)
+        assertEquals(saved, repository.current)
     }
 }

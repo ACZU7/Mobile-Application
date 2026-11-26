@@ -44,6 +44,7 @@ fun NavGraphBuilder.profileGraph(navController: NavHostController, onAdmin: () -
                 onClearDismissed = viewModel::onClearDismissed,
                 onClearConfirmed = viewModel::onClearConfirmed,
                 onAdmin = onAdmin,
+                onSignOut = viewModel::signOut,
                 onMessageShown = viewModel::onMessageShown
             )
         }

@@ -306,6 +306,14 @@
     <string name="login_demo_resident">Resident: resident@example.com / Resident-Demo-2026</string>
     <string name="login_demo_admin">Admin: admin@example.com / Admin-Demo-2026</string>
 
+    <!-- Profile: account and sign out -->
+    <string name="profile_account_heading">Account</string>
+    <string name="profile_signed_in_as">Signed in as %1$s (%2$s)</string>
+    <string name="profile_role_resident">Resident</string>
+    <string name="profile_role_admin">Admin</string>
+    <string name="profile_guest">Guest</string>
+    <string name="profile_sign_out">Sign out</string>
+
     <!-- Admin route guard -->
     <string name="admin_only_message">Admins only</string>
 
