@@ -117,7 +117,7 @@ fun LoginScreen(
     }
 }
 
-/** The bridge drawing, "Bristol Connect" and the subtitle, in teal. */
+/** The bridge drawing, "Bristol City Companion" and the subtitle, in teal. */
 @Composable
 private fun LoginHeader() {
     // Decorative: the title below names the app.

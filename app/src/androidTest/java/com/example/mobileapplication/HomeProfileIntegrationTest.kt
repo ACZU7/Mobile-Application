@@ -51,7 +51,7 @@ class HomeProfileIntegrationTest {
         ui.onNodeWithText("Cancel").performScrollTo().performClick()
         visible("Admin dashboard")
         ui.onNodeWithText("Admin dashboard").performClick()
-        visible("Bristol Connect Staff")
+        visible("Bristol City Companion Staff")
         ui.onNode(hasText("Profile") and isSelectable()).assertIsSelected()
         screenshot("03-staff")
         Espresso.pressBack()

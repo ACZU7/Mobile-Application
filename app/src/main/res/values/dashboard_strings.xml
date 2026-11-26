@@ -1,7 +1,7 @@
 <resources>
     <string name="admin_nav_title">Admin</string>
     <string name="profile_admin_entry">Admin dashboard</string>
-    <string name="staff_title">Bristol Connect Staff</string>
+    <string name="staff_title">Bristol City Companion Staff</string>
     <string name="staff_demo">Local staff demonstration. Changes affect this device only. No staff authentication or live Council access.</string>
     <string name="staff_reports">Reports</string>
     <string name="staff_map">Map</string>

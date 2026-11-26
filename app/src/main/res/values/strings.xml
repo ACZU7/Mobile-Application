@@ -281,7 +281,7 @@
     <string name="home_service_rent_account_keywords">rent payment balance pay housing tenancy</string>
 
     <!-- Login (local demo accounts only) -->
-    <string name="login_title">Bristol Connect</string>
+    <string name="login_title">Bristol City Companion</string>
     <string name="login_subtitle">Council services for a cleaner, fairer Bristol</string>
     <string name="login_email_label">Email</string>
     <string name="login_email_placeholder">Email address</string>

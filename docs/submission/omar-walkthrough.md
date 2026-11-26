@@ -4,7 +4,7 @@ Target group runtime: 7 minutes 30 seconds, leaving 30 seconds below the brief's
 
 | Time | Speaker | Demonstration and explanation |
 |---|---|---|
-| 0:00–0:20 | Mohammad | Introduce Bristol Connect as a native Android pilot with local/sample data. State the ownership split and show navigation. Home remains a placeholder in this branch; do not claim a completed Home/full Profile dashboard implementation. |
+| 0:00–0:20 | Mohammad | Introduce Bristol City Companion as a native Android pilot with local/sample data. State the ownership split and show navigation. Home remains a placeholder in this branch; do not claim a completed Home/full Profile dashboard implementation. |
 | 0:20–1:15 | Omar | Parking: filter EV charging, open matching details, confirm external directions, show location on request and explain the denial fallback. Explain `ParkingViewModel`, immutable UI state, repository filtering and haversine distance sorting. |
 | 1:15–1:50 | Omar | Permit: show fictional Zone CM, permit expiry and reminder. Explain why one permit uses DataStore, why WorkManager survives process restarts, and why notifications require consent. |
 | 1:50–2:45 | Omar | Streets: show invalid submission, choose a category, enter a fictional description, attach/remove an optional photo and edit the location label. Submit, show the reference and My Reports. Explain validation, private photo copies, Room and save-before-confirmation. The map pin is illustrative, not GPS. |

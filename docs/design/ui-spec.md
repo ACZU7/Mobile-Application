@@ -1,4 +1,6 @@
-# UI spec – Bristol Connect
+# UI spec – Bristol City Companion
+
+> The mockups say "Bristol Connect"; the team agreed on 26 Nov 2026 to call the app **Bristol City Companion** everywhere.
 
 The approved mockups are in `docs/design/ui-mockups.png` (12 screens). Every screen must match them: layout, colours, spacing, icons and wording. When this spec and the image disagree, the image wins. Colours below were sampled from the image.
 
@@ -48,7 +50,7 @@ Put these in `ui/theme/Color.kt` and map them into the Material 3 colour scheme 
 
 ## Screens
 
-1. **Login** – Bristol bridge illustration and "Bristol Connect" title in teal, subtitle "Council services for a cleaner, fairer Bristol"; email and password fields; teal "Sign in"; "or"; outlined "Continue as guest"; landscape illustration at the bottom.
+1. **Login** – Bristol bridge illustration and "Bristol City Companion" title in teal, subtitle "Council services for a cleaner, fairer Bristol"; email and password fields; teal "Sign in"; "or"; outlined "Continue as guest"; landscape illustration at the bottom.
 2. **Home** – header image of Bristol with "Good morning, {name}" and "How can we help you today?"; search field; 3×2 grid of ServiceTiles (Find parking, Permit zones, Report an issue, Clean Air Zone, Report a repair, Rent account); "Your street report – In progress" card; bottom nav.
 3. **Car park finder** – search bar, filter chips (All, Multi-storey, Surface, EV charging), map with pins, bottom sheet "Nearest car parks" with photo, name, distance, spaces, price and chevron.
 4. **Permit zone checker** – map with the zone shaded coral and the user's dot; result card "You are inside Zone CM, Permit required 9am–5pm Mon–Fri"; "Your resident's permit" card with expiry; "Remind me before it expires" toggle.
@@ -58,7 +60,7 @@ Put these in `ui/theme/Color.kt` and map them into the Material 3 colour scheme 
 8. **Clean Air Zone checker** – illustration and "Check if your vehicle can drive in Bristol's Clean Air Zone"; yellow UK number-plate input; result card with green tick ("No charge – your vehicle meets the standard"); "Vehicle details" table (Make, Model, Fuel type, Euro standard).
 9. **Report a repair** – Stepper with 4 steps: Room, Problem, Photos, Appointment. Step 1 title "Which room is the problem in?" with subtitle; 2×2 grid of SelectableTiles (Kitchen, Bathroom, Bedroom, Living room); coral "Next" at the bottom. Later steps follow the same layout.
 10. **Rent account** – `surfaceTint` card with house icon, "£0.00", "You're up to date" and green tick; "Next payment" row with date and amount; coral "Pay rent"; list rows: Payment history, View your tenancy, Report a housing issue, Update your details.
-11. **Staff dashboard** – title "Bristol Connect Staff" with avatar; segmented tabs (Reports, Map, Analytics); two dropdown filters; "12 reports"; report cards with photo, title, reference, date, StatusChip, and on the selected card a "Change status" dropdown with a teal "Update" button.
+11. **Staff dashboard** – title "Bristol City Companion Staff" with avatar; segmented tabs (Reports, Map, Analytics); two dropdown filters; "12 reports"; report cards with photo, title, reference, date, StatusChip, and on the selected card a "Change status" dropdown with a teal "Update" button.
 12. **Settings – Arabic** – full right-to-left layout; profile header; rows with icons (language, notifications, privacy, help, about); language picker showing English, العربية (ticked), Polski; bottom nav mirrored.
 
 ## Rules for building screens

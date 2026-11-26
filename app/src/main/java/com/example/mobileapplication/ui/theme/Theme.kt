@@ -59,7 +59,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 /**
- * The Bristol Connect theme.
+ * The Bristol City Companion theme.
  *
  * Dynamic (wallpaper) colours are deliberately not used, so the app always shows
  * the approved brand colours from the UI spec.
