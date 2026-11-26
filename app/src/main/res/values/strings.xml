@@ -306,6 +306,9 @@
     <string name="login_demo_resident">Resident: resident@example.com / Resident-Demo-2026</string>
     <string name="login_demo_admin">Admin: admin@example.com / Admin-Demo-2026</string>
 
+    <!-- Admin route guard -->
+    <string name="admin_only_message">Admins only</string>
+
     <!-- Bottom navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_parking">Parking</string>

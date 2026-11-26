@@ -40,7 +40,7 @@ sealed class AppDestination(
     )
     data object Streets : AppDestination("streets", R.string.nav_streets, Icons.Default.ReportProblem)
     data object Housing : AppDestination("housing", R.string.nav_housing, Icons.Default.HomeRepairService)
-    data object Admin : AppDestination("staff", R.string.admin_nav_title, Icons.Default.AdminPanelSettings)
+    data object Admin : AppDestination(ADMIN_ROUTE, R.string.admin_nav_title, Icons.Default.AdminPanelSettings)
     data object Profile : AppDestination(
         PROFILE_GRAPH_ROUTE, R.string.nav_profile, Icons.Default.Person,
         alsoSelectedFor = setOf(Admin.route)
