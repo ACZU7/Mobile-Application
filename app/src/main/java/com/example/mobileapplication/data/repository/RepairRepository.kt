@@ -85,6 +85,18 @@ class RepairRepository(
         }
     }
 
+    /**
+     * Changes a request's status, for example when an admin books an appointment.
+     * Everyone observing [requests] (the tenant's "My repairs" list and the admin
+     * list) sees the new status straight away.
+     *
+     * @return False if there is no request with this [reference].
+     */
+    suspend fun updateStatus(reference: String, status: RepairStatus): Boolean {
+        seedIfEmpty()
+        return writeLock.withLock { dao.updateStatus(reference, status.name) > 0 }
+    }
+
     /** Returns the request with this [reference], or null if there isn't one. */
     suspend fun getRequest(reference: String): RepairRequest? {
         seedIfEmpty()

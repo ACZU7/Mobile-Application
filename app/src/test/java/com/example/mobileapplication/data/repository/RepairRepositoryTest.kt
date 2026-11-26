@@ -144,4 +144,31 @@ class RepairRepositoryTest {
         )
         assertEquals(request, request.toEntity().toModel())
     }
+
+    @Test
+    fun updateStatus_changesOnlyThatRequest_andObserversSeeIt() = runTest {
+        repository.seedIfEmpty()
+
+        assertTrue(repository.updateStatus("HR-2026-0001", RepairStatus.IN_PROGRESS))
+
+        val requests = repository.requests.first()
+        assertEquals(RepairStatus.IN_PROGRESS, requests.first { it.reference == "HR-2026-0001" }.status)
+        // The other samples keep their statuses.
+        assertEquals(RepairStatus.APPOINTMENT_BOOKED, requests.first { it.reference == "HR-2026-0002" }.status)
+        assertEquals(RepairStatus.IN_PROGRESS, repository.getRequest("HR-2026-0001")?.status)
+    }
+
+    @Test
+    fun updateStatus_unknownReference_returnsFalse() = runTest {
+        assertFalse(repository.updateStatus("HR-2026-9999", RepairStatus.COMPLETED))
+    }
+
+    @Test
+    fun updateStatus_onASubmittedRequest_keepsEverythingElse() = runTest {
+        val added = repository.addRequest(Room.KITCHEN, IssueType.LEAK, "Tap is dripping all day.", AppointmentPreference.MORNING)
+
+        repository.updateStatus(added.reference, RepairStatus.APPOINTMENT_BOOKED)
+
+        assertEquals(added.copy(status = RepairStatus.APPOINTMENT_BOOKED), repository.getRequest(added.reference))
+    }
 }

@@ -39,6 +39,13 @@ interface RepairRequestDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(request: RepairRequestEntity)
 
+    /**
+     * Changes the status of the request with this [reference] (the enum name, for
+     * example "IN_PROGRESS"). Returns how many rows changed: 1, or 0 if there is no such request.
+     */
+    @Query("UPDATE repair_requests SET status = :status WHERE reference = :reference")
+    suspend fun updateStatus(reference: String, status: String): Int
+
     /** Saves several requests, skipping any whose reference is already stored. */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(requests: List<RepairRequestEntity>)

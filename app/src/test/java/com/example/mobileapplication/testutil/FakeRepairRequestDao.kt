@@ -46,6 +46,18 @@ class FakeRepairRequestDao(initial: List<RepairRequestEntity> = emptyList()) : R
         rows.update { it + request }
     }
 
+    /** When true, [updateStatus] throws, to test how callers handle a failed save. */
+    var failUpdates = false
+
+    override suspend fun updateStatus(reference: String, status: String): Int {
+        if (failUpdates) throw IllegalStateException("Simulated database failure")
+        var changed = 0
+        rows.update { list ->
+            list.map { row -> if (row.reference == reference) row.copy(status = status).also { changed = 1 } else row }
+        }
+        return changed
+    }
+
     override suspend fun insertAll(requests: List<RepairRequestEntity>) {
         rows.update { current ->
             current + requests.filter { new -> current.none { it.reference == new.reference } }
