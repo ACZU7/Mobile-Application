@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.LocalParking
 import androidx.compose.material.icons.filled.ReportProblem
 import androidx.compose.runtime.Composable
@@ -37,6 +38,9 @@ object AdminRoutes {
     /** Street reports (the first screen admins see). */
     const val REPORTS = "admin/reports"
 
+    /** Housing repair requests. */
+    const val REPAIRS = "admin/repairs"
+
     /** Sample car park editing. */
     const val PARKING = "admin/parking"
 
@@ -48,7 +52,7 @@ object AdminRoutes {
 }
 
 /**
- * The admin section's bottom tabs: Reports, Parking, Analytics, Account.
+ * The admin section's bottom tabs: Reports, Repairs, Parking, Analytics, Account.
  * Admins see these instead of the resident tabs.
  */
 enum class AdminDestination(
@@ -57,6 +61,7 @@ enum class AdminDestination(
     override val icon: ImageVector
 ) : BottomTab {
     REPORTS(AdminRoutes.REPORTS, R.string.staff_reports, Icons.Default.ReportProblem),
+    REPAIRS(AdminRoutes.REPAIRS, R.string.admin_repairs_tab, Icons.Default.Build),
     PARKING(AdminRoutes.PARKING, R.string.staff_parking, Icons.Default.LocalParking),
     ANALYTICS(AdminRoutes.ANALYTICS, R.string.staff_analytics, Icons.Default.BarChart),
     ACCOUNT(AdminRoutes.ACCOUNT, R.string.admin_account_tab, Icons.Default.AccountCircle)
@@ -72,7 +77,7 @@ class StaffFiltersHolder : ViewModel() {
 
 /**
  * Adds the admin section: one nested graph whose screens share Omar's
- * [DashboardViewModel] and the street report filters.
+ * [DashboardViewModel], the [RepairAdminViewModel] and the street report filters.
  * Only admins may be here; the app shell checks that with RouteAccess.
  */
 fun NavGraphBuilder.adminGraph(navController: NavHostController) {
@@ -80,13 +85,26 @@ fun NavGraphBuilder.adminGraph(navController: NavHostController) {
         composable(AdminRoutes.REPORTS) { entry ->
             ReportsScreen(dashboardViewModel(navController, entry), filtersHolder(navController, entry).filters)
         }
+        composable(AdminRoutes.REPAIRS) { entry ->
+            val viewModel = repairAdminViewModel(navController, entry)
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+            RepairAdminScreen(
+                state = state,
+                onStatusFilterChanged = viewModel::onStatusFilterChanged,
+                onRoomFilterChanged = viewModel::onRoomFilterChanged,
+                onRetry = viewModel::onRetry,
+                onUpdateStatus = viewModel::updateStatus
+            )
+        }
         composable(AdminRoutes.PARKING) { entry ->
             ParkingAdminScreen(dashboardViewModel(navController, entry))
         }
         composable(AdminRoutes.ANALYTICS) { entry ->
+            val repairs by repairAdminViewModel(navController, entry).uiState.collectAsStateWithLifecycle()
             AnalyticsScreen(
                 vm = dashboardViewModel(navController, entry),
-                filters = filtersHolder(navController, entry).filters
+                filters = filtersHolder(navController, entry).filters,
+                repairCounts = repairs.counts.takeUnless { repairs.isLoading || repairs.loadFailed }
             )
         }
         composable(AdminRoutes.ACCOUNT) {
@@ -110,6 +128,10 @@ private fun dashboardViewModel(navController: NavHostController, entry: NavBackS
         initializer { DashboardViewModel(StreetReportRepository.getInstance(context), ParkingRepository.getInstance(context)) }
     })
 }
+
+@Composable
+private fun repairAdminViewModel(navController: NavHostController, entry: NavBackStackEntry): RepairAdminViewModel =
+    viewModel(viewModelStoreOwner = adminGraphEntry(navController, entry), factory = RepairAdminViewModel.Factory)
 
 @Composable
 private fun filtersHolder(navController: NavHostController, entry: NavBackStackEntry): StaffFiltersHolder =

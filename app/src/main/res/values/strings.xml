@@ -317,6 +317,35 @@
     <!-- Admin route guard -->
     <string name="admin_only_message">Admins only</string>
 
+    <!-- Admin section: housing repairs (Repairs tab) -->
+    <string name="admin_repairs_tab">Repairs</string>
+    <string name="admin_repairs_title">Housing repairs</string>
+    <string name="admin_repairs_demo">Local demonstration data. Status changes are saved on this device only and are not sent to Bristol City Council.</string>
+    <string name="admin_repairs_all_statuses">All statuses</string>
+    <string name="admin_repairs_all_rooms">All rooms</string>
+    <plurals name="admin_repairs_count">
+        <item quantity="one">%1$d repair request</item>
+        <item quantity="other">%1$d repair requests</item>
+    </plurals>
+    <string name="admin_repairs_loading">Loading repair requests…</string>
+    <string name="admin_repairs_load_error">The repair requests could not be loaded. Try again.</string>
+    <string name="admin_repairs_retry">Retry</string>
+    <string name="admin_repairs_save_error">The new status could not be saved. Try again.</string>
+    <string name="admin_repairs_saved">Saved on this device.</string>
+    <string name="admin_repairs_empty">No repair requests match these filters.</string>
+    <string name="admin_repairs_reference_room">%1$s · %2$s</string>
+    <string name="admin_repairs_date">Reported %1$s</string>
+    <string name="admin_repairs_appointment">Appointment preference: %1$s</string>
+    <string name="admin_repairs_change_status">Change status</string>
+    <string name="admin_repairs_update">Update</string>
+    <string name="admin_repairs_saving">Saving…</string>
+
+    <!-- Admin section: repair counts on the Analytics tab -->
+    <string name="admin_repairs_summary">Housing repairs</string>
+    <string name="admin_repairs_summary_note">All repair requests on this device.</string>
+    <string name="admin_repairs_by_status">By status</string>
+    <string name="admin_repairs_by_room">By room</string>
+
     <!-- Admin section: Account tab -->
     <string name="admin_account_tab">Account</string>
     <string name="admin_account_title">Account</string>
