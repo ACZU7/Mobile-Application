@@ -8,4 +8,6 @@
 <full-backup-content>
     <!-- The demo profile is "stored only on this phone", so it is never backed up. -->
     <exclude domain="file" path="datastore/demo_profile.preferences_pb" />
+    <!-- The signed-in session stays on this phone too. -->
+    <exclude domain="file" path="datastore/auth_session.preferences_pb" />
 </full-backup-content>
