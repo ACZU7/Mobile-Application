@@ -4,18 +4,20 @@ import com.example.mobileapplication.data.model.Role
 import org.junit.rules.RuleChain
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Rule
 import org.junit.Test
 import android.graphics.Bitmap
 import java.io.File
 
-/** Cross-tab navigation after combining Mohammad's Home/Profile with Omar's Staff route. */
+/**
+ * Cross-tab navigation in the resident tabs: every Home tile, the Profile editor,
+ * and no way into the admin section (admins have their own tabs).
+ */
 class HomeProfileIntegrationTest {
     val ui = createAndroidComposeRule<MainActivity>()
-    // Signs in as the demo admin, because this test opens the Admin dashboard before the activity starts, so the test begins on Home rather than Login.
-    @get:Rule val signedIn: RuleChain = RuleChain.outerRule(SignedInRule(Role.ADMIN)).around(ui)
+    // Signs in as the demo resident before the activity starts, so the test begins on Home rather than Login.
+    @get:Rule val signedIn: RuleChain = RuleChain.outerRule(SignedInRule(Role.RESIDENT)).around(ui)
     private fun tab(label: String) = ui.onNode(hasText(label) and isSelectable()).performClick()
     private fun visible(text: String) {
         ui.waitUntil(10000) { ui.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }
@@ -31,7 +33,7 @@ class HomeProfileIntegrationTest {
         File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         bitmap.recycle()
     }
-    @Test fun homeServicesAndProfileEditorKeepAdminReachable() {
+    @Test fun homeServicesAndProfileEditorStayInTheResidentTabs() {
         visible("Find parking")
         screenshot("01-home")
         listOf("Find parking" to "Nearest car parks", "Permit zones" to "Your resident's permit",
@@ -43,18 +45,18 @@ class HomeProfileIntegrationTest {
             visible("Find parking")
         }
         tab("Profile")
-        visible("Admin dashboard")
-        screenshot("02-profile-admin")
+        visible("Your details")
+        visible("Signed in as resident@example.com (Resident)")
+        // The staff features moved to the admin section: residents have no way in.
+        ui.onAllNodesWithText("Admin dashboard").assertCountEquals(0)
+        listOf("Reports", "Repairs", "Analytics", "Account").forEach {
+            ui.onAllNodes(hasText(it) and isSelectable()).assertCountEquals(0)
+        }
+        screenshot("02-profile")
         val edit = ui.onNode(hasText("Set up profile") or hasText("Edit details"))
         edit.performScrollTo().performClick()
         visible("Edit profile")
         ui.onNodeWithText("Cancel").performScrollTo().performClick()
-        visible("Admin dashboard")
-        ui.onNodeWithText("Admin dashboard").performClick()
-        visible("Bristol City Companion Staff")
-        ui.onNode(hasText("Profile") and isSelectable()).assertIsSelected()
-        screenshot("03-staff")
-        Espresso.pressBack()
         visible("Your details")
         ui.onNode(hasText("Profile") and isSelectable()).assertIsSelected()
     }

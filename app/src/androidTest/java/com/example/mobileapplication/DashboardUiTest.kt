@@ -16,10 +16,10 @@ import java.io.File
 
 class DashboardUiTest {
     val ui = createAndroidComposeRule<MainActivity>()
-    // Signs in as the demo admin, because this test opens the Admin dashboard before the activity starts, so the test begins on Home rather than Login.
+    // Signs in as the demo admin before the activity starts, so the test begins in the admin section rather than Login.
     @get:Rule val signedIn: RuleChain = RuleChain.outerRule(SignedInRule(Role.ADMIN)).around(ui)
     private fun tap(text: String) {
-        val node = if (text in listOf("Home", "Parking", "Streets", "Housing", "Profile"))
+        val node = if (text in listOf("Home", "Parking", "Streets", "Housing", "Profile", "Reports", "Repairs", "Analytics", "Account"))
             ui.onNode(hasText(text) and isSelectable()) else ui.onNodeWithText(text)
         if (!node.isDisplayed()) node.performScrollTo()
         node.performClick()
@@ -43,12 +43,10 @@ class DashboardUiTest {
         val park = parking.carParks.first()
         val desired = if (original == StreetStatus.FIXED) StreetStatus.SUBMITTED else StreetStatus.FIXED
         try {
-            tap("Profile")
-            ui.waitUntil(10000) { ui.onAllNodesWithText("Admin dashboard").fetchSemanticsNodes().isNotEmpty() }
-            ui.onNodeWithText("Admin dashboard").performScrollTo().assertIsDisplayed()
-            screenshot("01-profile-admin-entry")
-            tap("Admin dashboard")
+            // Admins start on the Reports tab of their own section.
             ui.waitUntil(10000) { ui.onAllNodesWithText("All statuses").fetchSemanticsNodes().isNotEmpty() }
+            ui.onNode(hasText("Reports") and isSelectable()).assertIsSelected()
+            screenshot("01-admin-reports")
             screenshot("02-staff-reports")
             // Select just the first report using its current category and status filters.
             val currentLabel = context.getString(original.labelRes)
@@ -59,7 +57,7 @@ class DashboardUiTest {
             screenshot("03-status-updated")
             tap("Map"); screenshot("04-staff-map")
             tap("Analytics"); screenshot("05-staff-analytics")
-            ui.onNode(hasText("Parking") and hasClickAction() and hasAnyAncestor(hasScrollAction())).performScrollTo().performClick()
+            tap("Parking")
             ui.onAllNodesWithText("Edit sample").onFirst().performClick()
             ui.onNodeWithText("Sample spaces (0–10,000)").performTextReplacement("-1")
             tap("Update")
@@ -73,6 +71,11 @@ class DashboardUiTest {
             val reopened = ParkingRepository(context.getSharedPreferences("parking_samples", 0))
             assertEquals(17, reopened.carParks.first().sampleSpaces)
             assertEquals(3.25, reopened.carParks.first().sampleHourlyPrice, 0.001)
+            // The resident screens are outside the admin section: sign out and continue as a guest to check them.
+            tap("Account"); tap("Sign out")
+            ui.waitUntil(10000) { ui.onAllNodesWithText("Continue as guest").fetchSemanticsNodes().isNotEmpty() }
+            tap("Continue as guest")
+            ui.waitUntil(10000) { ui.onAllNodes(hasText("Streets") and isSelectable()).fetchSemanticsNodes().isNotEmpty() }
             tap("Streets"); tap("My reports")
             ui.onAllNodesWithText(context.getString(desired.labelRes)).onFirst().assertExists()
             screenshot("07-resident-status")
