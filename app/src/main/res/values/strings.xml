@@ -280,6 +280,32 @@
     <string name="home_service_rent_account">Rent account</string>
     <string name="home_service_rent_account_keywords">rent payment balance pay housing tenancy</string>
 
+    <!-- Login (local demo accounts only) -->
+    <string name="login_title">Bristol Connect</string>
+    <string name="login_subtitle">Council services for a cleaner, fairer Bristol</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_email_placeholder">Email address</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_placeholder">Password</string>
+    <string name="login_show_password">Show password</string>
+    <string name="login_hide_password">Hide password</string>
+    <string name="login_sign_in">Sign in</string>
+    <string name="login_signing_in">Signing in…</string>
+    <string name="login_or">or</string>
+    <string name="login_continue_as_guest">Continue as guest</string>
+    <string name="login_error_email_empty">Enter your email address.</string>
+    <string name="login_error_email_format">Enter an email address like name@example.com.</string>
+    <string name="login_error_password_empty">Enter your password.</string>
+    <string name="login_error_invalid_credentials">The email or password is incorrect.</string>
+    <plurals name="login_error_locked_out">
+        <item quantity="one">Too many attempts. Sign-in is blocked for %1$d second.</item>
+        <item quantity="other">Too many attempts. Sign-in is blocked for %1$d seconds.</item>
+    </plurals>
+    <string name="login_demo_title">Demo accounts</string>
+    <string name="login_demo_body">Prototype sample accounts for testing. They are not real council accounts.</string>
+    <string name="login_demo_resident">Resident: resident@example.com / Resident-Demo-2026</string>
+    <string name="login_demo_admin">Admin: admin@example.com / Admin-Demo-2026</string>
+
     <!-- Bottom navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_parking">Parking</string>
