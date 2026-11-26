@@ -57,7 +57,6 @@ import com.example.mobileapplication.data.model.Session
 import com.example.mobileapplication.data.model.UserProfile
 import com.example.mobileapplication.domain.cleanairzone.RegistrationValidator
 import com.example.mobileapplication.ui.shared.SecondaryButton
-import com.example.mobileapplication.ui.navigation.RouteAccess
 import com.example.mobileapplication.ui.shared.PrimaryButton
 import com.example.mobileapplication.ui.shared.TopBar
 import com.example.mobileapplication.ui.theme.Dimens
@@ -67,8 +66,8 @@ import com.example.mobileapplication.ui.theme.extendedColors
 /**
  * The Profile tab (the profile part of mockup screen 12): an avatar with
  * initials, who is signed in with a "Sign out" button, the saved details, an
- * Edit button, the demo notice and "Clear my data". Only admins see the
- * "Admin dashboard" button.
+ * Edit button, the demo notice and "Clear my data". Admins use the separate
+ * admin section, so they never see this screen.
  *
  * Stateless: it draws [state] and reports taps through the callbacks.
  */
@@ -80,7 +79,6 @@ fun ProfileScreen(
     onClearDismissed: () -> Unit,
     onClearConfirmed: () -> Unit,
     onMessageShown: () -> Unit,
-    onAdmin: () -> Unit,
     onSignOut: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -130,13 +128,6 @@ fun ProfileScreen(
                     text = stringResource(if (profile.isEmpty) R.string.profile_set_up else R.string.profile_edit),
                     onClick = onEdit
                 )
-                // Omar's local Staff dashboard, for demo admin accounts only.
-                if (RouteAccess.canOpenAdmin(state.session?.role)) {
-                    SecondaryButton(
-                        text = stringResource(R.string.profile_admin_entry),
-                        onClick = onAdmin
-                    )
-                }
                 TextButton(
                     onClick = onClearRequested,
                     enabled = !profile.isEmpty,
@@ -377,24 +368,17 @@ private fun ProfilePreview(state: ProfileUiState, darkTheme: Boolean = false) {
             onClearDismissed = {},
             onClearConfirmed = {},
             onMessageShown = {},
-            onAdmin = {},
             onSignOut = {}
         )
     }
 }
 
 private val residentSession = Session(email = "resident@example.com", role = Role.RESIDENT)
-private val adminSession = Session(email = "admin@example.com", role = Role.ADMIN)
-
-/** A filled-in profile, signed in as a resident: no Admin dashboard button. */
+/** A filled-in profile, signed in as the demo resident. */
 @Preview(showBackground = true, heightDp = 900)
 @Composable
 private fun ProfileFilledPreview() = ProfilePreview(ProfileUiState(profile = previewProfile, session = residentSession))
 
-/** Signed in as an admin: the Admin dashboard button is shown. */
-@Preview(showBackground = true, heightDp = 900)
-@Composable
-private fun ProfileAdminPreview() = ProfilePreview(ProfileUiState(profile = previewProfile, session = adminSession))
 
 /** A guest with nothing saved yet: person icon, "Guest", "Not set" rows and "Set up profile". */
 @Preview(showBackground = true, heightDp = 900)
@@ -405,7 +389,7 @@ private fun ProfileEmptyPreview() = ProfilePreview(ProfileUiState(profile = User
 @Preview(showBackground = true, heightDp = 900)
 @Composable
 private fun ProfilePartialDarkPreview() =
-    ProfilePreview(ProfileUiState(profile = UserProfile(name = "Sam"), session = adminSession), darkTheme = true)
+    ProfilePreview(ProfileUiState(profile = UserProfile(name = "Sam"), session = residentSession), darkTheme = true)
 
 /** The "Clear my data" confirmation. */
 @Preview(showBackground = true, heightDp = 900)
@@ -416,4 +400,4 @@ private fun ProfileClearDialogPreview() =
 /** Large font (200%). */
 @Preview(showBackground = true, heightDp = 1600, fontScale = 2f)
 @Composable
-private fun ProfileLargeFontPreview() = ProfilePreview(ProfileUiState(profile = previewProfile, session = adminSession))
+private fun ProfileLargeFontPreview() = ProfilePreview(ProfileUiState(profile = previewProfile, session = residentSession))

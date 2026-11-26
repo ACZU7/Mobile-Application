@@ -317,6 +317,11 @@
     <!-- Admin route guard -->
     <string name="admin_only_message">Admins only</string>
 
+    <!-- Admin section: Account tab -->
+    <string name="admin_account_tab">Account</string>
+    <string name="admin_account_title">Account</string>
+    <string name="admin_account_notice">Admin demo account. Changes in the admin section affect this device only. There is no live Council access.</string>
+
     <!-- Bottom navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_parking">Parking</string>

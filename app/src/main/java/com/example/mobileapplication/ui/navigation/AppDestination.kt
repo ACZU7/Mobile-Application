@@ -2,7 +2,6 @@ package com.example.mobileapplication.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.HomeRepairService
@@ -17,7 +16,8 @@ import com.example.mobileapplication.ui.home.HOME_ROUTE
 import com.example.mobileapplication.ui.profile.PROFILE_GRAPH_ROUTE
 
 /**
- * The five bottom navigation tabs, in the order of the mockups.
+ * The five resident (and guest) bottom navigation tabs, in the order of the mockups.
+ * Admins get the admin section's tabs instead.
  *
  * @property route The tab's route (a nested graph for every tab except Home).
  * @property labelRes The tab label.
@@ -26,11 +26,11 @@ import com.example.mobileapplication.ui.profile.PROFILE_GRAPH_ROUTE
  * Parking selected), so Parking stays highlighted there.
  */
 sealed class AppDestination(
-    val route: String,
-    @StringRes val labelRes: Int,
-    val icon: ImageVector,
+    override val route: String,
+    @StringRes override val labelRes: Int,
+    override val icon: ImageVector,
     private val alsoSelectedFor: Set<String> = emptySet()
-) {
+) : BottomTab {
     data object Home : AppDestination(HOME_ROUTE, R.string.nav_home, Icons.Default.Home)
     data object Parking : AppDestination(
         "parking",
@@ -40,14 +40,10 @@ sealed class AppDestination(
     )
     data object Streets : AppDestination("streets", R.string.nav_streets, Icons.Default.ReportProblem)
     data object Housing : AppDestination("housing", R.string.nav_housing, Icons.Default.HomeRepairService)
-    data object Admin : AppDestination(ADMIN_ROUTE, R.string.admin_nav_title, Icons.Default.AdminPanelSettings)
-    data object Profile : AppDestination(
-        PROFILE_GRAPH_ROUTE, R.string.nav_profile, Icons.Default.Person,
-        alsoSelectedFor = setOf(Admin.route)
-    )
+    data object Profile : AppDestination(PROFILE_GRAPH_ROUTE, R.string.nav_profile, Icons.Default.Person)
 
     /** True when [destination] belongs to this tab, so its icon is highlighted. */
-    fun isSelected(destination: NavDestination?): Boolean =
+    override fun isSelected(destination: NavDestination?): Boolean =
         destination?.hierarchy?.any { it.route == route || it.route in alsoSelectedFor } == true
 
     companion object {

@@ -1,9 +1,8 @@
 <resources>
-    <string name="admin_nav_title">Admin</string>
-    <string name="profile_admin_entry">Admin dashboard</string>
     <string name="staff_title">Bristol City Companion Staff</string>
-    <string name="staff_demo">Local staff demonstration. Changes affect this device only. No staff authentication or live Council access.</string>
+    <string name="staff_demo">Local staff demonstration behind the admin demo login. Changes affect this device only. No live Council access.</string>
     <string name="staff_reports">Reports</string>
+    <string name="staff_list">List</string>
     <string name="staff_map">Map</string>
     <string name="staff_analytics">Analytics</string>
     <string name="staff_parking">Parking</string>
@@ -27,7 +26,6 @@
     <string name="staff_ev">EV charging</string>
     <string name="staff_invalid_parking">Enter whole spaces from 0 to 10,000 and a price from 0 to 100 with up to two decimal places.</string>
     <string name="staff_cancel">Cancel</string>
-    <string name="staff_back">Back</string>
     <string name="staff_edit_parking">Edit sample</string>
     <string name="staff_photo">Report photo</string>
     <string name="staff_edit_title">Edit parking sample</string>
